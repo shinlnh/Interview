@@ -1,28 +1,22 @@
 # Physical Robotics Interview Review
 
-This repository organizes interview preparation notes by knowledge domain. Each topic lives on a dedicated branch so it can be reviewed and developed independently.
+This repository organizes physical robotics interview preparation into focused knowledge chunks. Related concepts, questions, and existing answers are grouped together in each chunk.
 
-## Knowledge branches
+## Knowledge chunks
 
-| Domain | Branch |
+| Domain | Notes |
 |---|---|
-| Research paper implementation and SOTA redesign | `feat/implement-knowledge-paper-research` |
-| ONNX and TensorRT model deployment | `feat/implement-knowledge-model-deployment` |
-| Distributed training with DDP and FSDP | `feat/implement-knowledge-distributed-training` |
-| Data structures, algorithms, and complexity | `feat/implement-knowledge-dsa` |
-| Design patterns and object-oriented programming | `feat/implement-knowledge-software-design` |
-| Machine learning and mathematics | `feat/implement-knowledge-ml-math` |
-| Diffusion, flow matching, and vision-language models | `feat/implement-knowledge-generative-ai` |
-| Robotics systems and sensor fusion | `feat/implement-knowledge-robotics-systems` |
-| Projects, experience, and motivation | `feat/implement-knowledge-projects-motivation` |
-| Ratings, practice questions, and review strategy | `feat/implement-knowledge-interview-strategy` |
+| Research paper implementation and SOTA redesign | [Paper research](docs/paper-research/README.md) |
+| ONNX and TensorRT model deployment | [Model deployment](docs/model-deployment/README.md) |
+| Distributed training with DDP and FSDP | [Distributed training](docs/distributed-training/README.md) |
+| Data structures, algorithms, and complexity | [DSA](docs/dsa/README.md) |
+| Design patterns and object-oriented programming | [Software design](docs/software-design/README.md) |
+| Machine learning and mathematics | [ML and mathematics](docs/ml-math/README.md) |
+| Diffusion, flow matching, and vision-language models | [Generative AI](docs/generative-ai/README.md) |
+| Robotics systems and sensor fusion | [Robotics systems](docs/robotics-systems/README.md) |
+| Projects, experience, and motivation | [Projects and motivation](docs/projects-motivation/README.md) |
+| Ratings, practice questions, and review strategy | [Interview strategy](docs/interview-strategy/README.md) |
 
 ## Usage
 
-Switch to the branch for the domain you want to review:
-
-```bash
-git switch feat/implement-knowledge-dsa
-```
-
-Each knowledge branch contains a single domain-specific `README.md`.
+Open the README for the domain you want to review. All chunks are maintained together on `main`.
