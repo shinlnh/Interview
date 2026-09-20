@@ -1,28 +1,51 @@
-# Physical Robotics Interview Review
+# Software Design: Patterns and OOP
 
-This repository organizes interview preparation notes by knowledge domain. Each topic lives on a dedicated branch so it can be reviewed and developed independently.
+**Mức đã trao đổi:** **3/5**
 
-## Knowledge branches
+### Interviewer có thể hỏi thêm
 
-| Domain | Branch |
-|---|---|
-| Research paper implementation and SOTA redesign | `feat/implement-knowledge-paper-research` |
-| ONNX and TensorRT model deployment | `feat/implement-knowledge-model-deployment` |
-| Distributed training with DDP and FSDP | `feat/implement-knowledge-distributed-training` |
-| Data structures, algorithms, and complexity | `feat/implement-knowledge-dsa` |
-| Design patterns and object-oriented programming | `feat/implement-knowledge-software-design` |
-| Machine learning and mathematics | `feat/implement-knowledge-ml-math` |
-| Diffusion, flow matching, and vision-language models | `feat/implement-knowledge-generative-ai` |
-| Robotics systems and sensor fusion | `feat/implement-knowledge-robotics-systems` |
-| Projects, experience, and motivation | `feat/implement-knowledge-projects-motivation` |
-| Ratings, practice questions, and review strategy | `feat/implement-knowledge-interview-strategy` |
+- What is a software design pattern?
+- Why do we use design patterns?
+- What is the Singleton pattern?
+- What is the Factory pattern?
+- What is the Strategy pattern?
+- What is the Observer pattern?
+- Give an example of a design pattern in a robotics or ML pipeline.
+- When can Singleton become a bad design?
+- What is dependency injection?
+- How would you design interchangeable detector or tracker modules?
 
-## Usage
+### Robotics example
 
-Switch to the branch for the domain you want to review:
+Một pipeline kiểu:
 
-```bash
-git switch feat/implement-knowledge-dsa
-```
+`Detector interface → YOLO / SSD / StreamPETR implementation`
 
-Each knowledge branch contains a single domain-specific `README.md`.
+rất dễ liên hệ với **Strategy / Factory**.
+
+---
+
+### 1.8 Object-Oriented Programming
+
+**Mức đã trao đổi:** **4/5**
+
+### Interviewer có thể hỏi thêm
+
+- What are the four main principles of OOP?
+- What is encapsulation?
+- What is inheritance?
+- What is polymorphism?
+- What is abstraction?
+- What is the difference between inheritance and composition?
+- What is a virtual function in C++?
+- What is a pure virtual function?
+- What is an abstract class?
+- What is function overloading vs overriding?
+- What is a constructor/destructor?
+- What is RAII in C++?
+- What is a smart pointer?
+- unique_ptr vs shared_ptr?
+- Why is composition often preferred over inheritance?
+- How would you design a tracker interface supporting CSRT, KCF and a Siamese tracker?
+
+---
