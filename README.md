@@ -1,28 +1,50 @@
-# Physical Robotics Interview Review
+# Distributed Training: DDP and FSDP
 
-This repository organizes interview preparation notes by knowledge domain. Each topic lives on a dedicated branch so it can be reviewed and developed independently.
+**Mức đã trao đổi:** **2–3/5** — **chưa xác nhận chính xác**
 
-## Knowledge branches
+**DDP — Distributed Data Parallel:** mỗi GPU giữ một bản đầy đủ của model, mỗi GPU xử lý một phần batch và gradients được đồng bộ.
 
-| Domain | Branch |
-|---|---|
-| Research paper implementation and SOTA redesign | `feat/implement-knowledge-paper-research` |
-| ONNX and TensorRT model deployment | `feat/implement-knowledge-model-deployment` |
-| Distributed training with DDP and FSDP | `feat/implement-knowledge-distributed-training` |
-| Data structures, algorithms, and complexity | `feat/implement-knowledge-dsa` |
-| Design patterns and object-oriented programming | `feat/implement-knowledge-software-design` |
-| Machine learning and mathematics | `feat/implement-knowledge-ml-math` |
-| Diffusion, flow matching, and vision-language models | `feat/implement-knowledge-generative-ai` |
-| Robotics systems and sensor fusion | `feat/implement-knowledge-robotics-systems` |
-| Projects, experience, and motivation | `feat/implement-knowledge-projects-motivation` |
-| Ratings, practice questions, and review strategy | `feat/implement-knowledge-interview-strategy` |
+**FSDP — Fully Sharded Data Parallel:** parameters, gradients và optimizer states có thể được shard giữa nhiều GPU để giảm memory trên từng GPU.
 
-## Usage
+### Interviewer có thể hỏi thêm
 
-Switch to the branch for the domain you want to review:
+- What is distributed training?
+  + It includes DDP and FSDP in library torch.nn.parallel
+  + Code :
 
-```bash
-git switch feat/implement-knowledge-dsa
-```
+import torch.distributed as dist
 
-Each knowledge branch contains a single domain-specific `README.md`.
+
+from torch.nn.parallel import DistributedDataParallel as DDP
+
+
+from torch.utils.data import DataLoader
+
+
+from torch.utils.data.distributed import DistributedSampler
+
+-----------------------------------------------------------
+
+import torch.distributed as dist
+
+
+from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
+
+
+from torch.utils.data import DataLoader
+
+
+from torch.utils.data.distributed import DistributedSampler
+
+
+- What is the difference between DataParallel and DistributedDataParallel?
+  + DataParallel use a main process to control GPU. Model has been replicated to GPU, batch has been break down. Others GPU run forward/backward, and the result gather to main GPU.
+  + And DDP (DistributedDataParallel) use each process for each GPU. And each process keep full model, each GPU processes its own batch.
+- How does DDP synchronize gradients?
+  + It uses Allreduce to add gradient from all GPU : sum avegare
+- What problem does FSDP solve?
+  + GPU memory, with large model, VRAM GPU is not contain full model, so FSDP will handle it as devide model for many GPU.
+- What does FSDP shard?
+  + FSDP shards the model—including parameters, gradients, and weights—across the GPUs. This means that during the optimization step, it doesn't use AllReduce; instead, it performs optimization directly on each specific shard of the model.
+
+---
