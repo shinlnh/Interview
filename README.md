@@ -1,28 +1,42 @@
-# Physical Robotics Interview Review
+# ONNX and TensorRT Model Deployment
 
-This repository organizes interview preparation notes by knowledge domain. Each topic lives on a dedicated branch so it can be reviewed and developed independently.
+**Mức đã trao đổi:** **5/5**
 
-## Knowledge branches
+### Interviewer có thể hỏi thêm
 
-| Domain | Branch |
-|---|---|
-| Research paper implementation and SOTA redesign | `feat/implement-knowledge-paper-research` |
-| ONNX and TensorRT model deployment | `feat/implement-knowledge-model-deployment` |
-| Distributed training with DDP and FSDP | `feat/implement-knowledge-distributed-training` |
-| Data structures, algorithms, and complexity | `feat/implement-knowledge-dsa` |
-| Design patterns and object-oriented programming | `feat/implement-knowledge-software-design` |
-| Machine learning and mathematics | `feat/implement-knowledge-ml-math` |
-| Diffusion, flow matching, and vision-language models | `feat/implement-knowledge-generative-ai` |
-| Robotics systems and sensor fusion | `feat/implement-knowledge-robotics-systems` |
-| Projects, experience, and motivation | `feat/implement-knowledge-projects-motivation` |
-| Ratings, practice questions, and review strategy | `feat/implement-knowledge-interview-strategy` |
+- What is ONNX?
+- Why convert a PyTorch model to ONNX?
+- What is TensorRT?
+- What happens when TensorRT builds an engine?
+- What is the difference between FP32, FP16 and INT8?
+- Why can INT8 be faster?
+- What is INT8 calibration?
+- What is a TensorRT optimization profile?
+- What is dynamic shape?
+- What happens if an ONNX operator is not supported by TensorRT?
+- What is a TensorRT plugin?
+- How do you validate that ONNX/TensorRT output matches PyTorch output?
+- Why can ONNX Runtime sometimes be slower than PyTorch?
+- Why can TensorRT be faster on NVIDIA hardware?
+- What causes numerical differences after FP16 or INT8 conversion?
+- What is latency vs throughput?
+- How would you benchmark inference correctly?
+- Does higher FPS always mean lower latency?
+- How do preprocessing and postprocessing affect end-to-end FPS?
+- How would you deploy a model on Jetson Xavier?
 
-## Usage
+### Project-based follow-up
 
-Switch to the branch for the domain you want to review:
+Interviewer có thể đào trực tiếp:
 
-```bash
-git switch feat/implement-knowledge-dsa
-```
+- You mentioned StreamPETR. How did you convert or deploy it?
+- Which operators caused problems?
+- Why did INT8 improve performance?
+- How did you measure FPS?
+- Was the reported FPS model-only or end-to-end?
+- Did you include image decoding, preprocessing and postprocessing?
+- Why could PyTorch appear faster than ONNX in some experiments?
+- How did you verify accuracy after optimization?
 
-Each knowledge branch contains a single domain-specific `README.md`.
+---
+In mention book !!!
