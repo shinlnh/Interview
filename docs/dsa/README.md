@@ -41,16 +41,10 @@ Từ tốt đến xấu:
   }
 
 - Why is Merge Sort O(n log n)?
+  + Merge sort use divide arrray to binary tree. In this step, it divides the half array for each step, so the number of step will scale with the number of elements with O(logn). And then, it compares each elements with each other in sub array in same level, so in this step, big0 is O(n). So finally, bigO is O(n)*O(logn) = O(nlogn)
 - What is the average complexity of QuickSort?
-- What is the worst-case complexity of QuickSort?
-- Why can two O(n) algorithms have different runtime in practice?
-- What is amortized complexity?
-- What is the complexity of accessing an array element?
-- What is the complexity of searching in a hash table?
-- What is the complexity of inserting into a heap?
-- What is the complexity of matrix multiplication?
-- If an algorithm has two nested loops, is it always O(n²)?
-- How would you reduce an O(n²) matching operation?
+  + Quicksort use pivot to divide binary tree, so with each step, it use O(logn) compute. For each floor, it must devide for left and right. So it computes O(n). Finally, it uses O(nlogn) for all.
+
 
 ---
 
@@ -61,17 +55,25 @@ Từ tốt đến xấu:
 ### Interviewer có thể hỏi thêm
 
 - What is a heap?
+  + Heap is binary tree that features parent node is greater than to its chidlren.
 - What is the difference between a min-heap and max-heap?
-- What is the complexity of heap insertion?
+  + Min heap is binary tree that features parent node is smaller than to its children. And max heap is binary tree that features parent node is greater than to its children.
 - What is heapify?
+  + Heapify is generate features for binary tree meaning parent node is greater than chill nodel
 - How does HeapSort work?
+  + HeapSort use heapify to build binary tree that I mentioned. And it is call heapify for nodes that is not leaf node (foot node in tree). It means from n/2-1 to 0. Finally, when I have binary tree completely, I just swap a[i] with a[0] because with binary tree, a[0] is max node. And I keep to run i from head vector to tail vector
 - How does QuickSort work?
+  + It chooses late element to make pivot. And it use partition to move element that smaller than pivot to left pivot and greater than pivot to right pivot. And finally, it recursion from left and right pivot.
 - What is the pivot?
+  + It use pivot to divide array to binary tree.
 - Why can QuickSort become O(n²)?
+  + If quicksort use pivot high (late in array), the pivot may have ability max array or min array, not mid array, so it take a lot of time to choose pivot to mid array.
 - What is the average complexity of QuickSort?
+  + O(nlogn)
 - QuickSort vs MergeSort: when would you use each one?
 - Is QuickSort stable?
+  + When I choose pivot that is near median array.
 - Is MergeSort stable?
-- What is an in-place sorting algorithm?
+  + Almost stable O(nlogn)
 
 ---
