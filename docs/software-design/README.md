@@ -16,8 +16,176 @@
   - Observer pattern
 
 - What is the Strategy pattern?
+  - If you have a task which has many the way to solve the problem. You should divide those solutions within a box. You don't need to know what's inside; whenever you need a specific solution, you simply call it by name from the outside to use it. That is the Strategy pattern in OOP at work. It is using Polymorphism in OOP
+  - For example, I have three way to solve sort issue.
+
+    ```cpp
+    class SortStrategy {
+    public:
+        virtual void sort() = 0;
+    };
+
+    class BubbleSort : public SortStrategy {
+    public:
+        void sort() override {
+            cout << "Bubble Sort";
+        }
+    };
+
+    class QuickSort : public SortStrategy {
+    public:
+        void sort() override {
+            cout << "Quick Sort";
+        }
+    };
+
+    SortStrategy* s;
+
+    s = new BubbleSort();
+    s->sort();              // Bubble Sort
+
+    s = new QuickSort();
+    s->sort();
+    ```
+
 - What is the Factory pattern?
+  - With strategy pattern, you must call object way if you want use that object to solve. However, Factory pattern improve compare with Strategy. If you want what object, Factory will make this object for you. You don't create object handmade.
+  - For example :
+
+    ```cpp
+    #include <iostream>
+    #include <string>
+
+    using namespace std;
+
+    class SortStrategy {
+    public:
+        virtual void sort() = 0;
+    };
+
+    class BubbleSort : public SortStrategy {
+    public:
+        void sort() override {
+            cout << "Bubble Sort" << endl;
+        }
+    };
+
+    class QuickSort : public SortStrategy {
+    public:
+        void sort() override {
+            cout << "Quick Sort" << endl;
+        }
+    };
+
+    class SortFactory {
+    public:
+        SortStrategy* createSort(string type) {
+
+            if (type == "bubble") {
+                return new BubbleSort();
+            }
+
+            if (type == "quick") {
+                return new QuickSort();
+            }
+
+            return nullptr;
+        }
+    };
+
+    int main() {
+
+        SortFactory factory;
+        SortStrategy* s;
+
+        s = factory.createSort("bubble");
+        s->sort();
+
+        s = factory.createSort("quick");
+        s->sort();
+
+        return 0;
+    }
+    ```
+
 - What is the Observer pattern?
+  - Ìf you want when a object has been changed, all object will be received notify from it.
+  - For example :
+
+    ```cpp
+    #include <iostream>
+    #include <vector>
+
+    using namespace std;
+
+
+    // Observer
+    class SortObserver {
+    public:
+        virtual void update(int number) = 0;
+    };
+
+
+    // Observer 1
+    class QuickSort : public SortObserver {
+    public:
+        void update(int number) override {
+            cout << "QuickSort nhan so moi: "
+                 << number << endl;
+        }
+    };
+
+
+    // Observer 2
+    class HeapSort : public SortObserver {
+    public:
+        void update(int number) override {
+            cout << "HeapSort nhan so moi: "
+                 << number << endl;
+        }
+    };
+
+
+    // Subject
+    class NumberSource {
+    private:
+        vector<SortObserver*> observers;
+
+    public:
+        void subscribe(SortObserver* observer) {
+            observers.push_back(observer);
+        }
+
+        void addNumber(int number) {
+
+            cout << "So moi: " << number << endl;
+
+            // Thông báo cho tất cả Observer
+            for (SortObserver* observer : observers) {
+                observer->update(number);
+            }
+        }
+    };
+
+
+    int main() {
+
+        NumberSource source;
+
+        QuickSort quick;
+        HeapSort heap;
+
+        // Hai thuật toán đăng ký theo dõi source
+        source.subscribe(&quick);
+        source.subscribe(&heap);
+
+        // Source nhận số mới
+        source.addNumber(10);
+
+        return 0;
+    }
+    ```
+
 - Give an example of a design pattern in a robotics or ML pipeline.
 - When can Singleton become a bad design?
 - What is dependency injection?
