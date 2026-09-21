@@ -1,51 +1,22 @@
-# Software Design: Patterns and OOP
+# Physical Robotics Interview Review
 
-**Mức đã trao đổi:** **3/5**
+This repository organizes physical robotics interview preparation into focused knowledge chunks. Related concepts, questions, and existing answers are grouped together in each chunk.
 
-### Interviewer có thể hỏi thêm
+## Knowledge chunks
 
-- What is a software design pattern?
-- Why do we use design patterns?
-- What is the Singleton pattern?
-- What is the Factory pattern?
-- What is the Strategy pattern?
-- What is the Observer pattern?
-- Give an example of a design pattern in a robotics or ML pipeline.
-- When can Singleton become a bad design?
-- What is dependency injection?
-- How would you design interchangeable detector or tracker modules?
+| Domain | Notes |
+|---|---|
+| Research paper implementation and SOTA redesign | [Paper research](docs/paper-research/README.md) |
+| ONNX and TensorRT model deployment | [Model deployment](docs/model-deployment/README.md) |
+| Distributed training with DDP and FSDP | [Distributed training](docs/distributed-training/README.md) |
+| Data structures, algorithms, and complexity | [DSA](docs/dsa/README.md) |
+| Design patterns and object-oriented programming | [Software design](docs/software-design/README.md) |
+| Machine learning and mathematics | [ML and mathematics](docs/ml-math/README.md) |
+| Diffusion, flow matching, and vision-language models | [Generative AI](docs/generative-ai/README.md) |
+| Robotics systems and sensor fusion | [Robotics systems](docs/robotics-systems/README.md) |
+| Projects, experience, and motivation | [Projects and motivation](docs/projects-motivation/README.md) |
+| Ratings, practice questions, and review strategy | [Interview strategy](docs/interview-strategy/README.md) |
 
-### Robotics example
+## Usage
 
-Một pipeline kiểu:
-
-`Detector interface → YOLO / SSD / StreamPETR implementation`
-
-rất dễ liên hệ với **Strategy / Factory**.
-
----
-
-### 1.8 Object-Oriented Programming
-
-**Mức đã trao đổi:** **4/5**
-
-### Interviewer có thể hỏi thêm
-
-- What are the four main principles of OOP?
-- What is encapsulation?
-- What is inheritance?
-- What is polymorphism?
-- What is abstraction?
-- What is the difference between inheritance and composition?
-- What is a virtual function in C++?
-- What is a pure virtual function?
-- What is an abstract class?
-- What is function overloading vs overriding?
-- What is a constructor/destructor?
-- What is RAII in C++?
-- What is a smart pointer?
-- unique_ptr vs shared_ptr?
-- Why is composition often preferred over inheritance?
-- How would you design a tracker interface supporting CSRT, KCF and a Siamese tracker?
-
----
+Open the README for the domain you want to review. All chunks are maintained together on `main`.
