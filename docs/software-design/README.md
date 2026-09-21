@@ -5,10 +5,18 @@
 ### Interviewer có thể hỏi thêm
 
 - What is a software design pattern?
+  - A software design pattern is a reusable solution to a common software design problem.
+
 - Why do we use design patterns?
-- What is the Singleton pattern?
-- What is the Factory pattern?
+  - We use design patterns because they provide proven solutions to common software design problems. They help make code more maintainable, reusable, flexible, and easier to extend.
+
+- Three pattern i learn :
+  - Strategy pattern
+  - Factory pattern
+  - Observer pattern
+
 - What is the Strategy pattern?
+- What is the Factory pattern?
 - What is the Observer pattern?
 - Give an example of a design pattern in a robotics or ML pipeline.
 - When can Singleton become a bad design?
