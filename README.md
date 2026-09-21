@@ -1,90 +1,22 @@
-# Robotics Systems
+# Physical Robotics Interview Review
 
-### 6.1 Kalman Filter
+This repository organizes physical robotics interview preparation into focused knowledge chunks. Related concepts, questions, and existing answers are grouped together in each chunk.
 
-- What problem does a Kalman Filter solve?
-- What are the prediction and correction steps?
-- What is the state vector?
-- What is the covariance matrix P?
-- What are Q and R?
-- What is the Kalman Gain?
-- How does measurement noise affect the Kalman Gain?
-- What happens if Q is too large?
-- What happens if R is too large?
-- Can a Kalman Filter fuse camera and radar measurements?
-- What assumptions does a standard Kalman Filter make?
-- KF vs EKF vs UKF?
-- Why would a tracker use Kalman prediction during temporary occlusion?
+## Knowledge chunks
 
----
+| Domain | Notes |
+|---|---|
+| Research paper implementation and SOTA redesign | [Paper research](docs/paper-research/README.md) |
+| ONNX and TensorRT model deployment | [Model deployment](docs/model-deployment/README.md) |
+| Distributed training with DDP and FSDP | [Distributed training](docs/distributed-training/README.md) |
+| Data structures, algorithms, and complexity | [DSA](docs/dsa/README.md) |
+| Design patterns and object-oriented programming | [Software design](docs/software-design/README.md) |
+| Machine learning and mathematics | [ML and mathematics](docs/ml-math/README.md) |
+| Diffusion, flow matching, and vision-language models | [Generative AI](docs/generative-ai/README.md) |
+| Robotics systems and sensor fusion | [Robotics systems](docs/robotics-systems/README.md) |
+| Projects, experience, and motivation | [Projects and motivation](docs/projects-motivation/README.md) |
+| Ratings, practice questions, and review strategy | [Interview strategy](docs/interview-strategy/README.md) |
 
-### 6.2 Fourier domain / tracking
+## Usage
 
-- Why use the Fourier domain in correlation-filter tracking?
-- What is convolution in the spatial domain equivalent to in the Fourier domain?
-- Why can FFT reduce computation?
-- What is the complexity of FFT?
-- What is a correlation filter?
-- What is the relation between DCF/KCF/CSRT?
-- Does moving computation to Fourier space always reduce total runtime?
-- What does element-wise multiplication in frequency domain correspond to?
-
-Key relationship:
-
-\[
-\text{convolution in spatial domain}
-\leftrightarrow
-\text{multiplication in frequency domain}
-\]
-
-FFT complexity is approximately:
-
-\[
-O(n\log n)
-\]
-
----
-
-### 6.3 Camera + Radar
-
-- What does a camera provide?
-- What does radar provide?
-- Why fuse camera and radar?
-- What is sensor calibration?
-- What is extrinsic calibration?
-- What is intrinsic calibration?
-- How do you transform radar points into the camera coordinate frame?
-- How do you associate a radar point with a detected object?
-- What happens if camera and radar disagree?
-- What is data association?
-- Can Hungarian matching be used for data association?
-- Can a Kalman Filter perform sensor fusion?
-- What is gating?
-- What is Mahalanobis distance?
-- Early fusion vs late fusion?
-- What happens when radar has good depth but poor angular resolution?
-- How do timestamps affect multi-sensor fusion?
-
----
-
-### 6.4 Isaac Sim / Isaac Lab
-
-- What is Isaac Sim?
-- What is Isaac Lab?
-- What is the difference between Isaac Sim and Isaac Lab?
-- What simulator did you use for humanoid robots?
-- What is an articulation?
-- What is a joint / DOF?
-- Position control vs velocity control vs torque control?
-- What is sim-to-real?
-- What is domain randomization?
-- Why train robot policies in simulation?
-- What is PhysX?
-- What information belongs to an observation space?
-- What information belongs to an action space?
-- How do you define a reward in RL?
-- How do you reset an environment?
-- Why run many environments in parallel?
-- How can Isaac Lab accelerate RL training?
-
----
+Open the README for the domain you want to review. All chunks are maintained together on `main`.
