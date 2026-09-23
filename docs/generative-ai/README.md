@@ -110,61 +110,61 @@ Interviewer có thể hỏi:
 
 Forward:
 
-\[
+```math
 x_0 \rightarrow x_1 \rightarrow ... \rightarrow x_T
-\]
+```
 
 Thêm noise dần.
 
 Reverse:
 
-\[
+```math
 x_T \rightarrow ... \rightarrow x_1 \rightarrow x_0
-\]
+```
 
 Model học denoise.
 
 Typical noise-prediction objective:
 
-\[
+```math
 x_t
 =
 \sqrt{\bar{\alpha}_t}x_0
 +
 \sqrt{1-\bar{\alpha}_t}\epsilon
-\]
+```
 
-\[
+```math
 L_{diff}
 =
 \|
 \epsilon-\epsilon_\theta(x_t,t)
 \|^2
-\]
+```
 
 ### Flow Matching
 
 Một cách đơn giản:
 
-\[
+```math
 x_t=(1-t)x_0+tx_1
-\]
+```
 
 Target velocity:
 
-\[
+```math
 v^*=x_1-x_0
-\]
+```
 
 Loss:
 
-\[
+```math
 L_{FM}
 =
 \|
 v_\theta(x_t,t)-v^*
 \|^2
-\]
+```
 
 ### Interviewer có thể hỏi
 
