@@ -6,17 +6,17 @@
 
   A Kalman Filter estimates the hidden state of a dynamic system when the measurements are noisy. It combines
 
-  \[
+  ```math
   \text{motion prediction} + \text{sensor measurement}
-  \]
+  ```
 
   to obtain a better state estimate.
 
   For example, in object tracking:
 
-  \[
+  ```math
   x_k = [x, y, v_x, v_y]^T
-  \]
+  ```
 
   The camera measurement may be noisy, so the Kalman Filter combines the measurement with the previous motion information.
 
@@ -26,25 +26,25 @@
 
   **Prediction:**
 
-  \[
+  ```math
   \hat{x}_k^- = F\hat{x}_{k-1}
-  \]
+  ```
 
-  \[
+  ```math
   P_k^- = FP_{k-1}F^T + Q
-  \]
+  ```
 
   It predicts the current state using the previous state and the motion model.
 
   **Correction:**
 
-  \[
+  ```math
   K_k = P_k^-H^T(HP_k^-H^T + R)^{-1}
-  \]
+  ```
 
-  \[
+  ```math
   \hat{x}_k = \hat{x}_k^- + K_k(z_k - H\hat{x}_k^-)
-  \]
+  ```
 
   The correction step uses the new sensor measurement to correct the prediction.
 
@@ -54,67 +54,67 @@
 
   For example:
 
-  \[
+  ```math
   x = [x, y, v_x, v_y]^T
-  \]
+  ```
 
   contains position and velocity.
 
   For bounding-box tracking, it could be:
 
-  \[
+  ```math
   x = [c_x, c_y, w, h, v_x, v_y, v_w, v_h]^T
-  \]
+  ```
 
   The exact state vector depends on the application.
 
 - What is the covariance matrix P?
 
-  The covariance matrix \(P\) represents the uncertainty of the current state estimate.
+  The covariance matrix $P$ represents the uncertainty of the current state estimate.
 
-  A larger \(P\) means:
+  A larger $P$ means:
 
   > The filter is less confident about the estimated state.
 
-  A smaller \(P\) means:
+  A smaller $P$ means:
 
   > The filter is more confident about the estimated state.
 
   So:
 
-  \[
+  ```math
   P \uparrow \;\Rightarrow\; \text{uncertainty} \uparrow
-  \]
+  ```
 
-  \[
+  ```math
   P \downarrow \;\Rightarrow\; \text{uncertainty} \downarrow
-  \]
+  ```
 
 - What are Q and R?
 
-  \(Q\) is the **process noise covariance**.
+  $Q$ is the **process noise covariance**.
 
   It represents uncertainty in the motion or system model.
 
   For example, we may assume constant velocity, but the object can actually accelerate.
 
-  \(R\) is the **measurement noise covariance**.
+  $R$ is the **measurement noise covariance**.
 
   It represents the uncertainty or noise of the sensor measurement.
 
   A simple way to remember them is:
 
-  > \(Q\) describes how much we distrust the motion model.
+  > $Q$ describes how much we distrust the motion model.
 
-  > \(R\) describes how much we distrust the measurement.
+  > $R$ describes how much we distrust the measurement.
 
 - What is the Kalman Gain?
 
   The Kalman Gain is:
 
-  \[
+  ```math
   K_k = P_k^-H^T(HP_k^-H^T + R)^{-1}
-  \]
+  ```
 
   It determines how much the filter should trust the measurement compared with the prediction.
 
@@ -126,25 +126,25 @@
 
 - How does measurement noise affect the Kalman Gain?
 
-  Measurement noise is represented by \(R\). From the Kalman Gain equation:
+  Measurement noise is represented by $R$. From the Kalman Gain equation:
 
-  \[
+  ```math
   K_k = P_k^-H^T(HP_k^-H^T + R)^{-1}
-  \]
+  ```
 
-  if \(R\) increases, the Kalman Gain generally decreases. The filter trusts the noisy measurement less and relies more on the prediction.
+  if $R$ increases, the Kalman Gain generally decreases. The filter trusts the noisy measurement less and relies more on the prediction.
 
-  If \(R\) decreases, the Kalman Gain generally increases. The filter considers the measurement more reliable and gives it more influence.
+  If $R$ decreases, the Kalman Gain generally increases. The filter considers the measurement more reliable and gives it more influence.
 
 - What happens if Q is too large?
 
-  If \(Q\) is too large, the filter assumes that the motion model is very uncertain. The predicted covariance \(P_k^-\) grows, which generally increases the Kalman Gain and makes the filter rely more on measurements.
+  If $Q$ is too large, the filter assumes that the motion model is very uncertain. The predicted covariance $P_k^-$ grows, which generally increases the Kalman Gain and makes the filter rely more on measurements.
 
   As a result, the estimate responds quickly to changes but may become noisy or unstable because it follows measurement noise too closely.
 
 - What happens if R is too large?
 
-  If \(R\) is too large, the filter assumes that the sensor measurements are very unreliable. The Kalman Gain becomes smaller, so the filter relies more on the motion prediction.
+  If $R$ is too large, the filter assumes that the sensor measurements are very unreliable. The Kalman Gain becomes smaller, so the filter relies more on the motion prediction.
 
   The estimate becomes smoother but may react too slowly to real changes. If the motion model is inaccurate, the estimate can also drift away from the true state.
 
@@ -152,7 +152,7 @@
 
   Yes. A Kalman Filter can combine camera and radar measurements if both can be related to the same state.
 
-  Each sensor has its own measurement model \(H\) and measurement noise covariance \(R\). Their measurements can be processed sequentially or combined into one measurement update.
+  Each sensor has its own measurement model $H$ and measurement noise covariance $R$. Their measurements can be processed sequentially or combined into one measurement update.
 
   For example, a camera may provide accurate image position, while radar provides range and relative velocity. The system also needs correct spatial calibration, time synchronization, and data association. If the measurement relationship is nonlinear, an EKF or UKF may be more appropriate than a standard KF.
 
@@ -162,7 +162,7 @@
 
   - The state transition and measurement models are linear.
   - Process noise and measurement noise are zero-mean Gaussian noise.
-  - The noise covariance matrices \(Q\) and \(R\) are known or estimated correctly.
+  - The noise covariance matrices $Q$ and $R$ are known or estimated correctly.
   - Process noise, measurement noise, and the initial state error are mutually independent.
   - The motion and measurement models describe the real system reasonably well.
 
@@ -186,32 +186,32 @@
 
 - Why use the Fourier domain in correlation-filter tracking?
 
-  Trong correlation-filter tracker, mục tiêu cơ bản là lấy một **filter/template** \(h\) rồi quét nó trên search region \(f\) để tìm vị trí giống target nhất.
+  Trong correlation-filter tracker, mục tiêu cơ bản là lấy một **filter/template** $h$ rồi quét nó trên search region $f$ để tìm vị trí giống target nhất.
 
   Nếu thực hiện trực tiếp trong spatial domain, ta phải dịch filter qua nhiều vị trí và tính correlation tại từng vị trí:
 
-  \[
+  ```math
   g = f \star h
-  \]
+  ```
 
   Trong Fourier domain, phép correlation trở thành phép nhân từng phần tử:
 
-  \[
+  ```math
   \boxed{G = F \odot H^*}
-  \]
+  ```
 
   với:
 
-  - \(F = \mathcal{F}(f)\)
-  - \(H = \mathcal{F}(h)\)
-  - \(H^*\): complex conjugate
-  - \(\odot\): element-wise multiplication
+  - $F = \mathcal{F}(f)$
+  - $H = \mathcal{F}(h)$
+  - $H^*$: complex conjugate
+  - $\odot$: element-wise multiplication
 
   Sau đó:
 
-  \[
+  ```math
   g = \mathcal{F}^{-1}(G)
-  \]
+  ```
 
   MOSSE sử dụng chính cách này: biến đổi ảnh và filter bằng FFT, nhân element-wise trong frequency domain, rồi dùng inverse FFT để thu được response map.
 
@@ -240,9 +240,9 @@
 
   Theo **Convolution Theorem**:
 
-  \[
+  ```math
   \boxed{f * h \quad \Longleftrightarrow \quad F \odot H}
-  \]
+  ```
 
   Tức là:
 
@@ -250,33 +250,33 @@
 
   Còn **correlation** hơi khác một chút:
 
-  \[
+  ```math
   \boxed{f \star h \quad \Longleftrightarrow \quad F \odot H^*}
-  \]
+  ```
 
-  Khác biệt chính là complex conjugate \(H^*\). MOSSE biểu diễn correlation dưới dạng:
+  Khác biệt chính là complex conjugate $H^*$. MOSSE biểu diễn correlation dưới dạng:
 
-  \[
+  ```math
   G = F \odot H^*
-  \]
+  ```
 
   Vì vậy, có thể ghi nhớ:
 
-  \[
+  ```math
   \boxed{\text{convolution} \rightarrow FH}
-  \]
+  ```
 
-  \[
+  ```math
   \boxed{\text{correlation} \rightarrow FH^*}
-  \]
+  ```
 
 - Why can FFT reduce computation?
 
-  Nếu tính correlation trực tiếp cho mọi vị trí, mỗi vị trí cần một phép dot product với filter. Với tín hiệu có \(N\) phần tử và filter có kích thước tương đương, chi phí có thể lên tới:
+  Nếu tính correlation trực tiếp cho mọi vị trí, mỗi vị trí cần một phép dot product với filter. Với tín hiệu có $N$ phần tử và filter có kích thước tương đương, chi phí có thể lên tới:
 
-  \[
+  ```math
   O(N^2)
-  \]
+  ```
 
   Khi dùng FFT, ta thực hiện ba bước:
 
@@ -286,31 +286,31 @@
 
   Tổng chi phí xấp xỉ:
 
-  \[
+  ```math
   O(N\log N) + O(N) + O(N\log N) = O(N\log N)
-  \]
+  ```
 
   Trong tracking, Fourier transform của filter thường được tái sử dụng, nên chi phí cho mỗi frame còn thấp hơn so với việc quét filter trực tiếp qua toàn bộ search region.
 
 - What is the complexity of FFT?
 
-  Với tín hiệu một chiều có \(N\) phần tử, độ phức tạp của FFT là:
+  Với tín hiệu một chiều có $N$ phần tử, độ phức tạp của FFT là:
 
-  \[
+  ```math
   O(N\log N)
-  \]
+  ```
 
-  Với ảnh hai chiều kích thước \(M \times N\), FFT được thực hiện theo cả hàng và cột, nên độ phức tạp là:
+  Với ảnh hai chiều kích thước $M \times N$, FFT được thực hiện theo cả hàng và cột, nên độ phức tạp là:
 
-  \[
+  ```math
   O\bigl(MN(\log M + \log N)\bigr)
-  \]
+  ```
 
   thường được viết gọn là:
 
-  \[
+  ```math
   O\bigl(MN\log(MN)\bigr)
-  \]
+  ```
 
 - What is a correlation filter?
 
@@ -335,9 +335,9 @@
 
   Tóm lại:
 
-  \[
+  ```math
   \text{DCF family} \supset \{\text{KCF},\ \text{CSRT},\ldots\}
-  \]
+  ```
 
   > KCF ưu tiên tốc độ, còn CSRT ưu tiên độ ổn định và chính xác.
 
@@ -358,15 +358,15 @@
 
   Element-wise multiplication trong frequency domain tương ứng với convolution trong spatial domain:
 
-  \[
+  ```math
   F \odot H \quad \Longleftrightarrow \quad f * h
-  \]
+  ```
 
   Nếu một spectrum được lấy complex conjugate, phép toán tương ứng với correlation:
 
-  \[
+  ```math
   F \odot H^* \quad \Longleftrightarrow \quad f \star h
-  \]
+  ```
 
   Vì Discrete Fourier Transform giả định signal có tính tuần hoàn, kết quả trực tiếp là **circular convolution hoặc correlation**. Muốn thu được dạng linear mà không bị wrap-around, cần zero-pad các input tới kích thước đủ lớn.
 
@@ -408,11 +408,11 @@
 
 - What is extrinsic calibration?
 
-  Extrinsic calibration estimates the rigid transformation between two coordinate frames. It consists of rotation \(R\) and translation \(t\):
+  Extrinsic calibration estimates the rigid transformation between two coordinate frames. It consists of rotation $R$ and translation $t$:
 
-  \[
+  ```math
   p_B = R_{B \leftarrow A}p_A + t_{B \leftarrow A}
-  \]
+  ```
 
   For camera-radar fusion, extrinsics describe where the camera and radar are mounted relative to the ego vehicle, allowing radar measurements to be transformed into the camera or ego frame.
 
@@ -420,38 +420,38 @@
 
   Intrinsic calibration describes how a 3D point in the camera frame maps to an image pixel. The camera matrix is:
 
-  \[
+  ```math
   K =
   \begin{bmatrix}
   f_x & 0 & c_x \\
   0 & f_y & c_y \\
   0 & 0 & 1
   \end{bmatrix}
-  \]
+  ```
 
   It contains the focal lengths and principal point; a real camera model may also contain lens-distortion parameters.
 
-  This project uses an ideal CARLA pinhole camera and calculates \(f_x\), \(f_y\), \(c_x\), and \(c_y\) from the horizontal field of view and image resolution.
+  This project uses an ideal CARLA pinhole camera and calculates $f_x$, $f_y$, $c_x$, and $c_y$ from the horizontal field of view and image resolution.
 
 - How do you transform radar points into the camera coordinate frame?
 
   First, transform the radar point into the ego frame, then transform it from the ego frame into the camera frame:
 
-  \[
+  ```math
   p_{\text{ego}} = T_{\text{ego} \leftarrow \text{radar}}p_{\text{radar}}
-  \]
+  ```
 
-  \[
+  ```math
   p_{\text{camera}} = T_{\text{camera} \leftarrow \text{ego}}p_{\text{ego}}
-  \]
+  ```
 
   To project it into the image:
 
-  \[
+  ```math
   \tilde{p} = Kp_{\text{camera}}, \qquad
   u = \frac{\tilde{p}_x}{\tilde{p}_z}, \quad
   v = \frac{\tilde{p}_y}{\tilde{p}_z}
-  \]
+  ```
 
   Points behind the camera or outside its field of view must be rejected. If the measurements are asynchronous, ego motion and object motion should also be used to transform them to the same timestamp.
 
@@ -468,7 +468,7 @@
 
   This project associates radar clusters or tracks rather than individual raw radar points. Its cost combines:
 
-  - Mahalanobis distance over \([x, v_x, y, v_y]\).
+  - Mahalanobis distance over $[x, v_x, y, v_y]$.
   - Projected radar-box versus camera-box IoU.
   - A 20 m ground-distance guard unless image IoU is at least 0.35.
   - An absolute 60 m mismatch guard.
@@ -505,7 +505,7 @@
 
   - Mahalanobis distance.
   - Euclidean distance.
-  - \(1 - \operatorname{IoU}\).
+  - $1 - \operatorname{IoU}$.
   - Class incompatibility.
   - Velocity difference.
   - A weighted combination of these cues.
@@ -539,18 +539,18 @@
 
   Mahalanobis distance measures the difference between a measurement and a predicted state while accounting for uncertainty:
 
-  \[
+  ```math
   d_M = \sqrt{(z - \hat{z})^T S^{-1}(z - \hat{z})}
-  \]
+  ```
 
   Here:
 
-  - \(z - \hat{z}\) is the innovation.
-  - \(S\) is the innovation covariance.
+  - $z - \hat{z}$ is the innovation.
+  - $S$ is the innovation covariance.
 
   Unlike Euclidean distance, it treats an error in an uncertain direction as less significant than the same error in a highly accurate direction.
 
-  The project calculates it using camera and radar states containing \(x\), \(v_x\), \(y\), and \(v_y\), together with their combined covariance.
+  The project calculates it using camera and radar states containing $x$, $v_x$, $y$, and $v_y$, together with their combined covariance.
 
 - Early fusion vs late fusion?
 
@@ -585,9 +585,9 @@
 
   Measurements must represent approximately the same physical time. Otherwise, ego motion and object motion cause spatial errors:
 
-  \[
+  ```math
   \text{position error} \approx v\Delta t
-  \]
+  ```
 
   Timestamp errors can cause incorrect associations, duplicated objects, unstable velocity estimates, and ghost tracks.
 
@@ -595,7 +595,7 @@
 
   - Buffers camera and radar results by timestamp.
   - Uses approximate-time synchronization.
-  - Uses exact timestamps in CARLA (\(\varepsilon = 0\)).
+  - Uses exact timestamps in CARLA ($\varepsilon = 0$).
   - Waits at most 200 ms for a missing sensor.
   - Predicts the older sensor track to the newer timestamp.
   - Does not reuse sensor data from a previous synchronized bundle.
