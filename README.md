@@ -17,6 +17,19 @@ This repository organizes physical robotics interview preparation into focused k
 | Projects, experience, and motivation | [Projects and motivation](docs/projects-motivation/README.md) |
 | Ratings, practice questions, and review strategy | [Interview strategy](docs/interview-strategy/README.md) |
 
+## Branch work order
+
+1. `feat/implement-knowledge-dsa`
+2. `feat/implement-knowledge-model-deployment`
+3. `feat/implement-knowledge-robotics-systems`
+4. `feat/implement-knowledge-software-design`
+5. `feat/implement-knowledge-projects-motivation`
+6. `feat/implement-knowledge-paper-research`
+7. `feat/implement-knowledge-ml-math`
+8. `feat/implement-knowledge-generative-ai`
+9. `feat/implement-knowledge-distributed-training`
+10. `feat/implement-knowledge-interview-strategy`
+
 ## Usage
 
 Open the README for the domain you want to review. All chunks are maintained together on `main`.
