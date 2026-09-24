@@ -634,6 +634,186 @@ AdamW thường là lựa chọn mặc định tốt hơn Adam khi train Transfo
 
 **Mức đã trao đổi:** **3/5**
 
+### Kiến Thức Cần Nhớ
+
+#### 1. Hạng của ma trận
+
+**Định nghĩa trực quan:** Hạng của ma trận cho biết phép biến đổi do ma trận đó tạo ra còn giữ được bao nhiêu **hướng độc lập**. Nói cách khác, hạng đo lượng thông tin độc lập có trong các hàng hoặc các cột của ma trận.
+
+Với ma trận $A\in\mathbb{R}^{m\times n}$:
+
+$$
+\operatorname{rank}(A)
+=
+\text{số cột độc lập tuyến tính của }A
+=
+\text{số hàng độc lập tuyến tính của }A
+$$
+
+Ta luôn có:
+
+$$
+0\leq \operatorname{rank}(A)\leq \min(m,n)
+$$
+
+Ví dụ:
+
+$$
+A=
+\begin{bmatrix}
+1&0\\
+0&1
+\end{bmatrix}
+$$
+
+Hai cột $(1,0)^T$ và $(0,1)^T$ chỉ hai hướng độc lập trong mặt phẳng, nên $\operatorname{rank}(A)=2$. Phép biến đổi này vẫn giữ được không gian hai chiều.
+
+Ngược lại:
+
+$$
+B=
+\begin{bmatrix}
+1&2\\
+2&4
+\end{bmatrix}
+$$
+
+Cột thứ hai bằng hai lần cột thứ nhất, nên ma trận chỉ có một hướng độc lập và $\operatorname{rank}(B)=1$. Với mọi vector $(x,y)^T$:
+
+$$
+B
+\begin{bmatrix}
+x\\y
+\end{bmatrix}
+=
+\begin{bmatrix}
+x+2y\\
+2x+4y
+\end{bmatrix}
+=
+(x+2y)
+\begin{bmatrix}
+1\\2
+\end{bmatrix}
+$$
+
+Mọi điểm trong mặt phẳng sau phép biến đổi đều bị ép lên cùng một đường thẳng. Vì một chiều đã bị mất nên ta không thể khôi phục duy nhất $(x,y)$ từ kết quả.
+
+> Hạng càng thấp thì ma trận càng có nhiều thông tin trùng lặp hoặc càng làm mất nhiều hướng. Hạng đầy đủ nghĩa là ma trận giữ được số hướng độc lập lớn nhất có thể.
+
+#### 2. Định thức của ma trận
+
+**Định nghĩa trực quan:** Định thức chỉ được định nghĩa cho ma trận vuông và cho biết phép biến đổi tuyến tính làm **diện tích hoặc thể tích có hướng** thay đổi bao nhiêu lần.
+
+- Trong không gian hai chiều, $|\det(A)|$ là hệ số co giãn diện tích.
+- Trong không gian ba chiều, $|\det(A)|$ là hệ số co giãn thể tích.
+- $\det(A)>0$: phép biến đổi giữ nguyên chiều định hướng.
+- $\det(A)<0$: phép biến đổi đảo chiều định hướng, giống như phản chiếu qua gương.
+- $\det(A)=0$: diện tích hoặc thể tích bị ép về $0$, nghĩa là ít nhất một chiều đã bị mất.
+
+Với ma trận $2\times2$:
+
+$$
+A=
+\begin{bmatrix}
+a&b\\
+c&d
+\end{bmatrix},
+\qquad
+\det(A)=ad-bc
+$$
+
+Ví dụ:
+
+$$
+C=
+\begin{bmatrix}
+2&0\\
+0&3
+\end{bmatrix},
+\qquad
+\det(C)=2\cdot3=6
+$$
+
+$C$ kéo dài một hướng lên $2$ lần và hướng còn lại lên $3$ lần. Vì vậy, hình vuông đơn vị có diện tích $1$ sẽ trở thành hình chữ nhật có diện tích $6$.
+
+Với ma trận $B$ ở trên:
+
+$$
+\det(B)=1\cdot4-2\cdot2=0
+$$
+
+Mặt phẳng bị ép xuống một đường thẳng nên diện tích sau biến đổi bằng $0$. Đây cũng là lý do $B$ có hạng nhỏ hơn $2$.
+
+> Hạng trả lời câu hỏi “còn bao nhiêu hướng độc lập?”, còn định thức trả lời “diện tích hoặc thể tích có hướng bị thay đổi bao nhiêu lần?”. Định thức bằng $0$ cho biết có hướng đã bị mất, nhưng không cho biết chính xác còn lại bao nhiêu hướng; muốn biết điều đó phải dùng hạng.
+
+#### 3. Ma trận khả nghịch
+
+**Định nghĩa trực quan:** Ma trận khả nghịch biểu diễn một phép biến đổi có thể **đảo ngược hoàn toàn**. Nếu $A$ biến $x$ thành $y$, thì $A^{-1}$ có thể biến $y$ trở lại đúng $x$:
+
+$$
+y=Ax
+\qquad\Longrightarrow\qquad
+x=A^{-1}y
+$$
+
+Ma trận nghịch đảo thỏa mãn:
+
+$$
+AA^{-1}=A^{-1}A=I
+$$
+
+Với ma trận vuông $A\in\mathbb{R}^{n\times n}$, các phát biểu sau là tương đương:
+
+$$
+A\text{ khả nghịch}
+\Longleftrightarrow
+\operatorname{rank}(A)=n
+\Longleftrightarrow
+\det(A)\neq0
+$$
+
+Ví dụ, với ma trận $C$:
+
+$$
+C^{-1}=
+\begin{bmatrix}
+\frac{1}{2}&0\\
+0&\frac{1}{3}
+\end{bmatrix}
+$$
+
+$C$ kéo dài hai hướng lên $2$ và $3$ lần; $C^{-1}$ co chúng lại còn $\frac{1}{2}$ và $\frac{1}{3}$, nên khôi phục được vector ban đầu.
+
+Ma trận $B$ không khả nghịch vì nó ép cả mặt phẳng xuống một đường thẳng. Nhiều điểm đầu vào khác nhau có thể cho cùng một đầu ra, nên không thể xác định duy nhất điểm ban đầu.
+
+> Ma trận khả nghịch không làm mất thông tin. Ma trận không khả nghịch làm mất ít nhất một hướng nên không thể đảo ngược duy nhất.
+
+#### 4. Ứng dụng trong đại số tuyến tính
+
+- **Giải hệ phương trình:** Với hệ $Ax=b$, nếu $A$ vuông và khả nghịch thì hệ có nghiệm duy nhất $x=A^{-1}b$. Trong tính toán thực tế, thường giải trực tiếp hệ tuyến tính thay vì tính $A^{-1}$ vì ổn định và hiệu quả hơn.
+- **Kiểm tra thông tin độc lập:** Hạng cho biết số phương trình hoặc số đặc trưng thực sự độc lập; nhờ đó phát hiện các hàng, cột hay biến bị trùng lặp.
+- **Xác định số nghiệm:** Hạng giúp biết một hệ phương trình có vô nghiệm, một nghiệm hay vô số nghiệm.
+- **Đo sự thay đổi hình học:** Định thức mô tả mức co giãn diện tích, thể tích và sự đảo chiều của phép biến đổi.
+- **Đổi biến:** Khi đổi hệ tọa độ hoặc đổi biến trong tích phân, trị tuyệt đối của định thức Jacobi cho biết phần tử diện tích hoặc thể tích thay đổi thế nào.
+
+#### 5. Ứng dụng trong AI và học máy
+
+- **Nén mô hình:** Nếu ma trận trọng số $W$ có hạng thấp hoặc gần hạng thấp, có thể xấp xỉ $W\approx U_k\Sigma_kV_k^T$. Việc lưu các ma trận nhỏ này cần ít tham số và phép tính hơn lưu toàn bộ $W$.
+- **LoRA:** Thay vì cập nhật trực tiếp một ma trận trọng số lớn, LoRA học một thay đổi hạng thấp $\Delta W=BA$. Cách này giúp tinh chỉnh mô hình lớn với ít tham số hơn.
+- **PCA và giảm chiều:** PCA dùng các hướng chứa nhiều biến thiên nhất của dữ liệu. Hạng cho biết dữ liệu thực sự trải trên bao nhiêu chiều độc lập; các hướng ít quan trọng có thể được loại bỏ để giảm nhiễu và giảm kích thước.
+- **Phát hiện đặc trưng dư thừa:** Ma trận dữ liệu hoặc ma trận hiệp phương sai có hạng thấp cho thấy một số đặc trưng có thể được tạo từ các đặc trưng khác.
+- **Phân phối Gaussian:** Định thức của ma trận hiệp phương sai xuất hiện trong mật độ Gaussian và biểu diễn độ lớn vùng không gian mà dữ liệu phân bố. Định thức bằng $0$ nghĩa là covariance suy biến và phân phối bị ép vào một không gian thấp chiều hơn.
+- **Mô hình luồng chuẩn hóa:** Các mô hình này cần phép biến đổi khả nghịch để đi qua lại giữa dữ liệu và biến ẩn. Định thức Jacobi được dùng để điều chỉnh mật độ xác suất khi không gian bị co giãn.
+
+Tóm lại:
+
+| Khái niệm | Câu hỏi trực quan | Điều cần nhớ |
+|---|---|---|
+| Hạng | Còn bao nhiêu hướng độc lập? | Hạng thấp nghĩa là có hướng hoặc thông tin bị trùng lặp hay mất đi |
+| Định thức | Diện tích hoặc thể tích có hướng đổi bao nhiêu lần? | $\det(A)=0$ nghĩa là phép biến đổi làm mất ít nhất một chiều |
+| Khả nghịch | Có khôi phục duy nhất đầu vào từ đầu ra không? | Với ma trận vuông: khả nghịch $\Leftrightarrow$ hạng đầy đủ $\Leftrightarrow\det(A)\neq0$ |
+
 ### Interviewer có thể hỏi thêm
 
 - What is matrix decomposition?
@@ -689,6 +869,336 @@ $$
 \min_\theta -\log P(D\mid\theta)
 $$
 
+### Kiến Thức Cần Nhớ
+
+#### 1. Ví dụ MLE chi tiết: tung đồng xu
+
+Giả sử có một đồng xu nhưng chưa biết xác suất xuất hiện mặt ngửa. Gọi:
+
+$$
+p=P(\text{ngửa}),
+\qquad
+1-p=P(\text{sấp})
+$$
+
+Ở đây:
+
+- **Dữ liệu** $D$ là kết quả các lần tung đồng xu.
+- **Tham số cần tìm** $\theta$ chính là $p$.
+- MLE chọn giá trị $p$ làm cho dữ liệu đã quan sát có khả năng xuất hiện cao nhất.
+
+Ta tung đồng xu độc lập $10$ lần và thu được $7$ mặt ngửa, $3$ mặt sấp. Xác suất của một thứ tự cụ thể, ví dụ `NNNSNNNSNS`, là:
+
+$$
+P(D\mid p)
+=
+p^7(1-p)^3
+$$
+
+Khi xem biểu thức này như một hàm của tham số chưa biết $p$, ta gọi nó là **hàm hợp lý**:
+
+$$
+L(p)=p^7(1-p)^3
+$$
+
+Nếu dữ liệu chỉ ghi nhận “có $7$ lần ngửa trong $10$ lần tung” mà không quan tâm thứ tự, xác suất sẽ là phân phối nhị thức:
+
+$$
+P(H=7\mid p)
+=
+\binom{10}{7}p^7(1-p)^3
+$$
+
+Hệ số $\binom{10}{7}$ không phụ thuộc vào $p$, nên có nhân thêm hệ số này hay không thì giá trị $p$ làm likelihood lớn nhất vẫn giống nhau.
+
+Một số giá trị thử:
+
+| $p$ giả định | $L(p)$ | $\log L(p)$ |
+|---:|---:|---:|
+| $0.5$ | $0.0009766$ | $-6.9315$ |
+| $0.6$ | $0.0017916$ | $-6.3247$ |
+| $0.7$ | $0.0022236$ | $-6.1086$ |
+| $0.8$ | $0.0016777$ | $-6.3903$ |
+
+Trong các giá trị trên, $p=0.7$ cho likelihood lớn nhất. Để tìm chính xác thay vì thử từng giá trị, ta lấy log:
+
+$$
+\ell(p)
+=
+\log L(p)
+=
+7\log p+3\log(1-p)
+$$
+
+Log là hàm đồng biến nên giá trị làm $L(p)$ lớn nhất cũng làm $\ell(p)$ lớn nhất. Lấy đạo hàm:
+
+$$
+\frac{d\ell}{dp}
+=
+\frac{7}{p}-\frac{3}{1-p}
+$$
+
+Cho đạo hàm bằng $0$:
+
+$$
+\frac{7}{p}-\frac{3}{1-p}=0
+$$
+
+$$
+7(1-p)=3p
+$$
+
+$$
+\hat p_{\text{MLE}}=\frac{7}{10}=0.7
+$$
+
+Đạo hàm bậc hai là:
+
+$$
+\frac{d^2\ell}{dp^2}
+=
+-\frac{7}{p^2}-\frac{3}{(1-p)^2}<0
+$$
+
+Do đó $p=0.7$ thực sự là điểm cực đại. Kết luận tổng quát: nếu có $h$ lần ngửa trong tổng số $N$ lần tung thì:
+
+$$
+\hat p_{\text{MLE}}=\frac{h}{N}
+$$
+
+**Trực giác:** ta chọn xác suất của mô hình khớp với tần suất quan sát được trong dữ liệu. MLE không nói rằng xác suất thật chắc chắn bằng $0.7$; nó chỉ nói rằng trong họ mô hình Bernoulli, $p=0.7$ giải thích dữ liệu hiện có tốt nhất.
+
+#### 2. Probability và likelihood khác nhau ở đâu?
+
+Cùng một biểu thức $p^7(1-p)^3$, nhưng câu hỏi khác nhau:
+
+- **Probability:** đã biết $p$, hỏi dữ liệu nào có thể xuất hiện và xác suất của dữ liệu là bao nhiêu.
+- **Likelihood:** đã quan sát cố định dữ liệu $D$, hỏi giá trị $p$ nào giải thích dữ liệu đó tốt nhất.
+
+Ta không nói “xác suất của $p$” trong MLE. Ta đang so sánh mức độ phù hợp của các giá trị $p$ đối với cùng một dữ liệu.
+
+#### 3. Từ đồng xu sang mô hình token
+
+Đồng xu có hai kết quả là ngửa và sấp. Một mô hình token có nhiều kết quả, mỗi kết quả là một token trong từ vựng $V$. Gọi $\theta_u$ là xác suất của token $u$:
+
+$$
+\theta_u=P(u),
+\qquad
+\sum_{u\in V}\theta_u=1
+$$
+
+Nếu sau khi tách từ, corpus trở thành chuỗi token $t_1,t_2,\ldots,t_N$ và tạm giả sử các token độc lập, likelihood là:
+
+$$
+L(\theta)
+=
+P(D\mid\theta,V)
+=
+\prod_{i=1}^{N}\theta_{t_i}
+=
+\prod_{u\in V}\theta_u^{c_u}
+$$
+
+Trong đó $c_u$ là số lần token $u$ xuất hiện. Log-likelihood là:
+
+$$
+\ell(\theta)
+=
+\sum_{u\in V}c_u\log\theta_u
+$$
+
+Với từ vựng và cách tách token đã cố định, nghiệm MLE là:
+
+$$
+\hat\theta_u
+=
+\frac{c_u}{N}
+$$
+
+Đây chính là phiên bản nhiều loại kết quả của ví dụ đồng xu: xác suất MLE của mỗi token bằng tần suất tương đối của token đó trong corpus.
+
+#### 4. Ánh xạ MLE sang bài toán học từ vựng WordPiece
+
+WordPiece bắt đầu với một từ vựng nhỏ, thường chứa các ký tự cơ bản, sau đó dần thêm các mảnh từ dài hơn. Về mặt ý tưởng, ở mỗi bước nó tìm mảnh từ mới làm tăng likelihood của corpus dưới mô hình ngôn ngữ nhiều nhất.
+
+Bài toán có thể nhìn thành hai tầng:
+
+1. **Ước lượng tham số:** với một từ vựng $V$ và cách tách token cố định, dùng MLE để tìm các xác suất token $\hat\theta_u=c_u/N$.
+2. **Chọn cấu trúc từ vựng:** thử thêm hoặc ghép một mảnh từ, tách lại corpus, ước lượng lại $\theta$, rồi đánh giá likelihood mới.
+
+Viết cô đọng:
+
+$$
+V^*
+\approx
+\underset{V\text{ được mở rộng dần}}{\arg\max}
+\left[
+\max_{\theta}
+\log P(D\mid V,\theta)
+\right]
+$$
+
+Dấu $\approx$ nhấn mạnh rằng WordPiece xây từ vựng theo kiểu tham lam từng bước, không duyệt tất cả từ vựng có thể có để tìm nghiệm tối ưu toàn cục.
+
+##### Ví dụ corpus nhỏ
+
+Giả sử corpus gồm:
+
+```text
+“học” xuất hiện 6 lần
+“hỏi” xuất hiện 2 lần
+“đọc” xuất hiện 3 lần
+```
+
+Ban đầu, ta minh họa cách tách theo ký tự với `##` đánh dấu mảnh nằm giữa từ:
+
+```text
+học  → [h, ##ọ, ##c]
+hỏi  → [h, ##ỏ, ##i]
+đọc  → [đ, ##ọ, ##c]
+```
+
+Bảng đếm token là:
+
+| Token | Số lần xuất hiện |
+|---|---:|
+| `h` | $8$ |
+| `##ọ` | $9$ |
+| `##c` | $9$ |
+| `##ỏ` | $2$ |
+| `##i` | $2$ |
+| `đ` | $3$ |
+
+Tổng cộng có $N=33$ token. Theo MLE:
+
+$$
+P(h)=\frac{8}{33},
+\quad
+P(\text{\#\#ọ})=\frac{9}{33},
+\quad
+P(\text{\#\#c})=\frac{9}{33},
+\quad\ldots
+$$
+
+Log-likelihood cực đại của cách tách hiện tại là:
+
+$$
+\ell_{\text{cũ}}
+=
+8\log\frac{8}{33}
++9\log\frac{9}{33}
++9\log\frac{9}{33}
++2\log\frac{2}{33}
++2\log\frac{2}{33}
++3\log\frac{3}{33}
+\approx -53.13
+$$
+
+Bây giờ thử ghép `##ọ` và `##c` thành token `##ọc`:
+
+```text
+học  → [h, ##ọc]
+hỏi  → [h, ##ỏ, ##i]
+đọc  → [đ, ##ọc]
+```
+
+Các count mới là:
+
+| Token | Số lần xuất hiện |
+|---|---:|
+| `h` | $8$ |
+| `##ọc` | $9$ |
+| `##ỏ` | $2$ |
+| `##i` | $2$ |
+| `đ` | $3$ |
+
+Chuỗi corpus lúc này chỉ còn $N'=24$ token. Ước lượng lại xác suất bằng MLE, ta được:
+
+$$
+\ell_{\text{mới}}
+=
+8\log\frac{8}{24}
++9\log\frac{9}{24}
++2\log\frac{2}{24}
++2\log\frac{2}{24}
++3\log\frac{3}{24}
+\approx -33.79
+$$
+
+Mức cải thiện trong ví dụ unigram đơn giản này là:
+
+$$
+\Delta\ell
+=
+\ell_{\text{mới}}-\ell_{\text{cũ}}
+\approx 19.34
+$$
+
+Log-likelihood mới lớn hơn vì $-33.79>-53.13$. Điều đó cho thấy `##ọc` là một mảnh từ hữu ích theo mô hình minh họa này: nó xuất hiện lặp lại, làm cách biểu diễn corpus ngắn hơn và giúp mô hình gán xác suất cao hơn cho dữ liệu đã thấy.
+
+#### 5. Điểm ghép thường dùng để giải thích WordPiece
+
+Một cách tái dựng WordPiece thường gặp không tính lại toàn bộ likelihood cho mọi ứng viên vì làm như vậy rất tốn kém. Thay vào đó, nó chấm điểm cặp token kề nhau bằng:
+
+$$
+\operatorname{score}(a,b)
+=
+\frac{\operatorname{freq}(a,b)}
+{\operatorname{freq}(a)\operatorname{freq}(b)}
+$$
+
+Điểm này đo mức độ hai token **đặc biệt thích đi cùng nhau**, thay vì chỉ nhìn số lần cặp xuất hiện như BPE.
+
+Trong corpus trên:
+
+$$
+\operatorname{score}(\text{\#\#ọ},\text{\#\#c})
+=
+\frac{9}{9\cdot9}
+=
+\frac{1}{9}
+$$
+
+$$
+\operatorname{score}(\text{\#\#ỏ},\text{\#\#i})
+=
+\frac{2}{2\cdot2}
+=
+\frac{1}{2}
+$$
+
+Dù `##ỏ ##i` chỉ xuất hiện $2$ lần, hai token này luôn đi cùng nhau trong corpus nhỏ, nên điểm liên kết của chúng cao. Vì vậy, quy tắc điểm ghép này có thể chọn `##ỏi` trước `##ọc`.
+
+> Cần phân biệt: công thức score trên là cách giải thích hoặc tái dựng phổ biến cho tiêu chí ghép của WordPiece; nó không đồng nhất với phép tính lại chính xác toàn bộ corpus likelihood trong ví dụ ở trên. Chi tiết đầy đủ của thuật toán huấn luyện WordPiece gốc không được công bố cùng mã nguồn, nên các thư viện có thể dùng tiêu chí gần đúng khác nhau.
+
+#### 6. MLE thông thường và likelihood trong WordPiece giống nhau ở đâu?
+
+| Điểm giống | Giải thích |
+|---|---|
+| Đều có dữ liệu quan sát cố định | Đồng xu dùng chuỗi ngửa/sấp; WordPiece dùng corpus văn bản |
+| Đều xây một mô hình xác suất | Đồng xu có $p$ và $1-p$; mô hình token có $\theta_u$ cho từng token |
+| Đều ưu tiên cách giải thích dữ liệu tốt nhất | Chọn tham số hoặc phép ghép làm likelihood lớn hơn |
+| Đều dùng log-likelihood | Tích xác suất trở thành tổng, dễ tính và tránh underflow |
+| Tần suất đóng vai trò trung tâm | Với mô hình cố định, nghiệm MLE chính là tần suất tương đối |
+
+#### 7. Chúng khác nhau ở đâu?
+
+| MLE đồng xu | Học từ vựng WordPiece |
+|---|---|
+| Không gian kết quả `{ngửa, sấp}` đã cố định | Chính tập token và cách chia văn bản cũng đang được thay đổi |
+| Chỉ tối ưu tham số liên tục $p$ | Vừa ước lượng xác suất, vừa ra quyết định rời rạc nên ghép token nào |
+| Có nghiệm đóng $\hat p=h/N$ | Việc tìm từ vựng tối ưu toàn cục rất lớn, nên thường xây từ vựng tham lam |
+| Mỗi quan sát đã có nhãn rõ ràng là ngửa hay sấp | Một từ có thể có nhiều cách phân mảnh tiềm năng |
+| Kết quả là một xác suất | Kết quả huấn luyện WordPiece chủ yếu là một từ vựng và quy tắc tách token |
+
+#### 8. Ba loại likelihood dễ bị nhầm
+
+1. **Likelihood khi học từ vựng WordPiece:** dùng corpus để quyết định mảnh từ nào nên có trong vocabulary.
+2. **Likelihood khi huấn luyện BERT hoặc mô hình ngôn ngữ:** vocabulary đã cố định; model học tham số neural để tăng xác suất của token đúng trong ngữ cảnh. Đây là bài toán cross-entropy hoặc negative log-likelihood khác.
+3. **Unigram tokenizer:** duy trì xác suất cho các mảnh từ và có thể xét nhiều cách phân đoạn; thường dùng thuật toán kiểu EM rồi loại dần các mảnh làm giảm likelihood ít nhất. Nó không phải chính là quy trình ghép tham lam của WordPiece.
+
+Sau khi từ vựng WordPiece đã được học xong, bước tokenize một từ mới thường dùng chiến lược **khớp mảnh dài nhất từ trái sang phải**. Bước suy luận này là một quy tắc tìm kiếm xác định, không phải mỗi lần tokenize lại giải một bài toán MLE.
+
 ### Interviewer có thể hỏi thêm
 
 - What is likelihood?
@@ -705,26 +1215,6 @@ $$
 - How is MLE related to cross-entropy?
 - How is likelihood used in LLM training?
 - Why does autoregressive language modeling multiply conditional token probabilities?
-
-### Coin example
-
-7 heads, 3 tails:
-
-$$
-L(p)=p^7(1-p)^3
-$$
-
-$$
-\log L(p)
-=
-7\log p + 3\log(1-p)
-$$
-
-Maximum occurs at:
-
-$$
-p=0.7
-$$
 
 ---
 
