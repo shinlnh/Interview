@@ -106,7 +106,7 @@ Interviewer có thể hỏi:
 
 ## 5. Diffusion vs Flow Matching vs RL — rất dễ bị hỏi vì GR00T
 
-> Xem bản đồ lịch sử và phân loại đầy đủ bằng tiếng Việt tại mục **3.7 — Từ Markov Chain đến các nhánh Reinforcement Learning, VLA và π0.5** trong [ML và Mathematics](../ml-math/README.md).
+> Xem bản đồ lịch sử và phân loại đầy đủ bằng tiếng Việt tại [3.7 — Từ Markov Chain đến các nhánh Reinforcement Learning, VLA và π0.5](../ml-math/07-reinforcement-learning-vla.md).
 
 ### Diffusion
 
