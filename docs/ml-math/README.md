@@ -10,4 +10,4 @@ Tài liệu được chia theo từng chủ đề để GitHub render công th�
 4. [3.4 Maximum Likelihood Estimation — MLE](./04-maximum-likelihood-estimation.md)
 5. [3.5 Markov Chain](./05-markov-chain.md)
 6. [3.6 Derive MSE from Gaussian Maximum Likelihood](./06-gaussian-mle-to-mse.md)
-7. [3.7 Từ Markov Chain đến Reinforcement Learning, VLA và π0.5](./07-reinforcement-learning-vla.md)
+7. [3.7 Cây Machine Learning: Imitation Learning, Reinforcement Learning và VLA](./07-reinforcement-learning-vla.md)
