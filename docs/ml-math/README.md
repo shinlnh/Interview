@@ -12,13 +12,13 @@
 
 Với model $f_\theta$, prediction $\hat y_i=f_\theta(x_i)$ và dataset có $N$ samples, training objective thường có dạng:
 
-$$
+```math
 J(\theta)
 =
 \frac{1}{N}\sum_{i=1}^{N}\ell(\hat y_i,y_i)
 +
 \lambda\Omega(\theta)
-$$
+```
 
 Trong đó:
 
@@ -34,34 +34,34 @@ Trong đó:
 
 **Mean Squared Error — MSE:**
 
-$$
+```math
 \operatorname{MSE}
 =
 \frac{1}{N}\sum_{i=1}^{N}(y_i-\hat y_i)^2
-$$
+```
 
 MSE xuất hiện tự nhiên khi giả định residual tuân theo Gaussian distribution. Nó trơn, dễ tối ưu và phạt rất mạnh lỗi lớn, nhưng vì bình phương sai số nên nhạy với outlier.
 
 **Mean Absolute Error — MAE:**
 
-$$
+```math
 \operatorname{MAE}
 =
 \frac{1}{N}\sum_{i=1}^{N}|y_i-\hat y_i|
-$$
+```
 
 MAE bền vững hơn với outlier và liên quan đến giả định Laplace distribution. Hạn chế của nó là không khả vi tại zero và gradient có độ lớn gần như không đổi.
 
 **Huber loss** kết hợp ưu điểm của MSE và MAE. Đặt residual $r=y-\hat y$:
 
-$$
+```math
 \ell_\delta(r)
 =
 \begin{cases}
 \frac{1}{2}r^2, & |r|\leq\delta, \\
 \delta\left(|r|-\frac{1}{2}\delta\right), & |r|>\delta.
 \end{cases}
-$$
+```
 
 Sai số nhỏ được xử lý giống MSE để tối ưu mượt; sai số lớn được xử lý gần giống MAE để giảm ảnh hưởng của outlier.
 
@@ -74,51 +74,51 @@ Các detector ban đầu có thể regression trực tiếp từng tọa độ $
 
 Vì vậy, nhiều phiên bản YOLO hiện đại sử dụng loss dựa trên **Intersection over Union — IoU**. Với predicted box $B$ và ground-truth box $B^{gt}$:
 
-$$
+```math
 \operatorname{IoU}(B,B^{gt})
 =
 \frac{|B\cap B^{gt}|}{|B\cup B^{gt}|}
-$$
+```
 
-$$
+```math
 \ell_{\text{IoU}}
 =
 1-\operatorname{IoU}(B,B^{gt})
-$$
+```
 
 IoU loss trực tiếp tối ưu metric overlap, không phụ thuộc tuyệt đối vào scale của box. Tuy nhiên, nếu hai box không giao nhau thì $\operatorname{IoU}=0$, khiến loss khó cung cấp tín hiệu hữu ích về hướng di chuyển hai box lại gần nhau.
 
 **Generalized IoU — GIoU** thêm penalty cho vùng trống trong enclosing box nhỏ nhất $C$ chứa cả hai box:
 
-$$
+```math
 \operatorname{GIoU}
 =
 \operatorname{IoU}
 -
 \frac{|C\setminus(B\cup B^{gt})|}{|C|}
-$$
+```
 
-$$
+```math
 \ell_{\text{GIoU}}=1-\operatorname{GIoU}
-$$
+```
 
 GIoU vẫn tạo được learning signal khi hai box không overlap, nhưng convergence có thể chậm khi enclosing box không thay đổi nhiều.
 
 **Distance IoU — DIoU** thêm khoảng cách giữa hai tâm box:
 
-$$
+```math
 \ell_{\text{DIoU}}
 =
 1-\operatorname{IoU}
 +
 \frac{\rho^2(b,b^{gt})}{c^2}
-$$
+```
 
 Trong đó $b$ và $b^{gt}$ là tâm của hai box, $\rho$ là Euclidean distance giữa hai tâm, còn $c$ là đường chéo của enclosing box $C$. DIoU khuyến khích predicted box vừa overlap tốt vừa có tâm gần ground truth.
 
 **Complete IoU — CIoU** bổ sung thêm độ tương đồng về aspect ratio:
 
-$$
+```math
 \ell_{\text{CIoU}}
 =
 1-\operatorname{IoU}
@@ -126,11 +126,11 @@ $$
 \frac{\rho^2(b,b^{gt})}{c^2}
 +
 \alpha v
-$$
+```
 
 và:
 
-$$
+```math
 v
 =
 \frac{4}{\pi^2}
@@ -139,13 +139,13 @@ v
 -
 \arctan\frac{w}{h}
 \right)^2
-$$
+```
 
-$$
+```math
 \alpha
 =
 \frac{v}{1-\operatorname{IoU}+v}
-$$
+```
 
 CIoU đồng thời xem xét ba yếu tố:
 
@@ -157,7 +157,7 @@ Do đó, CIoU thường phù hợp hơn coordinate-wise MSE cho bounding-box reg
 
 Tổng training loss của một YOLO detector thường có dạng:
 
-$$
+```math
 \mathcal{L}_{\text{YOLO}}
 =
 \lambda_{\text{box}}\mathcal{L}_{\text{box}}
@@ -167,7 +167,7 @@ $$
 \lambda_{\text{obj}}\mathcal{L}_{\text{obj}}
 +
 \lambda_{\text{DFL}}\mathcal{L}_{\text{DFL}}
-$$
+```
 
 Trong đó $\mathcal{L}_{\text{box}}$ có thể là một IoU-family loss. Classification loss, objectness loss và Distribution Focal Loss — DFL có được sử dụng hay không phụ thuộc vào kiến trúc YOLO cụ thể.
 
@@ -175,37 +175,37 @@ Trong đó $\mathcal{L}_{\text{box}}$ có thể là một IoU-family loss. Class
 
 **0–1 loss** chỉ kiểm tra dự đoán đúng hay sai:
 
-$$
+```math
 \ell_{0/1}(\hat y,y)=\mathbf{1}[\hat y\neq y]
-$$
+```
 
 Loss này phản ánh trực tiếp accuracy nhưng không khả vi, nên không phù hợp với gradient descent.
 
 Với binary classification, model dự đoán probability $p=P(y=1\mid x)$. Ta dùng **Binary Cross-Entropy — BCE**:
 
-$$
+```math
 \ell_{\text{BCE}}
 =
 -\left[y\log p+(1-y)\log(1-p)\right]
-$$
+```
 
 Với multi-class classification, logits $z_k$ được chuyển thành probability bằng softmax:
 
-$$
+```math
 p_k
 =
 \frac{e^{z_k}}{\sum_{j=1}^{K}e^{z_j}}
-$$
+```
 
 Sau đó dùng **Cross-Entropy — CE**:
 
-$$
+```math
 \ell_{\text{CE}}
 =
 -\sum_{k=1}^{K}y_k\log p_k
 =
 -\log p_y
-$$
+```
 
 Cross-entropy cũng chính là negative log-likelihood của categorical distribution. Nó không chỉ quan tâm class đúng hay sai mà còn phạt mức độ tự tin sai của model.
 
@@ -215,41 +215,41 @@ Cross-entropy cũng chính là negative log-likelihood của categorical distrib
 
 Gán trọng số lớn hơn cho class hiếm:
 
-$$
+```math
 \ell
 =
 -\sum_{k=1}^{K}w_k y_k\log p_k
-$$
+```
 
 **Nhiều easy examples — Focal loss:**
 
-$$
+```math
 \operatorname{FL}(p_t)
 =
 -\alpha_t(1-p_t)^\gamma\log p_t
-$$
+```
 
 Factor $(1-p_t)^\gamma$ giảm ảnh hưởng của easy examples và khiến model tập trung hơn vào hard examples. Focal loss thường được dùng trong object detection có foreground/background imbalance.
 
 **Model quá tự tin — Label smoothing:**
 
-$$
+```math
 y'_k
 =
 (1-\varepsilon)y_k+\frac{\varepsilon}{K}
-$$
+```
 
 Label smoothing thay one-hot target bằng target mềm hơn, giúp regularization và thường cải thiện calibration.
 
 **Segmentation — Dice loss:**
 
-$$
+```math
 \ell_{\text{Dice}}
 =
 1-
 \frac{2\sum_i p_i y_i+\varepsilon}
 {\sum_i p_i+\sum_i y_i+\varepsilon}
-$$
+```
 
 Dice loss tối ưu độ overlap và hữu ích khi foreground nhỏ hơn background rất nhiều. Trong thực tế, segmentation thường kết hợp BCE/CE với Dice hoặc IoU loss.
 
@@ -259,12 +259,12 @@ Các loss này không chỉ dự đoán class mà còn tổ chức embedding spa
 
 **Sequence modeling và LLM — Token-level Negative Log-Likelihood:**
 
-$$
+```math
 \ell_{\text{NLL}}
 =
 -\sum_{t=1}^{T}
 \log p_\theta(y_t\mid y_{<t},x)
-$$
+```
 
 Đây là cross-entropy áp dụng tại từng token. Với speech hoặc sequence chưa có alignment rõ ràng, CTC loss có thể tổng hợp probability của nhiều alignment hợp lệ.
 
@@ -276,26 +276,26 @@ $$
 
 Gradient cho biết hướng làm objective tăng nhanh nhất:
 
-$$
+```math
 g_t=\nabla_\theta J(\theta_{t-1})
-$$
+```
 
 Vì cần minimize objective, parameters được cập nhật theo hướng ngược gradient:
 
-$$
+```math
 \theta_t=\theta_{t-1}-\alpha g_t
-$$
+```
 
 Trong đó $\alpha$ là learning rate.
 
 **Batch Gradient Descent** tính gradient trên toàn bộ $N$ samples:
 
-$$
+```math
 g_t
 =
 \frac{1}{N}\sum_{i=1}^{N}
 \nabla_\theta\ell_i(\theta_{t-1})
-$$
+```
 
 Gradient ổn định và chính xác, nhưng mỗi update rất tốn thời gian và memory khi dataset lớn.
 
@@ -303,13 +303,13 @@ Gradient ổn định và chính xác, nhưng mỗi update rất tốn thời gi
 
 SGD đúng nghĩa lấy một sample ngẫu nhiên $i_t$ cho mỗi update:
 
-$$
+```math
 g_t=\nabla_\theta\ell_{i_t}(\theta_{t-1})
-$$
+```
 
-$$
+```math
 \theta_t=\theta_{t-1}-\alpha g_t
-$$
+```
 
 Mỗi bước rất rẻ và noise trong gradient có thể giúp thoát saddle point hoặc sharp region. Tuy nhiên, đường tối ưu dao động mạnh và khó tận dụng GPU hiệu quả.
 
@@ -317,16 +317,16 @@ Mỗi bước rất rẻ và noise trong gradient có thể giúp thoát saddle 
 
 Mini-batch SGD lấy một batch $B_t$ gồm $b$ samples:
 
-$$
+```math
 g_t
 =
 \frac{1}{b}\sum_{i\in B_t}
 \nabla_\theta\ell_i(\theta_{t-1})
-$$
+```
 
-$$
+```math
 \theta_t=\theta_{t-1}-\alpha g_t
-$$
+```
 
 Nó cân bằng giữa hai phía:
 
@@ -339,43 +339,43 @@ Nó cân bằng giữa hai phía:
 
 SGD có thể dao động mạnh theo những hướng có curvature lớn và tiến chậm theo hướng gradient ổn định. Momentum dùng exponential moving average của gradient:
 
-$$
+```math
 m_t
 =
 \beta m_{t-1}+(1-\beta)g_t
-$$
+```
 
-$$
+```math
 \theta_t
 =
 \theta_{t-1}-\alpha m_t
-$$
+```
 
 Momentum tích lũy vận tốc theo hướng gradient nhất quán và triệt bớt dao động đổi dấu. Giá trị phổ biến là $\beta=0.9$.
 
 **Nesterov momentum** nhìn trước tại vị trí dự kiến rồi mới tính gradient, nhờ đó có thể điều chỉnh sớm hơn khi sắp đi quá xa:
 
-$$
+```math
 g_t
 =
 \nabla_\theta J(\theta_{t-1}-\alpha\beta m_{t-1})
-$$
+```
 
 ##### 5. AdaGrad
 
 Momentum thích nghi theo **hướng**, nhưng vẫn dùng cùng một learning rate cho mọi parameter. AdaGrad tạo learning rate riêng cho từng parameter bằng tổng bình phương gradient:
 
-$$
+```math
 s_t=s_{t-1}+g_t\odot g_t
-$$
+```
 
-$$
+```math
 \theta_t
 =
 \theta_{t-1}
 -
 \alpha\frac{g_t}{\sqrt{s_t}+\epsilon}
-$$
+```
 
 Phép toán được thực hiện element-wise. Parameter có gradient lớn thường xuyên sẽ nhận bước update nhỏ hơn; parameter hiếm khi có gradient sẽ nhận bước lớn hơn. AdaGrad phù hợp với sparse features, nhưng $s_t$ chỉ tăng nên effective learning rate có thể giảm đến mức model gần như ngừng học.
 
@@ -383,19 +383,19 @@ Phép toán được thực hiện element-wise. Parameter có gradient lớn th
 
 RMSProp sửa nhược điểm tích lũy vô hạn của AdaGrad bằng exponential moving average của squared gradient:
 
-$$
+```math
 v_t
 =
 \rho v_{t-1}+(1-\rho)g_t\odot g_t
-$$
+```
 
-$$
+```math
 \theta_t
 =
 \theta_{t-1}
 -
 \alpha\frac{g_t}{\sqrt{v_t}+\epsilon}
-$$
+```
 
 Do gradient cũ dần bị quên, effective learning rate không liên tục giảm như AdaGrad. RMSProp thích hợp với objective non-stationary và từng được dùng nhiều cho RNN.
 
@@ -408,49 +408,49 @@ Adam kết hợp:
 
 Gradient tại step $t$:
 
-$$
+```math
 g_t=\nabla_\theta J(\theta_{t-1})
-$$
+```
 
 First moment:
 
-$$
+```math
 m_t=\beta_1m_{t-1}+(1-\beta_1)g_t
-$$
+```
 
 Second raw moment:
 
-$$
+```math
 v_t=\beta_2v_{t-1}+(1-\beta_2)g_t\odot g_t
-$$
+```
 
 Vì $m_0=v_0=0$, các moving averages ban đầu bị bias về zero. Adam dùng bias correction:
 
-$$
+```math
 \begin{aligned}
 \hat{m}_t &= \frac{m_t}{1-\beta_1^t}, \\
 \hat{v}_t &= \frac{v_t}{1-\beta_2^t}.
 \end{aligned}
-$$
+```
 
 Update:
 
-$$
+```math
 \theta_t
 =
 \theta_{t-1}
 -
 \alpha
 \frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon}
-$$
+```
 
 Default values thường dùng:
 
-$$
+```math
 \beta_1=0.9,\qquad
 \beta_2=0.999,\qquad
 \epsilon=10^{-8}
-$$
+```
 
 Adam pseudocode:
 
@@ -472,14 +472,14 @@ for each mini-batch:
 
 Adam với L2 term bên trong loss làm regularization bị scale bởi adaptive denominator. AdamW tách weight decay khỏi gradient update:
 
-$$
+```math
 \theta_t
 =
 (1-\alpha\lambda)\theta_{t-1}
 -
 \alpha
 \frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon}
-$$
+```
 
 AdamW thường là lựa chọn mặc định tốt hơn Adam khi train Transformer và nhiều modern deep network.
 
@@ -642,45 +642,45 @@ AdamW thường là lựa chọn mặc định tốt hơn Adam khi train Transfo
 
 Với ma trận $A\in\mathbb{R}^{m\times n}$:
 
-$$
+```math
 \operatorname{rank}(A)
 =
 \text{số cột độc lập tuyến tính của }A
 =
 \text{số hàng độc lập tuyến tính của }A
-$$
+```
 
 Ta luôn có:
 
-$$
+```math
 0\leq \operatorname{rank}(A)\leq \min(m,n)
-$$
+```
 
 Ví dụ:
 
-$$
+```math
 A=
 \begin{bmatrix}
 1&0\\
 0&1
 \end{bmatrix}
-$$
+```
 
 Hai cột $(1,0)^T$ và $(0,1)^T$ chỉ hai hướng độc lập trong mặt phẳng, nên $\operatorname{rank}(A)=2$. Phép biến đổi này vẫn giữ được không gian hai chiều.
 
 Ngược lại:
 
-$$
+```math
 B=
 \begin{bmatrix}
 1&2\\
 2&4
 \end{bmatrix}
-$$
+```
 
 Cột thứ hai bằng hai lần cột thứ nhất, nên ma trận chỉ có một hướng độc lập và $\operatorname{rank}(B)=1$. Với mọi vector $(x,y)^T$:
 
-$$
+```math
 B
 \begin{bmatrix}
 x\\y
@@ -695,7 +695,7 @@ x+2y\\
 \begin{bmatrix}
 1\\2
 \end{bmatrix}
-$$
+```
 
 Mọi điểm trong mặt phẳng sau phép biến đổi đều bị ép lên cùng một đường thẳng. Vì một chiều đã bị mất nên ta không thể khôi phục duy nhất $(x,y)$ từ kết quả.
 
@@ -713,7 +713,7 @@ Mọi điểm trong mặt phẳng sau phép biến đổi đều bị ép lên c
 
 Với ma trận $2\times2$:
 
-$$
+```math
 A=
 \begin{bmatrix}
 a&b\\
@@ -721,11 +721,11 @@ c&d
 \end{bmatrix},
 \qquad
 \det(A)=ad-bc
-$$
+```
 
 Ví dụ:
 
-$$
+```math
 C=
 \begin{bmatrix}
 2&0\\
@@ -733,15 +733,15 @@ C=
 \end{bmatrix},
 \qquad
 \det(C)=2\cdot3=6
-$$
+```
 
 $C$ kéo dài một hướng lên $2$ lần và hướng còn lại lên $3$ lần. Vì vậy, hình vuông đơn vị có diện tích $1$ sẽ trở thành hình chữ nhật có diện tích $6$.
 
 Với ma trận $B$ ở trên:
 
-$$
+```math
 \det(B)=1\cdot4-2\cdot2=0
-$$
+```
 
 Mặt phẳng bị ép xuống một đường thẳng nên diện tích sau biến đổi bằng $0$. Đây cũng là lý do $B$ có hạng nhỏ hơn $2$.
 
@@ -751,37 +751,37 @@ Mặt phẳng bị ép xuống một đường thẳng nên diện tích sau bi�
 
 **Định nghĩa trực quan:** Ma trận khả nghịch biểu diễn một phép biến đổi có thể **đảo ngược hoàn toàn**. Nếu $A$ biến $x$ thành $y$, thì $A^{-1}$ có thể biến $y$ trở lại đúng $x$:
 
-$$
+```math
 y=Ax
 \qquad\Longrightarrow\qquad
 x=A^{-1}y
-$$
+```
 
 Ma trận nghịch đảo thỏa mãn:
 
-$$
+```math
 AA^{-1}=A^{-1}A=I
-$$
+```
 
 Với ma trận vuông $A\in\mathbb{R}^{n\times n}$, các phát biểu sau là tương đương:
 
-$$
+```math
 A\text{ khả nghịch}
 \Longleftrightarrow
 \operatorname{rank}(A)=n
 \Longleftrightarrow
 \det(A)\neq0
-$$
+```
 
 Ví dụ, với ma trận $C$:
 
-$$
+```math
 C^{-1}=
 \begin{bmatrix}
 \frac{1}{2}&0\\
 0&\frac{1}{3}
 \end{bmatrix}
-$$
+```
 
 $C$ kéo dài hai hướng lên $2$ và $3$ lần; $C^{-1}$ co chúng lại còn $\frac{1}{2}$ và $\frac{1}{3}$, nên khôi phục được vector ban đầu.
 
@@ -832,15 +832,15 @@ Tóm lại:
 
 ### Công thức
 
-$$
+```math
 W = U \Sigma V^T
-$$
+```
 
 Low-rank approximation:
 
-$$
+```math
 W \approx U_k \Sigma_k V_k^T
-$$
+```
 
 ---
 
@@ -850,24 +850,24 @@ $$
 
 ### Core idea
 
-$$
+```math
 \theta^* = \arg\max_\theta P(D \mid \theta)
-$$
+```
 
 Nếu samples độc lập:
 
-$$
+```math
 L(\theta)
 =
 \prod_i
 p(y_i \mid x_i,\theta)
-$$
+```
 
 Thường chuyển sang Negative Log-Likelihood:
 
-$$
+```math
 \min_\theta -\log P(D\mid\theta)
-$$
+```
 
 ### Kiến Thức Cần Nhớ
 
@@ -875,11 +875,11 @@ $$
 
 Giả sử có một đồng xu nhưng chưa biết xác suất xuất hiện mặt ngửa. Gọi:
 
-$$
+```math
 p=P(\text{ngửa}),
 \qquad
 1-p=P(\text{sấp})
-$$
+```
 
 Ở đây:
 
@@ -889,25 +889,25 @@ $$
 
 Ta tung đồng xu độc lập $10$ lần và thu được $7$ mặt ngửa, $3$ mặt sấp. Xác suất của một thứ tự cụ thể, ví dụ `NNNSNNNSNS`, là:
 
-$$
+```math
 P(D\mid p)
 =
 p^7(1-p)^3
-$$
+```
 
 Khi xem biểu thức này như một hàm của tham số chưa biết $p$, ta gọi nó là **hàm hợp lý**:
 
-$$
+```math
 L(p)=p^7(1-p)^3
-$$
+```
 
 Nếu dữ liệu chỉ ghi nhận “có $7$ lần ngửa trong $10$ lần tung” mà không quan tâm thứ tự, xác suất sẽ là phân phối nhị thức:
 
-$$
+```math
 P(H=7\mid p)
 =
 \binom{10}{7}p^7(1-p)^3
-$$
+```
 
 Hệ số $\binom{10}{7}$ không phụ thuộc vào $p$, nên có nhân thêm hệ số này hay không thì giá trị $p$ làm likelihood lớn nhất vẫn giống nhau.
 
@@ -922,49 +922,49 @@ Một số giá trị thử:
 
 Trong các giá trị trên, $p=0.7$ cho likelihood lớn nhất. Để tìm chính xác thay vì thử từng giá trị, ta lấy log:
 
-$$
+```math
 \ell(p)
 =
 \log L(p)
 =
 7\log p+3\log(1-p)
-$$
+```
 
 Log là hàm đồng biến nên giá trị làm $L(p)$ lớn nhất cũng làm $\ell(p)$ lớn nhất. Lấy đạo hàm:
 
-$$
+```math
 \frac{d\ell}{dp}
 =
 \frac{7}{p}-\frac{3}{1-p}
-$$
+```
 
 Cho đạo hàm bằng $0$:
 
-$$
+```math
 \frac{7}{p}-\frac{3}{1-p}=0
-$$
+```
 
-$$
+```math
 7(1-p)=3p
-$$
+```
 
-$$
+```math
 \hat p_{\text{MLE}}=\frac{7}{10}=0.7
-$$
+```
 
 Đạo hàm bậc hai là:
 
-$$
+```math
 \frac{d^2\ell}{dp^2}
 =
 -\frac{7}{p^2}-\frac{3}{(1-p)^2}<0
-$$
+```
 
 Do đó $p=0.7$ thực sự là điểm cực đại. Kết luận tổng quát: nếu có $h$ lần ngửa trong tổng số $N$ lần tung thì:
 
-$$
+```math
 \hat p_{\text{MLE}}=\frac{h}{N}
-$$
+```
 
 **Trực giác:** ta chọn xác suất của mô hình khớp với tần suất quan sát được trong dữ liệu. MLE không nói rằng xác suất thật chắc chắn bằng $0.7$; nó chỉ nói rằng trong họ mô hình Bernoulli, $p=0.7$ giải thích dữ liệu hiện có tốt nhất.
 
@@ -981,15 +981,15 @@ Ta không nói “xác suất của $p$” trong MLE. Ta đang so sánh mức đ
 
 Đồng xu có hai kết quả là ngửa và sấp. Một mô hình token có nhiều kết quả, mỗi kết quả là một token trong từ vựng $V$. Gọi $\theta_u$ là xác suất của token $u$:
 
-$$
+```math
 \theta_u=P(u),
 \qquad
 \sum_{u\in V}\theta_u=1
-$$
+```
 
 Nếu sau khi tách từ, corpus trở thành chuỗi token $t_1,t_2,\ldots,t_N$ và tạm giả sử các token độc lập, likelihood là:
 
-$$
+```math
 L(\theta)
 =
 P(D\mid\theta,V)
@@ -997,23 +997,23 @@ P(D\mid\theta,V)
 \prod_{i=1}^{N}\theta_{t_i}
 =
 \prod_{u\in V}\theta_u^{c_u}
-$$
+```
 
 Trong đó $c_u$ là số lần token $u$ xuất hiện. Log-likelihood là:
 
-$$
+```math
 \ell(\theta)
 =
 \sum_{u\in V}c_u\log\theta_u
-$$
+```
 
 Với từ vựng và cách tách token đã cố định, nghiệm MLE là:
 
-$$
+```math
 \hat\theta_u
 =
 \frac{c_u}{N}
-$$
+```
 
 Đây chính là phiên bản nhiều loại kết quả của ví dụ đồng xu: xác suất MLE của mỗi token bằng tần suất tương đối của token đó trong corpus.
 
@@ -1028,7 +1028,7 @@ Bài toán có thể nhìn thành hai tầng:
 
 Viết cô đọng:
 
-$$
+```math
 V^*
 \approx
 \underset{V\text{ được mở rộng dần}}{\arg\max}
@@ -1036,7 +1036,7 @@ V^*
 \max_{\theta}
 \log P(D\mid V,\theta)
 \right]
-$$
+```
 
 Dấu $\approx$ nhấn mạnh rằng WordPiece xây từ vựng theo kiểu tham lam từng bước, không duyệt tất cả từ vựng có thể có để tìm nghiệm tối ưu toàn cục.
 
@@ -1071,18 +1071,18 @@ Bảng đếm token là:
 
 Tổng cộng có $N=33$ token. Theo MLE:
 
-$$
+```math
 P(h)=\frac{8}{33},
 \quad
 P(\text{\#\#ọ})=\frac{9}{33},
 \quad
 P(\text{\#\#c})=\frac{9}{33},
 \quad\ldots
-$$
+```
 
 Log-likelihood cực đại của cách tách hiện tại là:
 
-$$
+```math
 \ell_{\text{cũ}}
 =
 8\log\frac{8}{33}
@@ -1092,7 +1092,7 @@ $$
 +2\log\frac{2}{33}
 +3\log\frac{3}{33}
 \approx -53.13
-$$
+```
 
 Bây giờ thử ghép `##ọ` và `##c` thành token `##ọc`:
 
@@ -1114,7 +1114,7 @@ Các count mới là:
 
 Chuỗi corpus lúc này chỉ còn $N'=24$ token. Ước lượng lại xác suất bằng MLE, ta được:
 
-$$
+```math
 \ell_{\text{mới}}
 =
 8\log\frac{8}{24}
@@ -1123,16 +1123,16 @@ $$
 +2\log\frac{2}{24}
 +3\log\frac{3}{24}
 \approx -33.79
-$$
+```
 
 Mức cải thiện trong ví dụ unigram đơn giản này là:
 
-$$
+```math
 \Delta\ell
 =
 \ell_{\text{mới}}-\ell_{\text{cũ}}
 \approx 19.34
-$$
+```
 
 Log-likelihood mới lớn hơn vì $-33.79>-53.13$. Điều đó cho thấy `##ọc` là một mảnh từ hữu ích theo mô hình minh họa này: nó xuất hiện lặp lại, làm cách biểu diễn corpus ngắn hơn và giúp mô hình gán xác suất cao hơn cho dữ liệu đã thấy.
 
@@ -1140,32 +1140,32 @@ Log-likelihood mới lớn hơn vì $-33.79>-53.13$. Điều đó cho thấy `##
 
 Một cách tái dựng WordPiece thường gặp không tính lại toàn bộ likelihood cho mọi ứng viên vì làm như vậy rất tốn kém. Thay vào đó, nó chấm điểm cặp token kề nhau bằng:
 
-$$
+```math
 \operatorname{score}(a,b)
 =
 \frac{\operatorname{freq}(a,b)}
 {\operatorname{freq}(a)\operatorname{freq}(b)}
-$$
+```
 
 Điểm này đo mức độ hai token **đặc biệt thích đi cùng nhau**, thay vì chỉ nhìn số lần cặp xuất hiện như BPE.
 
 Trong corpus trên:
 
-$$
+```math
 \operatorname{score}(\text{\#\#ọ},\text{\#\#c})
 =
 \frac{9}{9\cdot9}
 =
 \frac{1}{9}
-$$
+```
 
-$$
+```math
 \operatorname{score}(\text{\#\#ỏ},\text{\#\#i})
 =
 \frac{2}{2\cdot2}
 =
 \frac{1}{2}
-$$
+```
 
 Dù `##ỏ ##i` chỉ xuất hiện $2$ lần, hai token này luôn đi cùng nhau trong corpus nhỏ, nên điểm liên kết của chúng cao. Vì vậy, quy tắc điểm ghép này có thể chọn `##ỏi` trước `##ọc`.
 
@@ -1569,11 +1569,11 @@ Ví dụ, thời tiết có hai trạng thái `Nắng` và `Mưa`. Mỗi ngày, 
 
 Tính chất Markov nói rằng khi đã biết trạng thái hiện tại, trạng thái tiếp theo không còn phụ thuộc trực tiếp vào toàn bộ lịch sử:
 
-$$
+```math
 P(S_{t+1}\mid S_t,S_{t-1},\ldots,S_0)
 =
 P(S_{t+1}\mid S_t)
-$$
+```
 
 Có thể viết ngắn gọn:
 
@@ -1599,17 +1599,17 @@ Một state tốt phải chứa đủ thông tin để phân phối của state 
 
 **Transition probability — xác suất chuyển trạng thái** là xác suất hệ thống đi từ state $i$ ở thời điểm hiện tại sang state $j$ ở bước tiếp theo:
 
-$$
+```math
 P_{ij}
 =
 P(S_{t+1}=j\mid S_t=i)
-$$
+```
 
 Ví dụ:
 
-$$
+```math
 P(\text{Mưa ngày mai}\mid\text{Nắng hôm nay})=0.3
-$$
+```
 
 Trong một **time-homogeneous Markov Chain**, xác suất này không thay đổi theo thời gian. Nếu xác suất phụ thuộc vào $t$, ta có một time-inhomogeneous Markov Chain.
 
@@ -1617,13 +1617,13 @@ Trong một **time-homogeneous Markov Chain**, xác suất này không thay đ�
 
 **Transition matrix** chứa xác suất chuyển đổi giữa mọi cặp trạng thái. Với thứ tự state là `[Nắng, Mưa]`, ta có thể có:
 
-$$
+```math
 P=
 \begin{bmatrix}
 0.7 & 0.3\\
 0.4 & 0.6
 \end{bmatrix}
-$$
+```
 
 | State hiện tại / State tiếp theo | Nắng | Mưa |
 |---|---:|---:|
@@ -1636,17 +1636,17 @@ Phần tử ở hàng $i$, cột $j$ chính là $P_{ij}=P(S_{t+1}=j\mid S_t=i)$.
 
 Khi state hiện tại $i$ đã được xác định, hệ thống phải chuyển tới một trong các state tiếp theo có thể có. Vì các khả năng này loại trừ lẫn nhau và bao phủ toàn bộ không gian state:
 
-$$
+```math
 \sum_j P_{ij}=1
-$$
+```
 
 Ví dụ, nếu ngày mai chỉ có thể nắng hoặc mưa thì:
 
-$$
+```math
 P(\text{Nắng}\mid\text{Nắng})
 +P(\text{Mưa}\mid\text{Nắng})
 =0.7+0.3=1
-$$
+```
 
 Ma trận có các phần tử không âm và mỗi hàng có tổng bằng $1$ được gọi là **row-stochastic matrix**.
 
@@ -1654,28 +1654,28 @@ Ma trận có các phần tử không âm và mỗi hàng có tổng bằng $1$ 
 
 Nếu $\pi_t$ là row vector biểu diễn phân phối state tại thời điểm $t$, sau một bước:
 
-$$
+```math
 \pi_{t+1}=\pi_tP
-$$
+```
 
 Sau $n$ bước:
 
-$$
+```math
 \boxed{\pi_{t+n}=\pi_tP^n}
-$$
+```
 
 Ví dụ, nếu hôm nay chắc chắn nắng:
 
-$$
+```math
 \pi_0=
 \begin{bmatrix}
 1 & 0
 \end{bmatrix}
-$$
+```
 
 thì phân phối của ngày mai là:
 
-$$
+```math
 \pi_1
 =
 \pi_0P
@@ -1683,7 +1683,7 @@ $$
 \begin{bmatrix}
 0.7 & 0.3
 \end{bmatrix}
-$$
+```
 
 Nếu dùng column vector cho phân phối thì phải nhất quán với convention tương ứng, ví dụ $\pi_{t+1}=P^T\pi_t$ khi $P$ vẫn là row-stochastic.
 
@@ -1691,21 +1691,21 @@ Nếu dùng column vector cho phân phối thì phải nhất quán với conven
 
 **Stationary distribution — phân phối dừng** là một phân phối $\pi^*$ không thay đổi sau một bước chuyển:
 
-$$
+```math
 \boxed{\pi^*=\pi^*P}
-$$
+```
 
 với:
 
-$$
+```math
 \pi_i^*\geq 0,
 \qquad
 \sum_i\pi_i^*=1
-$$
+```
 
 Với transition matrix thời tiết ở trên:
 
-$$
+```math
 \pi^*=
 \begin{bmatrix}
 \frac{4}{7} & \frac{3}{7}
@@ -1714,7 +1714,7 @@ $$
 \begin{bmatrix}
 0.571 & 0.429
 \end{bmatrix}
-$$
+```
 
 Nếu hệ thống bắt đầu từ phân phối này thì các bước sau vẫn có cùng phân phối. Stationary distribution tồn tại không tự động có nghĩa mọi phân phối ban đầu đều hội tụ về nó; tính duy nhất và hội tụ còn phụ thuộc vào các tính chất như irreducibility và aperiodicity.
 
@@ -1722,16 +1722,16 @@ Nếu hệ thống bắt đầu từ phân phối này thì các bước sau v�
 
 **Absorbing state — trạng thái hấp thụ** là state mà sau khi đi vào, hệ thống không thể rời khỏi:
 
-$$
+```math
 P_{ii}=1
-$$
+```
 
 Do tổng mỗi hàng bằng $1$, điều này cũng kéo theo:
 
-$$
+```math
 P_{ij}=0
 \quad\text{với mọi }j\neq i
-$$
+```
 
 Ví dụ, trong mô hình vòng đời tài khoản, nếu `Đã đóng vĩnh viễn` là absorbing state thì một tài khoản đã vào state này sẽ luôn ở đó trong các bước tiếp theo.
 
@@ -1739,21 +1739,21 @@ Ví dụ, trong mô hình vòng đời tài khoản, nếu `Đã đóng vĩnh vi
 
 Ta đếm số lần quan sát được mỗi chuyển đổi. Gọi $N_{ij}$ là số lần chuyển từ state $i$ sang state $j$, ước lượng là:
 
-$$
+```math
 \hat P_{ij}
 =
 \frac{N_{ij}}{\sum_kN_{ik}}
-$$
+```
 
 Ví dụ, trong dữ liệu có $70$ lần `Nắng → Nắng` và $30$ lần `Nắng → Mưa`:
 
-$$
+```math
 \hat P_{\text{Nắng,Nắng}}=\frac{70}{100}=0.7
-$$
+```
 
-$$
+```math
 \hat P_{\text{Nắng,Mưa}}=\frac{30}{100}=0.3
-$$
+```
 
 Nếu dữ liệu ít, có thể dùng Laplace smoothing hoặc Bayesian estimation để tránh kết luận rằng một transition chưa từng xuất hiện phải có xác suất đúng bằng zero.
 
@@ -1761,31 +1761,31 @@ Nếu dữ liệu ít, có thể dùng Laplace smoothing hoặc Bayesian estimat
 
 Với chuỗi quan sát $s_0,s_1,\ldots,s_T$ và giả sử state ban đầu đã cho trước, likelihood của transition matrix là:
 
-$$
+```math
 L(P)
 =
 \prod_{t=0}^{T-1}P_{s_t,s_{t+1}}
 =
 \prod_i\prod_jP_{ij}^{N_{ij}}
-$$
+```
 
 Log-likelihood là:
 
-$$
+```math
 \log L(P)
 =
 \sum_i\sum_jN_{ij}\log P_{ij}
-$$
+```
 
 Tối đa hóa biểu thức này với ràng buộc $\sum_jP_{ij}=1$ cho mỗi hàng cho nghiệm MLE:
 
-$$
+```math
 \boxed{
 \hat P_{ij}^{\text{MLE}}
 =
 \frac{N_{ij}}{\sum_kN_{ik}}
 }
-$$
+```
 
 Vì vậy, cách lấy transition count chia cho tổng số lần rời state $i$ không chỉ là trực giác về tần suất; đó chính là nghiệm maximum likelihood của transition matrix.
 
@@ -1806,15 +1806,15 @@ Markov Chain mô tả diễn biến ngẫu nhiên của một hệ thống khôn
 
 Khi thêm action, transition model trở thành:
 
-$$
+```math
 P(S_{t+1}=s'\mid S_t=s,A_t=a)
-$$
+```
 
 Cùng một state có thể dẫn tới các phân phối state tiếp theo khác nhau tùy action. Agent cần một **policy** để chọn action:
 
-$$
+```math
 \pi(a\mid s)=P(A_t=a\mid S_t=s)
-$$
+```
 
 Nếu mới có state, action và transition nhưng chưa có reward, mô hình thường được gọi là **controlled Markov process**. Ta có thể điều khiển hệ thống nhưng chưa có tiêu chí để nói policy nào tốt hơn.
 
@@ -1822,13 +1822,13 @@ Nếu mới có state, action và transition nhưng chưa có reward, mô hình 
 
 Reward $R(s,a,s')$ cho biết mức độ tốt hoặc xấu của một transition. Khi có states, actions, transitions và rewards, ta có một **Markov Decision Process**:
 
-$$
+```math
 (S,A,P,R,\gamma)
-$$
+```
 
 Mục tiêu thường là tìm policy tối đa hóa discounted return kỳ vọng:
 
-$$
+```math
 \boxed{
 J(\pi)
 =
@@ -1837,39 +1837,39 @@ J(\pi)
 \sum_{t=0}^{\infty}\gamma^tR_{t+1}
 \right]
 }
-$$
+```
 
 Trong đó $0\leq\gamma<1$ là discount factor. Giá trị $\gamma$ nhỏ ưu tiên reward gần; giá trị lớn coi trọng kết quả dài hạn hơn.
 
 Nếu policy $\pi$ được cố định, action được lấy theo policy và MDP tạo ra một Markov Chain trên các state với transition probability:
 
-$$
+```math
 P_{\pi}(s'\mid s)
 =
 \sum_a\pi(a\mid s)P(s'\mid s,a)
-$$
+```
 
 #### 15. What is a POMDP?
 
 **Partially Observable Markov Decision Process — POMDP** là MDP mà agent không quan sát trực tiếp được state thật $S_t$. Thay vào đó, agent nhận observation $O_t$ được tạo ra từ state thông qua observation model, ví dụ:
 
-$$
+```math
 P(O_t=o\mid S_t=s)
-$$
+```
 
 Một POMDP thường được mô tả bởi:
 
-$$
+```math
 (S,A,P,R,\Omega,O,\gamma)
-$$
+```
 
 Trong đó $\Omega$ là tập observations và $O$ là observation model. Vì một observation có thể tương ứng với nhiều state thật khác nhau, agent dùng toàn bộ lịch sử action và observation để duy trì **belief state**:
 
-$$
+```math
 b_t(s)
 =
 P(S_t=s\mid o_{1:t},a_{0:t-1})
-$$
+```
 
 Belief state là một phân phối xác suất thể hiện agent đang tin state thật là mỗi khả năng với xác suất bao nhiêu.
 
@@ -1914,19 +1914,19 @@ POMDP:               MDP + observation model + belief state
 
 Giả sử:
 
-$$
+```math
 y_i=f_\theta(x_i)+\epsilon_i
-$$
+```
 
 với
 
-$$
+```math
 \epsilon_i\sim\mathcal N(0,\sigma^2)
-$$
+```
 
 thì:
 
-$$
+```math
 p(y_i\mid x_i,\theta)
 =
 \frac{1}{\sqrt{2\pi\sigma^2}}
@@ -1934,20 +1934,20 @@ p(y_i\mid x_i,\theta)
 \left(
 -\frac{(y_i-f_\theta(x_i))^2}{2\sigma^2}
 \right)
-$$
+```
 
 Likelihood của toàn bộ dataset:
 
-$$
+```math
 L(\theta)
 =
 \prod_i
 p(y_i\mid x_i,\theta)
-$$
+```
 
 Log-likelihood:
 
-$$
+```math
 \log L(\theta)
 =
 C
@@ -1955,25 +1955,25 @@ C
 \frac{1}{2\sigma^2}
 \sum_i
 (y_i-\hat y_i)^2
-$$
+```
 
 Nếu $\sigma^2$ cố định:
 
-$$
+```math
 \arg\max_\theta \log L(\theta)
 \equiv
 \arg\min_\theta
 \sum_i(y_i-\hat y_i)^2
-$$
+```
 
 Chia cho $N$:
 
-$$
+```math
 MSE
 =
 \frac{1}{N}
 \sum_i(y_i-\hat y_i)^2
-$$
+```
 
 ### Interviewer có thể hỏi thêm
 
