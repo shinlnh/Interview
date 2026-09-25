@@ -1157,19 +1157,123 @@ Nếu dữ liệu ít, có thể dùng Laplace smoothing hoặc Bayesian estimat
 
 #### 11. How is MLE related to a Markov Chain?
 
-Với chuỗi quan sát $s_0,s_1,\ldots,s_T$ và giả sử state ban đầu đã cho trước, likelihood của transition matrix là:
+Markov Chain và MLE có hai vai trò khác nhau:
 
-$$L(P) = \prod_{t=0}^{T-1}P_{s_t,s_{t+1}} = \prod_i\prod_jP_{ij}^{N_{ij}}$$
+$$\boxed{\text{Markov Chain}=\text{probabilistic model}}$$
+
+$$\boxed{\text{MLE}=\text{method for estimating model parameters from data}}$$
+
+Markov Chain định nghĩa cấu trúc xác suất $P(X_{t+1}\mid X_t)$. Khi transition matrix chưa biết, ta quan sát các trajectory rồi dùng MLE để ước lượng các phần tử của ma trận đó.
+
+##### Ví dụ chi tiết với hai states
+
+Giả sử Markov Chain có hai states $A$ và $B$, với transition matrix:
+
+$$P=\begin{bmatrix}p_{AA}&p_{AB}\\p_{BA}&p_{BB}\end{bmatrix}$$
+
+Mỗi hàng là một probability distribution nên:
+
+$$p_{AA}+p_{AB}=1,\qquad p_{BA}+p_{BB}=1$$
+
+Ta quan sát trajectory:
+
+$$A\rightarrow A\rightarrow B\rightarrow A\rightarrow B\rightarrow B$$
+
+Các transition counts là:
+
+| State hiện tại | Transition quan sát được | Tổng số lần rời state |
+|---|---|---:|
+| $A$ | $N_{AA}=1$, $N_{AB}=2$ | $3$ |
+| $B$ | $N_{BA}=1$, $N_{BB}=1$ | $2$ |
+
+MLE cho hàng bắt đầu từ $A$ là:
+
+$$\hat p_{AA}=\frac13,\qquad \hat p_{AB}=\frac23$$
+
+MLE cho hàng bắt đầu từ $B$ là:
+
+$$\hat p_{BA}=\frac12,\qquad \hat p_{BB}=\frac12$$
+
+Vì vậy, transition matrix ước lượng được là:
+
+$$\boxed{\hat P=\begin{bmatrix}\frac13&\frac23\\\frac12&\frac12\end{bmatrix}}$$
+
+##### Tại sao transition counts cho đúng nghiệm MLE?
+
+Do Markov property:
+
+$$P(X_{t+1}\mid X_t,X_{t-1},\ldots,X_0)=P(X_{t+1}\mid X_t)$$
+
+xác suất của một trajectory $X_0,X_1,\ldots,X_T$ được factorize thành:
+
+$$P(X_0,X_1,\ldots,X_T)=P(X_0)\prod_{t=0}^{T-1}P(X_{t+1}\mid X_t)$$
+
+Với trajectory trong ví dụ:
+
+$$L(P)=P(X_0=A)\,p_{AA}p_{AB}p_{BA}p_{AB}p_{BB}$$
+
+Nếu initial distribution đã biết và không phụ thuộc vào transition parameters, $P(X_0=A)$ là constant đối với bài toán tối ưu. Khi đó:
+
+$$L(P)\propto p_{AA}p_{AB}^{2}p_{BA}p_{BB}$$
+
+MLE tìm transition matrix làm likelihood này lớn nhất:
+
+$$\hat P=\arg\max_P L(P)$$
+
+Tổng quát, nếu $N_{ij}$ là số lần quan sát transition $i\rightarrow j$, likelihood của transition parameters có thể nhóm lại thành:
+
+$$L(P)\propto\prod_i\prod_jP_{ij}^{N_{ij}}$$
 
 Log-likelihood là:
 
-$$\log L(P) = \sum_i\sum_jN_{ij}\log P_{ij}$$
+$$\log L(P)=\sum_i\sum_jN_{ij}\log P_{ij}$$
 
-Tối đa hóa biểu thức này với ràng buộc $\sum_jP_{ij}=1$ cho mỗi hàng cho nghiệm MLE:
+Tối đa hóa log-likelihood với các ràng buộc $\sum_jP_{ij}=1$ cho từng hàng cho nghiệm:
 
-$$\boxed{ \hat P_{ij}^{\text{MLE}} = \frac{N_{ij}}{\sum_kN_{ik}} }$$
+$$\boxed{\hat P_{ij}^{\mathrm{MLE}}=\frac{N_{ij}}{\sum_kN_{ik}}}$$
 
-Vì vậy, cách lấy transition count chia cho tổng số lần rời state $i$ không chỉ là trực giác về tần suất; đó chính là nghiệm maximum likelihood của transition matrix.
+Trong đó:
+
+- $N_{ij}$ là số lần quan sát transition $i\rightarrow j$.
+- $\sum_kN_{ik}$ là tổng số lần trajectory rời state $i$.
+
+Nói ngắn gọn:
+
+$$\boxed{\hat P(j\mid i)=\frac{\text{number of observed }i\rightarrow j\text{ transitions}}{\text{total number of transitions leaving }i}}$$
+
+Đây là MLE vì các relative frequencies trên chính là giá trị làm trajectory likelihood lớn nhất, không chỉ là một quy tắc đếm theo trực giác.
+
+##### Nối sang transition dynamics trong Reinforcement Learning
+
+Trong MDP, transition dynamics còn phụ thuộc vào action:
+
+$$P(s'\mid s,a)$$
+
+Nếu dynamics chưa biết nhưng dataset chứa các transition tuples $(s,a,s')$, ta có thể ước lượng bằng:
+
+$$\boxed{\hat P(s'\mid s,a)=\frac{N(s,a,s')}{N(s,a)}}$$
+
+Đây vẫn là cùng một nguyên lý MLE, chỉ khác là mỗi distribution được conditioned trên cả state $s$ và action $a$.
+
+Mạch cần nhớ là:
+
+```text
+Markov assumption
+       ↓
+trajectory likelihood
+       ↓
+maximize with MLE
+       ↓
+estimated transition matrix P
+```
+
+Quan hệ này tương tự phần Gaussian và MSE:
+
+$$\text{Gaussian model}+\text{MLE}\Longrightarrow\text{MSE}$$
+
+$$\text{Markov model}+\text{MLE}\Longrightarrow\text{estimated transition matrix }\hat P$$
+
+MLE là cùng một nguyên lý học tham số; probability model khác nhau sẽ dẫn tới parameters và objective cụ thể khác nhau.
 
 #### 12. Markov Chain vs MDP?
 
