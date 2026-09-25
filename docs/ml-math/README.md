@@ -12,13 +12,13 @@
 
 Với model $f_\theta$, prediction $\hat y_i=f_\theta(x_i)$ và dataset có $N$ samples, training objective thường có dạng:
 
-$$
+```math
 J(\theta)
 =
 \frac{1}{N}\sum_{i=1}^{N}\ell(\hat y_i,y_i)
 +
 \lambda\Omega(\theta)
-$$
+```
 
 Trong đó:
 
@@ -34,34 +34,34 @@ Trong đó:
 
 **Mean Squared Error — MSE:**
 
-$$
+```math
 \operatorname{MSE}
 =
 \frac{1}{N}\sum_{i=1}^{N}(y_i-\hat y_i)^2
-$$
+```
 
 MSE xuất hiện tự nhiên khi giả định residual tuân theo Gaussian distribution. Nó trơn, dễ tối ưu và phạt rất mạnh lỗi lớn, nhưng vì bình phương sai số nên nhạy với outlier.
 
 **Mean Absolute Error — MAE:**
 
-$$
+```math
 \operatorname{MAE}
 =
 \frac{1}{N}\sum_{i=1}^{N}|y_i-\hat y_i|
-$$
+```
 
 MAE bền vững hơn với outlier và liên quan đến giả định Laplace distribution. Hạn chế của nó là không khả vi tại zero và gradient có độ lớn gần như không đổi.
 
 **Huber loss** kết hợp ưu điểm của MSE và MAE. Đặt residual $r=y-\hat y$:
 
-$$
+```math
 \ell_\delta(r)
 =
 \begin{cases}
 \frac{1}{2}r^2, & |r|\leq\delta, \\
 \delta\left(|r|-\frac{1}{2}\delta\right), & |r|>\delta.
 \end{cases}
-$$
+```
 
 Sai số nhỏ được xử lý giống MSE để tối ưu mượt; sai số lớn được xử lý gần giống MAE để giảm ảnh hưởng của outlier.
 
@@ -74,51 +74,51 @@ Các detector ban đầu có thể regression trực tiếp từng tọa độ $
 
 Vì vậy, nhiều phiên bản YOLO hiện đại sử dụng loss dựa trên **Intersection over Union — IoU**. Với predicted box $B$ và ground-truth box $B^{gt}$:
 
-$$
+```math
 \operatorname{IoU}(B,B^{gt})
 =
 \frac{|B\cap B^{gt}|}{|B\cup B^{gt}|}
-$$
+```
 
-$$
+```math
 \ell_{\text{IoU}}
 =
 1-\operatorname{IoU}(B,B^{gt})
-$$
+```
 
 IoU loss trực tiếp tối ưu metric overlap, không phụ thuộc tuyệt đối vào scale của box. Tuy nhiên, nếu hai box không giao nhau thì $\operatorname{IoU}=0$, khiến loss khó cung cấp tín hiệu hữu ích về hướng di chuyển hai box lại gần nhau.
 
 **Generalized IoU — GIoU** thêm penalty cho vùng trống trong enclosing box nhỏ nhất $C$ chứa cả hai box:
 
-$$
+```math
 \operatorname{GIoU}
 =
 \operatorname{IoU}
 -
 \frac{|C\setminus(B\cup B^{gt})|}{|C|}
-$$
+```
 
-$$
+```math
 \ell_{\text{GIoU}}=1-\operatorname{GIoU}
-$$
+```
 
 GIoU vẫn tạo được learning signal khi hai box không overlap, nhưng convergence có thể chậm khi enclosing box không thay đổi nhiều.
 
 **Distance IoU — DIoU** thêm khoảng cách giữa hai tâm box:
 
-$$
+```math
 \ell_{\text{DIoU}}
 =
 1-\operatorname{IoU}
 +
 \frac{\rho^2(b,b^{gt})}{c^2}
-$$
+```
 
 Trong đó $b$ và $b^{gt}$ là tâm của hai box, $\rho$ là Euclidean distance giữa hai tâm, còn $c$ là đường chéo của enclosing box $C$. DIoU khuyến khích predicted box vừa overlap tốt vừa có tâm gần ground truth.
 
 **Complete IoU — CIoU** bổ sung thêm độ tương đồng về aspect ratio:
 
-$$
+```math
 \ell_{\text{CIoU}}
 =
 1-\operatorname{IoU}
@@ -126,11 +126,11 @@ $$
 \frac{\rho^2(b,b^{gt})}{c^2}
 +
 \alpha v
-$$
+```
 
 và:
 
-$$
+```math
 v
 =
 \frac{4}{\pi^2}
@@ -139,13 +139,13 @@ v
 -
 \arctan\frac{w}{h}
 \right)^2
-$$
+```
 
-$$
+```math
 \alpha
 =
 \frac{v}{1-\operatorname{IoU}+v}
-$$
+```
 
 CIoU đồng thời xem xét ba yếu tố:
 
@@ -157,7 +157,7 @@ Do đó, CIoU thường phù hợp hơn coordinate-wise MSE cho bounding-box reg
 
 Tổng training loss của một YOLO detector thường có dạng:
 
-$$
+```math
 \mathcal{L}_{\text{YOLO}}
 =
 \lambda_{\text{box}}\mathcal{L}_{\text{box}}
@@ -167,7 +167,7 @@ $$
 \lambda_{\text{obj}}\mathcal{L}_{\text{obj}}
 +
 \lambda_{\text{DFL}}\mathcal{L}_{\text{DFL}}
-$$
+```
 
 Trong đó $\mathcal{L}_{\text{box}}$ có thể là một IoU-family loss. Classification loss, objectness loss và Distribution Focal Loss — DFL có được sử dụng hay không phụ thuộc vào kiến trúc YOLO cụ thể.
 
@@ -175,37 +175,37 @@ Trong đó $\mathcal{L}_{\text{box}}$ có thể là một IoU-family loss. Class
 
 **0–1 loss** chỉ kiểm tra dự đoán đúng hay sai:
 
-$$
+```math
 \ell_{0/1}(\hat y,y)=\mathbf{1}[\hat y\neq y]
-$$
+```
 
 Loss này phản ánh trực tiếp accuracy nhưng không khả vi, nên không phù hợp với gradient descent.
 
 Với binary classification, model dự đoán probability $p=P(y=1\mid x)$. Ta dùng **Binary Cross-Entropy — BCE**:
 
-$$
+```math
 \ell_{\text{BCE}}
 =
 -\left[y\log p+(1-y)\log(1-p)\right]
-$$
+```
 
 Với multi-class classification, logits $z_k$ được chuyển thành probability bằng softmax:
 
-$$
+```math
 p_k
 =
 \frac{e^{z_k}}{\sum_{j=1}^{K}e^{z_j}}
-$$
+```
 
 Sau đó dùng **Cross-Entropy — CE**:
 
-$$
+```math
 \ell_{\text{CE}}
 =
 -\sum_{k=1}^{K}y_k\log p_k
 =
 -\log p_y
-$$
+```
 
 Cross-entropy cũng chính là negative log-likelihood của categorical distribution. Nó không chỉ quan tâm class đúng hay sai mà còn phạt mức độ tự tin sai của model.
 
@@ -215,41 +215,41 @@ Cross-entropy cũng chính là negative log-likelihood của categorical distrib
 
 Gán trọng số lớn hơn cho class hiếm:
 
-$$
+```math
 \ell
 =
 -\sum_{k=1}^{K}w_k y_k\log p_k
-$$
+```
 
 **Nhiều easy examples — Focal loss:**
 
-$$
+```math
 \operatorname{FL}(p_t)
 =
 -\alpha_t(1-p_t)^\gamma\log p_t
-$$
+```
 
 Factor $(1-p_t)^\gamma$ giảm ảnh hưởng của easy examples và khiến model tập trung hơn vào hard examples. Focal loss thường được dùng trong object detection có foreground/background imbalance.
 
 **Model quá tự tin — Label smoothing:**
 
-$$
+```math
 y'_k
 =
 (1-\varepsilon)y_k+\frac{\varepsilon}{K}
-$$
+```
 
 Label smoothing thay one-hot target bằng target mềm hơn, giúp regularization và thường cải thiện calibration.
 
 **Segmentation — Dice loss:**
 
-$$
+```math
 \ell_{\text{Dice}}
 =
 1-
 \frac{2\sum_i p_i y_i+\varepsilon}
 {\sum_i p_i+\sum_i y_i+\varepsilon}
-$$
+```
 
 Dice loss tối ưu độ overlap và hữu ích khi foreground nhỏ hơn background rất nhiều. Trong thực tế, segmentation thường kết hợp BCE/CE với Dice hoặc IoU loss.
 
@@ -259,12 +259,12 @@ Các loss này không chỉ dự đoán class mà còn tổ chức embedding spa
 
 **Sequence modeling và LLM — Token-level Negative Log-Likelihood:**
 
-$$
+```math
 \ell_{\text{NLL}}
 =
 -\sum_{t=1}^{T}
 \log p_\theta(y_t\mid y_{<t},x)
-$$
+```
 
 Đây là cross-entropy áp dụng tại từng token. Với speech hoặc sequence chưa có alignment rõ ràng, CTC loss có thể tổng hợp probability của nhiều alignment hợp lệ.
 
@@ -276,26 +276,26 @@ $$
 
 Gradient cho biết hướng làm objective tăng nhanh nhất:
 
-$$
+```math
 g_t=\nabla_\theta J(\theta_{t-1})
-$$
+```
 
 Vì cần minimize objective, parameters được cập nhật theo hướng ngược gradient:
 
-$$
+```math
 \theta_t=\theta_{t-1}-\alpha g_t
-$$
+```
 
 Trong đó $\alpha$ là learning rate.
 
 **Batch Gradient Descent** tính gradient trên toàn bộ $N$ samples:
 
-$$
+```math
 g_t
 =
 \frac{1}{N}\sum_{i=1}^{N}
 \nabla_\theta\ell_i(\theta_{t-1})
-$$
+```
 
 Gradient ổn định và chính xác, nhưng mỗi update rất tốn thời gian và memory khi dataset lớn.
 
@@ -303,13 +303,13 @@ Gradient ổn định và chính xác, nhưng mỗi update rất tốn thời gi
 
 SGD đúng nghĩa lấy một sample ngẫu nhiên $i_t$ cho mỗi update:
 
-$$
+```math
 g_t=\nabla_\theta\ell_{i_t}(\theta_{t-1})
-$$
+```
 
-$$
+```math
 \theta_t=\theta_{t-1}-\alpha g_t
-$$
+```
 
 Mỗi bước rất rẻ và noise trong gradient có thể giúp thoát saddle point hoặc sharp region. Tuy nhiên, đường tối ưu dao động mạnh và khó tận dụng GPU hiệu quả.
 
@@ -317,16 +317,16 @@ Mỗi bước rất rẻ và noise trong gradient có thể giúp thoát saddle 
 
 Mini-batch SGD lấy một batch $B_t$ gồm $b$ samples:
 
-$$
+```math
 g_t
 =
 \frac{1}{b}\sum_{i\in B_t}
 \nabla_\theta\ell_i(\theta_{t-1})
-$$
+```
 
-$$
+```math
 \theta_t=\theta_{t-1}-\alpha g_t
-$$
+```
 
 Nó cân bằng giữa hai phía:
 
@@ -339,43 +339,43 @@ Nó cân bằng giữa hai phía:
 
 SGD có thể dao động mạnh theo những hướng có curvature lớn và tiến chậm theo hướng gradient ổn định. Momentum dùng exponential moving average của gradient:
 
-$$
+```math
 m_t
 =
 \beta m_{t-1}+(1-\beta)g_t
-$$
+```
 
-$$
+```math
 \theta_t
 =
 \theta_{t-1}-\alpha m_t
-$$
+```
 
 Momentum tích lũy vận tốc theo hướng gradient nhất quán và triệt bớt dao động đổi dấu. Giá trị phổ biến là $\beta=0.9$.
 
 **Nesterov momentum** nhìn trước tại vị trí dự kiến rồi mới tính gradient, nhờ đó có thể điều chỉnh sớm hơn khi sắp đi quá xa:
 
-$$
+```math
 g_t
 =
 \nabla_\theta J(\theta_{t-1}-\alpha\beta m_{t-1})
-$$
+```
 
 ##### 5. AdaGrad
 
 Momentum thích nghi theo **hướng**, nhưng vẫn dùng cùng một learning rate cho mọi parameter. AdaGrad tạo learning rate riêng cho từng parameter bằng tổng bình phương gradient:
 
-$$
+```math
 s_t=s_{t-1}+g_t\odot g_t
-$$
+```
 
-$$
+```math
 \theta_t
 =
 \theta_{t-1}
 -
 \alpha\frac{g_t}{\sqrt{s_t}+\epsilon}
-$$
+```
 
 Phép toán được thực hiện element-wise. Parameter có gradient lớn thường xuyên sẽ nhận bước update nhỏ hơn; parameter hiếm khi có gradient sẽ nhận bước lớn hơn. AdaGrad phù hợp với sparse features, nhưng $s_t$ chỉ tăng nên effective learning rate có thể giảm đến mức model gần như ngừng học.
 
@@ -383,19 +383,19 @@ Phép toán được thực hiện element-wise. Parameter có gradient lớn th
 
 RMSProp sửa nhược điểm tích lũy vô hạn của AdaGrad bằng exponential moving average của squared gradient:
 
-$$
+```math
 v_t
 =
 \rho v_{t-1}+(1-\rho)g_t\odot g_t
-$$
+```
 
-$$
+```math
 \theta_t
 =
 \theta_{t-1}
 -
 \alpha\frac{g_t}{\sqrt{v_t}+\epsilon}
-$$
+```
 
 Do gradient cũ dần bị quên, effective learning rate không liên tục giảm như AdaGrad. RMSProp thích hợp với objective non-stationary và từng được dùng nhiều cho RNN.
 
@@ -408,50 +408,49 @@ Adam kết hợp:
 
 Gradient tại step $t$:
 
-$$
+```math
 g_t=\nabla_\theta J(\theta_{t-1})
-$$
+```
 
 First moment:
 
-$$
+```math
 m_t=\beta_1m_{t-1}+(1-\beta_1)g_t
-$$
+```
 
 Second raw moment:
 
-$$
+```math
 v_t=\beta_2v_{t-1}+(1-\beta_2)g_t\odot g_t
-$$
+```
 
 Vì $m_0=v_0=0$, các moving averages ban đầu bị bias về zero. Adam dùng bias correction:
 
-$$
-\hat m_t=\frac{m_t}{1-\beta_1^t}
-$$
-
-$$
-\hat v_t=\frac{v_t}{1-\beta_2^t}
-$$
+```math
+\begin{aligned}
+\hat{m}_t &= \frac{m_t}{1-\beta_1^t}, \\
+\hat{v}_t &= \frac{v_t}{1-\beta_2^t}.
+\end{aligned}
+```
 
 Update:
 
-$$
+```math
 \theta_t
 =
 \theta_{t-1}
 -
 \alpha
 \frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon}
-$$
+```
 
 Default values thường dùng:
 
-$$
+```math
 \beta_1=0.9,\qquad
 \beta_2=0.999,\qquad
 \epsilon=10^{-8}
-$$
+```
 
 Adam pseudocode:
 
@@ -473,14 +472,14 @@ for each mini-batch:
 
 Adam với L2 term bên trong loss làm regularization bị scale bởi adaptive denominator. AdamW tách weight decay khỏi gradient update:
 
-$$
+```math
 \theta_t
 =
 (1-\alpha\lambda)\theta_{t-1}
 -
 \alpha
 \frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon}
-$$
+```
 
 AdamW thường là lựa chọn mặc định tốt hơn Adam khi train Transformer và nhiều modern deep network.
 
@@ -522,25 +521,298 @@ AdamW thường là lựa chọn mặc định tốt hơn Adam khi train Transfo
 ### Interviewer có thể hỏi thêm
 
 - What is Masked Language Modeling?
+
+  Masked Language Modeling, or MLM, is a self-supervised pretraining objective. The model receives a sequence in which some tokens have been hidden or replaced and learns to recover the original tokens from their surrounding context.
+
+  Because the prediction can use tokens on both the left and the right, MLM helps the model learn bidirectional contextual representations.
+
 - Which famous model uses MLM?
+
+  **BERT** is the best-known model pretrained with MLM. RoBERTa, ALBERT, and many other encoder-only Transformer models also use variants of this objective.
+
 - How is BERT trained?
+
+  The original BERT is first pretrained on unlabeled text using two objectives:
+
+  - **Masked Language Modeling:** Predict selected original tokens from their context.
+  - **Next Sentence Prediction:** Predict whether one sentence follows another in the source text.
+
+  For MLM, BERT selects 15% of the input tokens. Among those selected tokens, 80% are replaced by `[MASK]`, 10% by a random token, and 10% are left unchanged. After pretraining, the model is fine-tuned on a downstream task using labeled data.
+
 - What happens when a token is masked?
+
+  The token's original identity is hidden from the input, usually by replacing it with `[MASK]`. BERT processes the entire sequence with bidirectional self-attention and uses the final hidden state at that position to predict a probability distribution over the vocabulary.
+
+  The token is not assigned a score of zero. Its contextual representation is computed from the visible tokens on both sides. Also, because of BERT's 80/10/10 replacement rule, a selected token is not always literally replaced by `[MASK]`.
+
 - What is the training target?
+
+  The target is the **original token ID at each selected position**. Positions that were not selected for MLM do not contribute to the MLM loss. In original BERT, Next Sentence Prediction has a separate binary target, but it is not part of the token-level MLM target.
+
 - Which loss is commonly used?
+
+  MLM commonly uses **cross-entropy loss over the vocabulary**, evaluated only at the selected token positions. If $\mathcal{M}$ is the set of selected positions, the loss is:
+
+  ```math
+  \mathcal{L}_{\text{MLM}}
+  =
+  -\frac{1}{|\mathcal{M}|}
+  \sum_{i \in \mathcal{M}}
+  \log p_\theta\!\left(x_i \mid \tilde{x}\right)
+  ```
+
+  Here, $x_i$ is the original token and $\tilde{x}$ is the corrupted input sequence. In code, unselected positions are typically ignored with a special label such as `-100`.
+
 - Why is cross-entropy used?
+
+  Predicting a masked token is a multi-class classification problem: the model produces one logit for every token in the vocabulary, while the original token provides the correct class. Cross-entropy converts these logits through softmax and minimizes the negative log-probability of the correct token.
+
+  It is differentiable, strongly penalizes confident wrong predictions, and is equivalent to maximum likelihood for a categorical target. Original BERT also uses cross-entropy for NSP, but that is a separate binary classification loss.
+
 - What is the difference between MLM and autoregressive language modeling?
+
+  **MLM** corrupts selected input tokens and predicts their original values using context from both sides. It normally computes loss only at the selected positions and can predict several positions in parallel.
+
+  **Autoregressive language modeling** factorizes a sequence from left to right:
+
+  ```math
+  p(x_1,\ldots,x_T)
+  =
+  \prod_{t=1}^{T}p(x_t\mid x_{<t})
+  ```
+
+  It uses a causal attention mask so position $t$ cannot access future tokens. During generation, each predicted token is appended to the context before predicting the next one. The `[MASK]` corruption used by MLM and the causal attention mask used by an autoregressive model therefore serve different purposes.
+
 - BERT vs GPT training objective?
+
+  The original **BERT** is an encoder model pretrained with MLM and NSP. Its objective is to recover masked tokens from bidirectional context and learn representations that can be fine-tuned for understanding tasks such as classification or question answering.
+
+  **GPT** is a decoder-only model pretrained with causal next-token prediction. It maximizes the probability of each token conditioned only on earlier tokens, which directly trains it to generate text from left to right.
+
+  Modern BERT-like models may omit NSP, and modern GPT-like models may add instruction tuning or preference optimization, but their core pretraining objectives remain bidirectional masked-token prediction versus causal next-token prediction.
+
 - Why can BERT use information from both left and right context?
+
+  BERT uses a Transformer encoder without a causal triangular mask. Except for padding restrictions, every position can attend to tokens before and after it through self-attention. When a selected token is hidden, its representation can therefore combine evidence from both directions while predicting the original token.
+
 - Why is MLM not naturally autoregressive?
+
+  MLM does not learn the left-to-right factorization required for autoregressive generation. It predicts selected positions from a corrupted sequence, often predicts several positions in parallel, and may use future context that would not exist during left-to-right generation.
+
+  It also introduces special `[MASK]` inputs that normally do not appear in generated text. An MLM can generate through iterative masking and resampling, but this requires a separate procedure and is not its native training behavior.
+
 - What is a tokenizer?
+
+  A tokenizer converts raw text into a sequence of token IDs that a model can process. A typical tokenizer normalizes text, segments it into words or subwords, maps those pieces to a fixed vocabulary, and inserts special tokens such as `[CLS]`, `[SEP]`, or `[MASK]` when required.
+
+  Subword or byte-level tokenization limits out-of-vocabulary problems because an unfamiliar word can be represented by smaller known units. Decoding performs the reverse mapping from token IDs back to text.
+
 - BPE vs Unigram tokenizer?
+
+  **Byte Pair Encoding — BPE** starts with small symbols, such as characters or bytes, and repeatedly merges the most frequent adjacent pair. The learned merge rules are then applied to segment new text. BPE is simple and fast, but its greedy merge process does not explicitly model the probability of every possible segmentation.
+
+  **Unigram tokenization** starts with a large candidate vocabulary and assigns a probability to each token. It repeatedly removes tokens whose removal hurts the corpus likelihood the least. At inference, it can use the Viterbi algorithm to select the highest-probability segmentation or sample alternative segmentations.
+
+  In short, BPE builds the vocabulary by adding frequent merges, whereas Unigram begins with many candidates and prunes them using a probabilistic objective.
+
 - Is likelihood used in tokenizer training?
+
+  It depends on the tokenizer algorithm. A **Unigram language-model tokenizer** explicitly optimizes corpus likelihood by assigning probabilities to tokens and considering possible segmentations:
+
+  ```math
+  p(x)
+  =
+  \sum_{s\in\mathcal{S}(x)}
+  \prod_{u\in s}p(u)
+  ```
+
+  Here, $\mathcal{S}(x)$ is the set of valid segmentations of string $x$. By contrast, standard BPE greedily chooses frequent pair merges rather than directly maximizing this likelihood. Therefore, likelihood is central to Unigram training but is not a universal objective for every tokenizer.
 
 ---
 
 ### 3.3 Matrix decomposition
 
 **Mức đã trao đổi:** **3/5**
+
+### Kiến Thức Cần Nhớ
+
+#### 1. Hạng của ma trận
+
+**Định nghĩa trực quan:** Hạng của ma trận cho biết phép biến đổi do ma trận đó tạo ra còn giữ được bao nhiêu **hướng độc lập**. Nói cách khác, hạng đo lượng thông tin độc lập có trong các hàng hoặc các cột của ma trận.
+
+Với ma trận $A\in\mathbb{R}^{m\times n}$:
+
+```math
+\operatorname{rank}(A)
+=
+\text{số cột độc lập tuyến tính của }A
+=
+\text{số hàng độc lập tuyến tính của }A
+```
+
+Ta luôn có:
+
+```math
+0\leq \operatorname{rank}(A)\leq \min(m,n)
+```
+
+Ví dụ:
+
+```math
+A=
+\begin{bmatrix}
+1&0\\
+0&1
+\end{bmatrix}
+```
+
+Hai cột $(1,0)^T$ và $(0,1)^T$ chỉ hai hướng độc lập trong mặt phẳng, nên $\operatorname{rank}(A)=2$. Phép biến đổi này vẫn giữ được không gian hai chiều.
+
+Ngược lại:
+
+```math
+B=
+\begin{bmatrix}
+1&2\\
+2&4
+\end{bmatrix}
+```
+
+Cột thứ hai bằng hai lần cột thứ nhất, nên ma trận chỉ có một hướng độc lập và $\operatorname{rank}(B)=1$. Với mọi vector $(x,y)^T$:
+
+```math
+B
+\begin{bmatrix}
+x\\y
+\end{bmatrix}
+=
+\begin{bmatrix}
+x+2y\\
+2x+4y
+\end{bmatrix}
+=
+(x+2y)
+\begin{bmatrix}
+1\\2
+\end{bmatrix}
+```
+
+Mọi điểm trong mặt phẳng sau phép biến đổi đều bị ép lên cùng một đường thẳng. Vì một chiều đã bị mất nên ta không thể khôi phục duy nhất $(x,y)$ từ kết quả.
+
+> Hạng càng thấp thì ma trận càng có nhiều thông tin trùng lặp hoặc càng làm mất nhiều hướng. Hạng đầy đủ nghĩa là ma trận giữ được số hướng độc lập lớn nhất có thể.
+
+#### 2. Định thức của ma trận
+
+**Định nghĩa trực quan:** Định thức chỉ được định nghĩa cho ma trận vuông và cho biết phép biến đổi tuyến tính làm **diện tích hoặc thể tích có hướng** thay đổi bao nhiêu lần.
+
+- Trong không gian hai chiều, $|\det(A)|$ là hệ số co giãn diện tích.
+- Trong không gian ba chiều, $|\det(A)|$ là hệ số co giãn thể tích.
+- $\det(A)>0$: phép biến đổi giữ nguyên chiều định hướng.
+- $\det(A)<0$: phép biến đổi đảo chiều định hướng, giống như phản chiếu qua gương.
+- $\det(A)=0$: diện tích hoặc thể tích bị ép về $0$, nghĩa là ít nhất một chiều đã bị mất.
+
+Với ma trận $2\times2$:
+
+```math
+A=
+\begin{bmatrix}
+a&b\\
+c&d
+\end{bmatrix},
+\qquad
+\det(A)=ad-bc
+```
+
+Ví dụ:
+
+```math
+C=
+\begin{bmatrix}
+2&0\\
+0&3
+\end{bmatrix},
+\qquad
+\det(C)=2\cdot3=6
+```
+
+$C$ kéo dài một hướng lên $2$ lần và hướng còn lại lên $3$ lần. Vì vậy, hình vuông đơn vị có diện tích $1$ sẽ trở thành hình chữ nhật có diện tích $6$.
+
+Với ma trận $B$ ở trên:
+
+```math
+\det(B)=1\cdot4-2\cdot2=0
+```
+
+Mặt phẳng bị ép xuống một đường thẳng nên diện tích sau biến đổi bằng $0$. Đây cũng là lý do $B$ có hạng nhỏ hơn $2$.
+
+> Hạng trả lời câu hỏi “còn bao nhiêu hướng độc lập?”, còn định thức trả lời “diện tích hoặc thể tích có hướng bị thay đổi bao nhiêu lần?”. Định thức bằng $0$ cho biết có hướng đã bị mất, nhưng không cho biết chính xác còn lại bao nhiêu hướng; muốn biết điều đó phải dùng hạng.
+
+#### 3. Ma trận khả nghịch
+
+**Định nghĩa trực quan:** Ma trận khả nghịch biểu diễn một phép biến đổi có thể **đảo ngược hoàn toàn**. Nếu $A$ biến $x$ thành $y$, thì $A^{-1}$ có thể biến $y$ trở lại đúng $x$:
+
+```math
+y=Ax
+\qquad\Longrightarrow\qquad
+x=A^{-1}y
+```
+
+Ma trận nghịch đảo thỏa mãn:
+
+```math
+AA^{-1}=A^{-1}A=I
+```
+
+Với ma trận vuông $A\in\mathbb{R}^{n\times n}$, các phát biểu sau là tương đương:
+
+```math
+A\text{ khả nghịch}
+\Longleftrightarrow
+\operatorname{rank}(A)=n
+\Longleftrightarrow
+\det(A)\neq0
+```
+
+Ví dụ, với ma trận $C$:
+
+```math
+C^{-1}=
+\begin{bmatrix}
+\frac{1}{2}&0\\
+0&\frac{1}{3}
+\end{bmatrix}
+```
+
+$C$ kéo dài hai hướng lên $2$ và $3$ lần; $C^{-1}$ co chúng lại còn $\frac{1}{2}$ và $\frac{1}{3}$, nên khôi phục được vector ban đầu.
+
+Ma trận $B$ không khả nghịch vì nó ép cả mặt phẳng xuống một đường thẳng. Nhiều điểm đầu vào khác nhau có thể cho cùng một đầu ra, nên không thể xác định duy nhất điểm ban đầu.
+
+> Ma trận khả nghịch không làm mất thông tin. Ma trận không khả nghịch làm mất ít nhất một hướng nên không thể đảo ngược duy nhất.
+
+#### 4. Ứng dụng trong đại số tuyến tính
+
+- **Giải hệ phương trình:** Với hệ $Ax=b$, nếu $A$ vuông và khả nghịch thì hệ có nghiệm duy nhất $x=A^{-1}b$. Trong tính toán thực tế, thường giải trực tiếp hệ tuyến tính thay vì tính $A^{-1}$ vì ổn định và hiệu quả hơn.
+- **Kiểm tra thông tin độc lập:** Hạng cho biết số phương trình hoặc số đặc trưng thực sự độc lập; nhờ đó phát hiện các hàng, cột hay biến bị trùng lặp.
+- **Xác định số nghiệm:** Hạng giúp biết một hệ phương trình có vô nghiệm, một nghiệm hay vô số nghiệm.
+- **Đo sự thay đổi hình học:** Định thức mô tả mức co giãn diện tích, thể tích và sự đảo chiều của phép biến đổi.
+- **Đổi biến:** Khi đổi hệ tọa độ hoặc đổi biến trong tích phân, trị tuyệt đối của định thức Jacobi cho biết phần tử diện tích hoặc thể tích thay đổi thế nào.
+
+#### 5. Ứng dụng trong AI và học máy
+
+- **Nén mô hình:** Nếu ma trận trọng số $W$ có hạng thấp hoặc gần hạng thấp, có thể xấp xỉ $W\approx U_k\Sigma_kV_k^T$. Việc lưu các ma trận nhỏ này cần ít tham số và phép tính hơn lưu toàn bộ $W$.
+- **LoRA:** Thay vì cập nhật trực tiếp một ma trận trọng số lớn, LoRA học một thay đổi hạng thấp $\Delta W=BA$. Cách này giúp tinh chỉnh mô hình lớn với ít tham số hơn.
+- **PCA và giảm chiều:** PCA dùng các hướng chứa nhiều biến thiên nhất của dữ liệu. Hạng cho biết dữ liệu thực sự trải trên bao nhiêu chiều độc lập; các hướng ít quan trọng có thể được loại bỏ để giảm nhiễu và giảm kích thước.
+- **Phát hiện đặc trưng dư thừa:** Ma trận dữ liệu hoặc ma trận hiệp phương sai có hạng thấp cho thấy một số đặc trưng có thể được tạo từ các đặc trưng khác.
+- **Phân phối Gaussian:** Định thức của ma trận hiệp phương sai xuất hiện trong mật độ Gaussian và biểu diễn độ lớn vùng không gian mà dữ liệu phân bố. Định thức bằng $0$ nghĩa là covariance suy biến và phân phối bị ép vào một không gian thấp chiều hơn.
+- **Mô hình luồng chuẩn hóa:** Các mô hình này cần phép biến đổi khả nghịch để đi qua lại giữa dữ liệu và biến ẩn. Định thức Jacobi được dùng để điều chỉnh mật độ xác suất khi không gian bị co giãn.
+
+Tóm lại:
+
+| Khái niệm | Câu hỏi trực quan | Điều cần nhớ |
+|---|---|---|
+| Hạng | Còn bao nhiêu hướng độc lập? | Hạng thấp nghĩa là có hướng hoặc thông tin bị trùng lặp hay mất đi |
+| Định thức | Diện tích hoặc thể tích có hướng đổi bao nhiêu lần? | $\det(A)=0$ nghĩa là phép biến đổi làm mất ít nhất một chiều |
+| Khả nghịch | Có khôi phục duy nhất đầu vào từ đầu ra không? | Với ma trận vuông: khả nghịch $\Leftrightarrow$ hạng đầy đủ $\Leftrightarrow\det(A)\neq0$ |
 
 ### Interviewer có thể hỏi thêm
 
@@ -560,15 +832,15 @@ AdamW thường là lựa chọn mặc định tốt hơn Adam khi train Transfo
 
 ### Công thức
 
-$$
+```math
 W = U \Sigma V^T
-$$
+```
 
 Low-rank approximation:
 
-$$
+```math
 W \approx U_k \Sigma_k V_k^T
-$$
+```
 
 ---
 
@@ -578,61 +850,700 @@ $$
 
 ### Core idea
 
-$$
+```math
 \theta^* = \arg\max_\theta P(D \mid \theta)
-$$
+```
 
 Nếu samples độc lập:
 
-$$
+```math
 L(\theta)
 =
 \prod_i
 p(y_i \mid x_i,\theta)
-$$
+```
 
 Thường chuyển sang Negative Log-Likelihood:
 
-$$
+```math
 \min_\theta -\log P(D\mid\theta)
-$$
+```
+
+### Kiến Thức Cần Nhớ
+
+#### 1. Ví dụ MLE chi tiết: tung đồng xu
+
+Giả sử có một đồng xu nhưng chưa biết xác suất xuất hiện mặt ngửa. Gọi:
+
+```math
+p=P(\text{ngửa}),
+\qquad
+1-p=P(\text{sấp})
+```
+
+Ở đây:
+
+- **Dữ liệu** $D$ là kết quả các lần tung đồng xu.
+- **Tham số cần tìm** $\theta$ chính là $p$.
+- MLE chọn giá trị $p$ làm cho dữ liệu đã quan sát có khả năng xuất hiện cao nhất.
+
+Ta tung đồng xu độc lập $10$ lần và thu được $7$ mặt ngửa, $3$ mặt sấp. Xác suất của một thứ tự cụ thể, ví dụ `NNNSNNNSNS`, là:
+
+```math
+P(D\mid p)
+=
+p^7(1-p)^3
+```
+
+Khi xem biểu thức này như một hàm của tham số chưa biết $p$, ta gọi nó là **hàm hợp lý**:
+
+```math
+L(p)=p^7(1-p)^3
+```
+
+Nếu dữ liệu chỉ ghi nhận “có $7$ lần ngửa trong $10$ lần tung” mà không quan tâm thứ tự, xác suất sẽ là phân phối nhị thức:
+
+```math
+P(H=7\mid p)
+=
+\binom{10}{7}p^7(1-p)^3
+```
+
+Hệ số $\binom{10}{7}$ không phụ thuộc vào $p$, nên có nhân thêm hệ số này hay không thì giá trị $p$ làm likelihood lớn nhất vẫn giống nhau.
+
+Một số giá trị thử:
+
+| $p$ giả định | $L(p)$ | $\log L(p)$ |
+|---:|---:|---:|
+| $0.5$ | $0.0009766$ | $-6.9315$ |
+| $0.6$ | $0.0017916$ | $-6.3247$ |
+| $0.7$ | $0.0022236$ | $-6.1086$ |
+| $0.8$ | $0.0016777$ | $-6.3903$ |
+
+Trong các giá trị trên, $p=0.7$ cho likelihood lớn nhất. Để tìm chính xác thay vì thử từng giá trị, ta lấy log:
+
+```math
+\ell(p)
+=
+\log L(p)
+=
+7\log p+3\log(1-p)
+```
+
+Log là hàm đồng biến nên giá trị làm $L(p)$ lớn nhất cũng làm $\ell(p)$ lớn nhất. Lấy đạo hàm:
+
+```math
+\frac{d\ell}{dp}
+=
+\frac{7}{p}-\frac{3}{1-p}
+```
+
+Cho đạo hàm bằng $0$:
+
+```math
+\frac{7}{p}-\frac{3}{1-p}=0
+```
+
+```math
+7(1-p)=3p
+```
+
+```math
+\hat p_{\text{MLE}}=\frac{7}{10}=0.7
+```
+
+Đạo hàm bậc hai là:
+
+```math
+\frac{d^2\ell}{dp^2}
+=
+-\frac{7}{p^2}-\frac{3}{(1-p)^2}<0
+```
+
+Do đó $p=0.7$ thực sự là điểm cực đại. Kết luận tổng quát: nếu có $h$ lần ngửa trong tổng số $N$ lần tung thì:
+
+```math
+\hat p_{\text{MLE}}=\frac{h}{N}
+```
+
+**Trực giác:** ta chọn xác suất của mô hình khớp với tần suất quan sát được trong dữ liệu. MLE không nói rằng xác suất thật chắc chắn bằng $0.7$; nó chỉ nói rằng trong họ mô hình Bernoulli, $p=0.7$ giải thích dữ liệu hiện có tốt nhất.
+
+#### 2. Probability và likelihood khác nhau ở đâu?
+
+Cùng một biểu thức $p^7(1-p)^3$, nhưng câu hỏi khác nhau:
+
+- **Probability:** đã biết $p$, hỏi dữ liệu nào có thể xuất hiện và xác suất của dữ liệu là bao nhiêu.
+- **Likelihood:** đã quan sát cố định dữ liệu $D$, hỏi giá trị $p$ nào giải thích dữ liệu đó tốt nhất.
+
+Ta không nói “xác suất của $p$” trong MLE. Ta đang so sánh mức độ phù hợp của các giá trị $p$ đối với cùng một dữ liệu.
+
+#### 3. Từ đồng xu sang mô hình token
+
+Đồng xu có hai kết quả là ngửa và sấp. Một mô hình token có nhiều kết quả, mỗi kết quả là một token trong từ vựng $V$. Gọi $\theta_u$ là xác suất của token $u$:
+
+```math
+\theta_u=P(u),
+\qquad
+\sum_{u\in V}\theta_u=1
+```
+
+Nếu sau khi tách từ, corpus trở thành chuỗi token $t_1,t_2,\ldots,t_N$ và tạm giả sử các token độc lập, likelihood là:
+
+```math
+L(\theta)
+=
+P(D\mid\theta,V)
+=
+\prod_{i=1}^{N}\theta_{t_i}
+=
+\prod_{u\in V}\theta_u^{c_u}
+```
+
+Trong đó $c_u$ là số lần token $u$ xuất hiện. Log-likelihood là:
+
+```math
+\ell(\theta)
+=
+\sum_{u\in V}c_u\log\theta_u
+```
+
+Với từ vựng và cách tách token đã cố định, nghiệm MLE là:
+
+```math
+\hat\theta_u
+=
+\frac{c_u}{N}
+```
+
+Đây chính là phiên bản nhiều loại kết quả của ví dụ đồng xu: xác suất MLE của mỗi token bằng tần suất tương đối của token đó trong corpus.
+
+#### 4. Ánh xạ MLE sang bài toán học từ vựng WordPiece
+
+WordPiece bắt đầu với một từ vựng nhỏ, thường chứa các ký tự cơ bản, sau đó dần thêm các mảnh từ dài hơn. Về mặt ý tưởng, ở mỗi bước nó tìm mảnh từ mới làm tăng likelihood của corpus dưới mô hình ngôn ngữ nhiều nhất.
+
+Bài toán có thể nhìn thành hai tầng:
+
+1. **Ước lượng tham số:** với một từ vựng $V$ và cách tách token cố định, dùng MLE để tìm các xác suất token $\hat\theta_u=c_u/N$.
+2. **Chọn cấu trúc từ vựng:** thử thêm hoặc ghép một mảnh từ, tách lại corpus, ước lượng lại $\theta$, rồi đánh giá likelihood mới.
+
+Viết cô đọng:
+
+```math
+V^*
+\approx
+\underset{V\text{ được mở rộng dần}}{\arg\max}
+\left[
+\max_{\theta}
+\log P(D\mid V,\theta)
+\right]
+```
+
+Dấu $\approx$ nhấn mạnh rằng WordPiece xây từ vựng theo kiểu tham lam từng bước, không duyệt tất cả từ vựng có thể có để tìm nghiệm tối ưu toàn cục.
+
+##### Ví dụ corpus nhỏ
+
+Giả sử corpus gồm:
+
+```text
+“học” xuất hiện 6 lần
+“hỏi” xuất hiện 2 lần
+“đọc” xuất hiện 3 lần
+```
+
+Ban đầu, ta minh họa cách tách theo ký tự với `##` đánh dấu mảnh nằm giữa từ:
+
+```text
+học  → [h, ##ọ, ##c]
+hỏi  → [h, ##ỏ, ##i]
+đọc  → [đ, ##ọ, ##c]
+```
+
+Bảng đếm token là:
+
+| Token | Số lần xuất hiện |
+|---|---:|
+| `h` | $8$ |
+| `##ọ` | $9$ |
+| `##c` | $9$ |
+| `##ỏ` | $2$ |
+| `##i` | $2$ |
+| `đ` | $3$ |
+
+Tổng cộng có $N=33$ token. Theo MLE:
+
+```math
+P(h)=\frac{8}{33},
+\quad
+P(\text{\#\#ọ})=\frac{9}{33},
+\quad
+P(\text{\#\#c})=\frac{9}{33},
+\quad\ldots
+```
+
+Log-likelihood cực đại của cách tách hiện tại là:
+
+```math
+\ell_{\text{cũ}}
+=
+8\log\frac{8}{33}
++9\log\frac{9}{33}
++9\log\frac{9}{33}
++2\log\frac{2}{33}
++2\log\frac{2}{33}
++3\log\frac{3}{33}
+\approx -53.13
+```
+
+Bây giờ thử ghép `##ọ` và `##c` thành token `##ọc`:
+
+```text
+học  → [h, ##ọc]
+hỏi  → [h, ##ỏ, ##i]
+đọc  → [đ, ##ọc]
+```
+
+Các count mới là:
+
+| Token | Số lần xuất hiện |
+|---|---:|
+| `h` | $8$ |
+| `##ọc` | $9$ |
+| `##ỏ` | $2$ |
+| `##i` | $2$ |
+| `đ` | $3$ |
+
+Chuỗi corpus lúc này chỉ còn $N'=24$ token. Ước lượng lại xác suất bằng MLE, ta được:
+
+```math
+\ell_{\text{mới}}
+=
+8\log\frac{8}{24}
++9\log\frac{9}{24}
++2\log\frac{2}{24}
++2\log\frac{2}{24}
++3\log\frac{3}{24}
+\approx -33.79
+```
+
+Mức cải thiện trong ví dụ unigram đơn giản này là:
+
+```math
+\Delta\ell
+=
+\ell_{\text{mới}}-\ell_{\text{cũ}}
+\approx 19.34
+```
+
+Log-likelihood mới lớn hơn vì $-33.79>-53.13$. Điều đó cho thấy `##ọc` là một mảnh từ hữu ích theo mô hình minh họa này: nó xuất hiện lặp lại, làm cách biểu diễn corpus ngắn hơn và giúp mô hình gán xác suất cao hơn cho dữ liệu đã thấy.
+
+#### 5. Điểm ghép thường dùng để giải thích WordPiece
+
+Một cách tái dựng WordPiece thường gặp không tính lại toàn bộ likelihood cho mọi ứng viên vì làm như vậy rất tốn kém. Thay vào đó, nó chấm điểm cặp token kề nhau bằng:
+
+```math
+\operatorname{score}(a,b)
+=
+\frac{\operatorname{freq}(a,b)}
+{\operatorname{freq}(a)\operatorname{freq}(b)}
+```
+
+Điểm này đo mức độ hai token **đặc biệt thích đi cùng nhau**, thay vì chỉ nhìn số lần cặp xuất hiện như BPE.
+
+Trong corpus trên:
+
+```math
+\operatorname{score}(\text{\#\#ọ},\text{\#\#c})
+=
+\frac{9}{9\cdot9}
+=
+\frac{1}{9}
+```
+
+```math
+\operatorname{score}(\text{\#\#ỏ},\text{\#\#i})
+=
+\frac{2}{2\cdot2}
+=
+\frac{1}{2}
+```
+
+Dù `##ỏ ##i` chỉ xuất hiện $2$ lần, hai token này luôn đi cùng nhau trong corpus nhỏ, nên điểm liên kết của chúng cao. Vì vậy, quy tắc điểm ghép này có thể chọn `##ỏi` trước `##ọc`.
+
+> Cần phân biệt: công thức score trên là cách giải thích hoặc tái dựng phổ biến cho tiêu chí ghép của WordPiece; nó không đồng nhất với phép tính lại chính xác toàn bộ corpus likelihood trong ví dụ ở trên. Chi tiết đầy đủ của thuật toán huấn luyện WordPiece gốc không được công bố cùng mã nguồn, nên các thư viện có thể dùng tiêu chí gần đúng khác nhau.
+
+#### 6. MLE thông thường và likelihood trong WordPiece giống nhau ở đâu?
+
+| Điểm giống | Giải thích |
+|---|---|
+| Đều có dữ liệu quan sát cố định | Đồng xu dùng chuỗi ngửa/sấp; WordPiece dùng corpus văn bản |
+| Đều xây một mô hình xác suất | Đồng xu có $p$ và $1-p$; mô hình token có $\theta_u$ cho từng token |
+| Đều ưu tiên cách giải thích dữ liệu tốt nhất | Chọn tham số hoặc phép ghép làm likelihood lớn hơn |
+| Đều dùng log-likelihood | Tích xác suất trở thành tổng, dễ tính và tránh underflow |
+| Tần suất đóng vai trò trung tâm | Với mô hình cố định, nghiệm MLE chính là tần suất tương đối |
+
+#### 7. Chúng khác nhau ở đâu?
+
+| MLE đồng xu | Học từ vựng WordPiece |
+|---|---|
+| Không gian kết quả `{ngửa, sấp}` đã cố định | Chính tập token và cách chia văn bản cũng đang được thay đổi |
+| Chỉ tối ưu tham số liên tục $p$ | Vừa ước lượng xác suất, vừa ra quyết định rời rạc nên ghép token nào |
+| Có nghiệm đóng $\hat p=h/N$ | Việc tìm từ vựng tối ưu toàn cục rất lớn, nên thường xây từ vựng tham lam |
+| Mỗi quan sát đã có nhãn rõ ràng là ngửa hay sấp | Một từ có thể có nhiều cách phân mảnh tiềm năng |
+| Kết quả là một xác suất | Kết quả huấn luyện WordPiece chủ yếu là một từ vựng và quy tắc tách token |
+
+#### 8. Ba loại likelihood dễ bị nhầm
+
+1. **Likelihood khi học từ vựng WordPiece:** dùng corpus để quyết định mảnh từ nào nên có trong vocabulary.
+2. **Likelihood khi huấn luyện BERT hoặc mô hình ngôn ngữ:** vocabulary đã cố định; model học tham số neural để tăng xác suất của token đúng trong ngữ cảnh. Đây là bài toán cross-entropy hoặc negative log-likelihood khác.
+3. **Unigram tokenizer:** duy trì xác suất cho các mảnh từ và có thể xét nhiều cách phân đoạn; thường dùng thuật toán kiểu EM rồi loại dần các mảnh làm giảm likelihood ít nhất. Nó không phải chính là quy trình ghép tham lam của WordPiece.
+
+Sau khi từ vựng WordPiece đã được học xong, bước tokenize một từ mới thường dùng chiến lược **khớp mảnh dài nhất từ trái sang phải**. Bước suy luận này là một quy tắc tìm kiếm xác định, không phải mỗi lần tokenize lại giải một bài toán MLE.
 
 ### Interviewer có thể hỏi thêm
 
 - What is likelihood?
+
+  **Likelihood** đo mức độ một giá trị tham số $\theta$ giải thích tốt dữ liệu $D$ đã quan sát như thế nào. Nó được định nghĩa bởi:
+
+  ```math
+  L(\theta;D)=P(D\mid\theta)
+  ```
+
+  Khi nói về likelihood, dữ liệu $D$ được giữ cố định và $\theta$ là biến ta thay đổi. MLE chọn giá trị $\theta$ làm likelihood lớn nhất:
+
+  ```math
+  \hat\theta_{\text{MLE}}
+  =
+  \arg\max_\theta L(\theta;D)
+  ```
+
+  Ví dụ, sau khi quan sát $7$ lần ngửa và $3$ lần sấp, ta so sánh các giá trị $p=0.5,0.6,0.7,\ldots$ để xem giá trị nào giải thích dữ liệu tốt nhất.
+
 - What is the difference between probability and likelihood?
+
+  Hai khái niệm có thể dùng cùng biểu thức $P(D\mid\theta)$ nhưng giữ cố định những đại lượng khác nhau:
+
+  - **Probability:** cố định tham số $\theta$, xem dữ liệu $D$ là biến. Câu hỏi là: “Với mô hình này, dữ liệu nào có thể xuất hiện và xác suất là bao nhiêu?”.
+  - **Likelihood:** cố định dữ liệu đã quan sát $D$, xem tham số $\theta$ là biến. Câu hỏi là: “Tham số nào giải thích dữ liệu này tốt nhất?”.
+
+  Probability phải tạo thành một phân phối hợp lệ trên mọi dữ liệu có thể xảy ra:
+
+  ```math
+  \sum_D P(D\mid\theta)=1
+  ```
+
+  Ngược lại, likelihood không phải phân phối xác suất trên $\theta$ và không bắt buộc có tổng bằng $1$ theo $\theta$. Muốn có phân phối xác suất của tham số sau khi thấy dữ liệu, ta cần Bayesian posterior $P(\theta\mid D)$.
+
 - What does theta represent?
+
+  $\theta$ đại diện cho toàn bộ **tham số chưa biết của mô hình** mà quá trình huấn luyện cần ước lượng từ dữ liệu.
+
+  - Với đồng xu, $\theta=p$, là xác suất xuất hiện mặt ngửa.
+  - Với linear regression, $\theta$ có thể gồm vector trọng số $w$, bias $b$ và phương sai nhiễu $\sigma^2$.
+  - Với neural network hoặc LLM, $\theta$ là toàn bộ weight và bias của mô hình, có thể lên đến hàng tỷ tham số.
+
+  $\theta$ không phải dữ liệu đầu vào $x$ hay nhãn $y$; nó là những giá trị bên trong mô hình được optimizer cập nhật trong quá trình training.
+
 - What does argmax mean?
+
+  $\arg\max$ trả về **đầu vào làm hàm đạt giá trị lớn nhất**, không phải bản thân giá trị lớn nhất.
+
+  Ví dụ:
+
+  ```math
+  f(p)=p^7(1-p)^3
+  ```
+
+  ```math
+  \arg\max_{0\leq p\leq1}f(p)=0.7
+  ```
+
+  Trong khi đó:
+
+  ```math
+  \max_{0\leq p\leq1}f(p)
+  =
+  f(0.7)
+  \approx0.0022236
+  ```
+
+  Vì vậy, $\hat\theta=\arg\max_\theta L(\theta)$ có nghĩa là tìm **bộ tham số** tốt nhất, không phải chỉ tìm giá trị likelihood lớn nhất.
+
 - Why do we multiply probabilities across samples?
+
+  Nếu các sample độc lập có điều kiện khi biết $\theta$, joint probability của toàn bộ dataset bằng tích xác suất của từng sample:
+
+  ```math
+  P(D\mid\theta)
+  =
+  P(D_1,D_2,\ldots,D_N\mid\theta)
+  =
+  \prod_{i=1}^{N}P(D_i\mid\theta)
+  ```
+
+  Trong supervised learning, với $D_i=(x_i,y_i)$ và coi $x_i$ là đầu vào đã cho:
+
+  ```math
+  L(\theta)
+  =
+  \prod_{i=1}^{N}p_\theta(y_i\mid x_i)
+  ```
+
+  Ta nhân vì mô hình cần giải thích **đồng thời tất cả sample**. Chỉ cần gán xác suất rất thấp cho một sample thì likelihood chung cũng giảm mạnh.
+
+  Nếu các sample không độc lập thì không được tùy ý nhân các marginal probability. Khi đó phải mô hình hóa joint distribution hoặc dùng chain rule với các conditional probability thích hợp.
+
 - Why do we take the logarithm of likelihood?
+
+  Ta dùng log-likelihood vì bốn lý do chính:
+
+  1. Log là hàm đồng biến, nên không thay đổi vị trí nghiệm tối ưu:
+
+     ```math
+     \arg\max_\theta L(\theta)
+     =
+     \arg\max_\theta\log L(\theta)
+     ```
+
+  2. Log biến tích thành tổng, làm công thức và đạo hàm đơn giản hơn:
+
+     ```math
+     \log\prod_i p_i
+     =
+     \sum_i\log p_i
+     ```
+
+  3. Tổng log-probability dễ tính theo mini-batch và dễ phân rã contribution của từng sample hoặc token.
+  4. Tích hàng triệu xác suất nhỏ có thể bị làm tròn về $0$ trên máy tính; cộng log-probability giúp tránh numerical underflow.
+
 - Why does log convert multiplication into addition?
+
+  Đây là tính chất cơ bản của logarithm:
+
+  ```math
+  \log(ab)=\log a+\log b
+  ```
+
+  Có thể thấy từ định nghĩa số mũ. Nếu $a=e^x$ và $b=e^y$ thì:
+
+  ```math
+  ab=e^xe^y=e^{x+y}
+  ```
+
+  Do đó:
+
+  ```math
+  \log(ab)=x+y=\log a+\log b
+  ```
+
+  Tương tự, lũy thừa được đưa xuống thành hệ số:
+
+  ```math
+  \log(a^n)=n\log a
+  ```
+
+  Vì vậy:
+
+  ```math
+  \log\left[p^7(1-p)^3\right]
+  =
+  7\log p+3\log(1-p)
+  ```
+
 - Why is negative log-likelihood minimized?
+
+  MLE yêu cầu tối đa hóa likelihood. Vì log đồng biến, ta có thể tối đa hóa log-likelihood. Nhân thêm dấu âm sẽ đổi bài toán cực đại thành cực tiểu:
+
+  ```math
+  \arg\max_\theta L(\theta)
+  =
+  \arg\max_\theta\log L(\theta)
+  =
+  \arg\min_\theta\left[-\log L(\theta)\right]
+  ```
+
+  Các thư viện machine learning và optimizer thường được thiết kế để **minimize loss**, nên ta dùng Negative Log-Likelihood — NLL làm loss. NLL nhỏ nghĩa là mô hình gán xác suất cao cho dữ liệu đúng; NLL lớn nghĩa là mô hình cho rằng dữ liệu đúng khó xảy ra.
+
 - What is the MLE of the probability of heads if a coin gives 7 heads and 3 tails?
+
+  Gọi $p$ là xác suất xuất hiện mặt ngửa. Likelihood là:
+
+  ```math
+  L(p)=p^7(1-p)^3
+  ```
+
+  Log-likelihood:
+
+  ```math
+  \ell(p)=7\log p+3\log(1-p)
+  ```
+
+  Cho đạo hàm bằng $0$:
+
+  ```math
+  \frac{d\ell}{dp}
+  =
+  \frac{7}{p}-\frac{3}{1-p}
+  =0
+  ```
+
+  Suy ra:
+
+  ```math
+  \hat p_{\text{MLE}}
+  =
+  \frac{7}{7+3}
+  =0.7
+  ```
+
+  Tổng quát, nếu có $h$ lần ngửa trong $N$ lần tung thì $\hat p_{\text{MLE}}=h/N$.
+
 - What is MAP estimation?
+
+  **Maximum A Posteriori — MAP** chọn tham số có posterior probability lớn nhất sau khi kết hợp dữ liệu với niềm tin có trước về tham số:
+
+  ```math
+  \hat\theta_{\text{MAP}}
+  =
+  \arg\max_\theta P(\theta\mid D)
+  ```
+
+  Theo định lý Bayes:
+
+  ```math
+  P(\theta\mid D)
+  =
+  \frac{P(D\mid\theta)P(\theta)}{P(D)}
+  ```
+
+  Vì $P(D)$ không phụ thuộc vào $\theta$:
+
+  ```math
+  \hat\theta_{\text{MAP}}
+  =
+  \arg\max_\theta
+  \left[
+  \log P(D\mid\theta)+\log P(\theta)
+  \right]
+  ```
+
+  $P(\theta)$ là prior, giúp đưa kiến thức hoặc giả định có trước vào quá trình ước lượng. Ví dụ, Gaussian prior trên weight dẫn đến một penalty có dạng L2.
+
 - MLE vs MAP?
+
+  | MLE | MAP |
+  |---|---|
+  | Tối đa hóa $P(D\mid\theta)$ | Tối đa hóa $P(\theta\mid D)$ |
+  | Chỉ sử dụng dữ liệu quan sát | Kết hợp likelihood với prior $P(\theta)$ |
+  | Không trực tiếp ưu tiên giá trị tham số nào | Có thể ưu tiên các tham số hợp lý theo kiến thức có trước |
+  | Dễ overfit hơn khi dữ liệu ít | Prior có thể regularize khi dữ liệu ít |
+  | Tương đương MAP nếu prior là uniform | Khi dữ liệu rất lớn, ảnh hưởng của prior thường giảm |
+
+  Dưới dạng bài toán cực tiểu:
+
+  ```math
+  \text{MLE:}
+  \qquad
+  \min_\theta -\log P(D\mid\theta)
+  ```
+
+  ```math
+  \text{MAP:}
+  \qquad
+  \min_\theta
+  \left[
+  -\log P(D\mid\theta)-\log P(\theta)
+  \right]
+  ```
+
+  Có thể hiểu MAP là MLE cộng thêm một regularization term đến từ prior.
+
 - How is MLE related to cross-entropy?
+
+  Với bài toán phân loại, model dự đoán phân phối $p_\theta(k\mid x)$ trên các class. Nếu target $y$ là one-hot vector, cross-entropy của một sample là:
+
+  ```math
+  \mathcal{L}_{\text{CE}}
+  =
+  -\sum_{k=1}^{K}y_k\log p_\theta(k\mid x)
+  ```
+
+  Vì chỉ class đúng $y$ có giá trị $1$, biểu thức rút gọn thành:
+
+  ```math
+  \mathcal{L}_{\text{CE}}
+  =
+  -\log p_\theta(y\mid x)
+  ```
+
+  Với toàn bộ dataset:
+
+  ```math
+  \sum_{i=1}^{N}\mathcal{L}_{\text{CE}}^{(i)}
+  =
+  -\sum_{i=1}^{N}\log p_\theta(y_i\mid x_i)
+  =
+  -\log\prod_{i=1}^{N}p_\theta(y_i\mid x_i)
+  ```
+
+  Vế phải chính là negative conditional log-likelihood. Vì vậy, với one-hot target, **minimize cross-entropy tương đương với maximum likelihood estimation**. Nếu dùng soft target hoặc label smoothing, cross-entropy vẫn hợp lệ nhưng không còn đơn giản là NLL của một class duy nhất.
+
 - How is likelihood used in LLM training?
+
+  Với chuỗi token $x_1,x_2,\ldots,x_T$, LLM tự hồi quy mô hình hóa xác suất của cả chuỗi bằng:
+
+  ```math
+  p_\theta(x_1,\ldots,x_T)
+  =
+  \prod_{t=1}^{T}p_\theta(x_t\mid x_{<t})
+  ```
+
+  MLE tìm tham số $\theta$ làm xác suất của các chuỗi trong training corpus lớn nhất. Trong thực tế, model minimize token-level negative log-likelihood:
+
+  ```math
+  \mathcal{L}(\theta)
+  =
+  -\sum_{t=1}^{T}
+  \log p_\theta(x_t\mid x_{<t})
+  ```
+
+  Đây cũng là cross-entropy giữa phân phối dự đoán trên vocabulary và token đúng tại mỗi vị trí. Khi training, model thường dùng **teacher forcing**: để dự đoán $x_t$, context $x_{<t}$ lấy từ chuỗi thật thay vì các token model tự sinh trước đó.
+
+  Mục tiêu này dạy model tăng xác suất cho token thực sự xuất hiện trong ngữ cảnh của corpus. Nó không trực tiếp dạy model “hiểu” hay “nói thật”; các khả năng đó xuất hiện gián tiếp từ việc học cấu trúc thống kê của dữ liệu và các giai đoạn alignment bổ sung.
+
 - Why does autoregressive language modeling multiply conditional token probabilities?
 
-### Coin example
+  Vì **chain rule của xác suất** phân rã joint probability của một chuỗi thành tích các conditional probability:
 
-7 heads, 3 tails:
+  ```math
+  P(x_1,x_2,\ldots,x_T)
+  =
+  P(x_1)
+  P(x_2\mid x_1)
+  P(x_3\mid x_1,x_2)
+  \cdots
+  P(x_T\mid x_{<T})
+  ```
 
-$$
-L(p)=p^7(1-p)^3
-$$
+  Viết gọn:
 
-$$
-\log L(p)
-=
-7\log p + 3\log(1-p)
-$$
+  ```math
+  P(x_{1:T})
+  =
+  \prod_{t=1}^{T}P(x_t\mid x_{<t})
+  ```
 
-Maximum occurs at:
+  Phép phân rã này **không giả định các token độc lập**. Ngược lại, xác suất của mỗi token phụ thuộc vào toàn bộ token đứng trước nó. Ta nhân vì xác suất của cả câu phải bao gồm việc token thứ nhất xuất hiện, rồi token thứ hai xuất hiện trong context thứ nhất, và tiếp tục như vậy đến cuối chuỗi.
 
-$$
-p=0.7
-$$
+  Khi lấy log, sequence log-likelihood trở thành tổng token log-likelihood:
+
+  ```math
+  \log P(x_{1:T})
+  =
+  \sum_{t=1}^{T}\log P(x_t\mid x_{<t})
+  ```
+
+  Nhờ đó, training loss có thể được tính cho tất cả vị trí token song song mặc dù mô hình vẫn tuân theo factorization từ trái sang phải.
 
 ---
 
@@ -642,74 +1553,356 @@ $$
 
 Em đang học phần này nên mức 3 là phù hợp với định nghĩa của form: **understand the concept**.
 
-### Markov property
+### Kiến thức cần nhớ
 
-$$
-P(X_{t+1}\mid X_t,X_{t-1},...,X_0)
+#### 1. What is a Markov Chain?
+
+**Markov Chain — chuỗi Markov** là mô hình xác suất mô tả một hệ thống chuyển đổi giữa các trạng thái theo từng bước thời gian. Một Markov Chain hữu hạn thường gồm:
+
+- Tập trạng thái $S$.
+- Phân phối trạng thái ban đầu $\pi_0$.
+- Xác suất chuyển trạng thái $P(s'\mid s)$.
+
+Ví dụ, thời tiết có hai trạng thái `Nắng` và `Mưa`. Mỗi ngày, hệ thống chuyển sang trạng thái của ngày tiếp theo theo một xác suất nhất định.
+
+#### 2. What is the Markov property?
+
+Tính chất Markov nói rằng khi đã biết trạng thái hiện tại, trạng thái tiếp theo không còn phụ thuộc trực tiếp vào toàn bộ lịch sử:
+
+```math
+P(S_{t+1}\mid S_t,S_{t-1},\ldots,S_0)
 =
-P(X_{t+1}\mid X_t)
-$$
+P(S_{t+1}\mid S_t)
+```
 
-Nói đơn giản:
+Có thể viết ngắn gọn:
 
-`Future ⟂ Past | Present`
+```text
+Future ⟂ Past | Present
+```
 
-### Transition probability
+Điều này không có nghĩa quá khứ luôn vô dụng. Nó có nghĩa state hiện tại phải chứa đủ thông tin liên quan từ quá khứ để dự đoán bước tiếp theo. Nếu một state không chứa đủ thông tin này thì cách định nghĩa state chưa thỏa mãn Markov property.
 
-$$
+#### 3. What is a state?
+
+**State — trạng thái** là biểu diễn tình trạng hiện tại của hệ thống tại một thời điểm.
+
+Ví dụ:
+
+- Trong mô hình thời tiết: `Nắng` hoặc `Mưa`.
+- Trong robot: vị trí, hướng quay và vận tốc.
+- Trong game: vị trí nhân vật, lượng máu và các vật phẩm đang có.
+
+Một state tốt phải chứa đủ thông tin để phân phối của state tiếp theo chỉ phụ thuộc vào state hiện tại và, trong bài toán điều khiển, action hiện tại.
+
+#### 4. What is a transition probability?
+
+**Transition probability — xác suất chuyển trạng thái** là xác suất hệ thống đi từ state $i$ ở thời điểm hiện tại sang state $j$ ở bước tiếp theo:
+
+```math
 P_{ij}
 =
-P(X_{t+1}=j \mid X_t=i)
-$$
+P(S_{t+1}=j\mid S_t=i)
+```
 
-Distribution update:
+Ví dụ:
 
-$$
+```math
+P(\text{Mưa ngày mai}\mid\text{Nắng hôm nay})=0.3
+```
+
+Trong một **time-homogeneous Markov Chain**, xác suất này không thay đổi theo thời gian. Nếu xác suất phụ thuộc vào $t$, ta có một time-inhomogeneous Markov Chain.
+
+#### 5. What is a transition matrix?
+
+**Transition matrix** chứa xác suất chuyển đổi giữa mọi cặp trạng thái. Với thứ tự state là `[Nắng, Mưa]`, ta có thể có:
+
+```math
+P=
+\begin{bmatrix}
+0.7 & 0.3\\
+0.4 & 0.6
+\end{bmatrix}
+```
+
+| State hiện tại / State tiếp theo | Nắng | Mưa |
+|---|---:|---:|
+| Nắng | $0.7$ | $0.3$ |
+| Mưa | $0.4$ | $0.6$ |
+
+Phần tử ở hàng $i$, cột $j$ chính là $P_{ij}=P(S_{t+1}=j\mid S_t=i)$.
+
+#### 6. Why does each row of the transition matrix sum to 1?
+
+Khi state hiện tại $i$ đã được xác định, hệ thống phải chuyển tới một trong các state tiếp theo có thể có. Vì các khả năng này loại trừ lẫn nhau và bao phủ toàn bộ không gian state:
+
+```math
+\sum_j P_{ij}=1
+```
+
+Ví dụ, nếu ngày mai chỉ có thể nắng hoặc mưa thì:
+
+```math
+P(\text{Nắng}\mid\text{Nắng})
++P(\text{Mưa}\mid\text{Nắng})
+=0.7+0.3=1
+```
+
+Ma trận có các phần tử không âm và mỗi hàng có tổng bằng $1$ được gọi là **row-stochastic matrix**.
+
+#### 7. How do you compute the state distribution after n steps?
+
+Nếu $\pi_t$ là row vector biểu diễn phân phối state tại thời điểm $t$, sau một bước:
+
+```math
 \pi_{t+1}=\pi_tP
-$$
+```
 
-$$
-\pi_{t+n}=\pi_tP^n
-$$
+Sau $n$ bước:
 
-### Interviewer có thể hỏi thêm
+```math
+\boxed{\pi_{t+n}=\pi_tP^n}
+```
 
-- What is a Markov Chain?
-- What is the Markov property?
-- What is a state?
-- What is a transition probability?
-- What is a transition matrix?
-- Why does each row of the transition matrix sum to 1?
-- How do you compute the state distribution after n steps?
-- What is a stationary distribution?
-- What is an absorbing state?
-- How can transition probabilities be estimated from data?
-- How is MLE related to a Markov Chain?
-- Markov Chain vs MDP?
-- What happens when we add actions?
-- What happens when we add rewards?
-- What is a POMDP?
-- Why are robotics problems often partially observable?
+Ví dụ, nếu hôm nay chắc chắn nắng:
 
-### Connection to RL
+```math
+\pi_0=
+\begin{bmatrix}
+1 & 0
+\end{bmatrix}
+```
 
-Markov Chain:
+thì phân phối của ngày mai là:
 
-$$
-P(S_{t+1}\mid S_t)
-$$
+```math
+\pi_1
+=
+\pi_0P
+=
+\begin{bmatrix}
+0.7 & 0.3
+\end{bmatrix}
+```
 
-With action:
+Nếu dùng column vector cho phân phối thì phải nhất quán với convention tương ứng, ví dụ $\pi_{t+1}=P^T\pi_t$ khi $P$ vẫn là row-stochastic.
 
-$$
-P(S_{t+1}\mid S_t,A_t)
-$$
+#### 8. What is a stationary distribution?
 
-Add reward → **MDP**
+**Stationary distribution — phân phối dừng** là một phân phối $\pi^*$ không thay đổi sau một bước chuyển:
 
-$$
+```math
+\boxed{\pi^*=\pi^*P}
+```
+
+với:
+
+```math
+\pi_i^*\geq 0,
+\qquad
+\sum_i\pi_i^*=1
+```
+
+Với transition matrix thời tiết ở trên:
+
+```math
+\pi^*=
+\begin{bmatrix}
+\frac{4}{7} & \frac{3}{7}
+\end{bmatrix}
+\approx
+\begin{bmatrix}
+0.571 & 0.429
+\end{bmatrix}
+```
+
+Nếu hệ thống bắt đầu từ phân phối này thì các bước sau vẫn có cùng phân phối. Stationary distribution tồn tại không tự động có nghĩa mọi phân phối ban đầu đều hội tụ về nó; tính duy nhất và hội tụ còn phụ thuộc vào các tính chất như irreducibility và aperiodicity.
+
+#### 9. What is an absorbing state?
+
+**Absorbing state — trạng thái hấp thụ** là state mà sau khi đi vào, hệ thống không thể rời khỏi:
+
+```math
+P_{ii}=1
+```
+
+Do tổng mỗi hàng bằng $1$, điều này cũng kéo theo:
+
+```math
+P_{ij}=0
+\quad\text{với mọi }j\neq i
+```
+
+Ví dụ, trong mô hình vòng đời tài khoản, nếu `Đã đóng vĩnh viễn` là absorbing state thì một tài khoản đã vào state này sẽ luôn ở đó trong các bước tiếp theo.
+
+#### 10. How can transition probabilities be estimated from data?
+
+Ta đếm số lần quan sát được mỗi chuyển đổi. Gọi $N_{ij}$ là số lần chuyển từ state $i$ sang state $j$, ước lượng là:
+
+```math
+\hat P_{ij}
+=
+\frac{N_{ij}}{\sum_kN_{ik}}
+```
+
+Ví dụ, trong dữ liệu có $70$ lần `Nắng → Nắng` và $30$ lần `Nắng → Mưa`:
+
+```math
+\hat P_{\text{Nắng,Nắng}}=\frac{70}{100}=0.7
+```
+
+```math
+\hat P_{\text{Nắng,Mưa}}=\frac{30}{100}=0.3
+```
+
+Nếu dữ liệu ít, có thể dùng Laplace smoothing hoặc Bayesian estimation để tránh kết luận rằng một transition chưa từng xuất hiện phải có xác suất đúng bằng zero.
+
+#### 11. How is MLE related to a Markov Chain?
+
+Với chuỗi quan sát $s_0,s_1,\ldots,s_T$ và giả sử state ban đầu đã cho trước, likelihood của transition matrix là:
+
+```math
+L(P)
+=
+\prod_{t=0}^{T-1}P_{s_t,s_{t+1}}
+=
+\prod_i\prod_jP_{ij}^{N_{ij}}
+```
+
+Log-likelihood là:
+
+```math
+\log L(P)
+=
+\sum_i\sum_jN_{ij}\log P_{ij}
+```
+
+Tối đa hóa biểu thức này với ràng buộc $\sum_jP_{ij}=1$ cho mỗi hàng cho nghiệm MLE:
+
+```math
+\boxed{
+\hat P_{ij}^{\text{MLE}}
+=
+\frac{N_{ij}}{\sum_kN_{ik}}
+}
+```
+
+Vì vậy, cách lấy transition count chia cho tổng số lần rời state $i$ không chỉ là trực giác về tần suất; đó chính là nghiệm maximum likelihood của transition matrix.
+
+#### 12. Markov Chain vs MDP?
+
+| Thành phần | Markov Chain | Markov Decision Process — MDP |
+|---|---|---|
+| State | Có | Có |
+| Transition | $P(s'\mid s)$ | $P(s'\mid s,a)$ |
+| Action | Không | Có |
+| Reward | Không | Có |
+| Policy | Không cần | $\pi(a\mid s)$ |
+| Mục tiêu điều khiển | Không | Tối đa hóa expected return |
+
+Markov Chain mô tả diễn biến ngẫu nhiên của một hệ thống không có quyết định của agent. MDP mô tả một bài toán ra quyết định tuần tự, trong đó action của agent ảnh hưởng tới state tiếp theo và reward nhận được.
+
+#### 13. What happens when we add actions?
+
+Khi thêm action, transition model trở thành:
+
+```math
+P(S_{t+1}=s'\mid S_t=s,A_t=a)
+```
+
+Cùng một state có thể dẫn tới các phân phối state tiếp theo khác nhau tùy action. Agent cần một **policy** để chọn action:
+
+```math
+\pi(a\mid s)=P(A_t=a\mid S_t=s)
+```
+
+Nếu mới có state, action và transition nhưng chưa có reward, mô hình thường được gọi là **controlled Markov process**. Ta có thể điều khiển hệ thống nhưng chưa có tiêu chí để nói policy nào tốt hơn.
+
+#### 14. What happens when we add rewards?
+
+Reward $R(s,a,s')$ cho biết mức độ tốt hoặc xấu của một transition. Khi có states, actions, transitions và rewards, ta có một **Markov Decision Process**:
+
+```math
 (S,A,P,R,\gamma)
-$$
+```
+
+Mục tiêu thường là tìm policy tối đa hóa discounted return kỳ vọng:
+
+```math
+\boxed{
+J(\pi)
+=
+\mathbb E_{\pi}
+\left[
+\sum_{t=0}^{\infty}\gamma^tR_{t+1}
+\right]
+}
+```
+
+Trong đó $0\leq\gamma<1$ là discount factor. Giá trị $\gamma$ nhỏ ưu tiên reward gần; giá trị lớn coi trọng kết quả dài hạn hơn.
+
+Nếu policy $\pi$ được cố định, action được lấy theo policy và MDP tạo ra một Markov Chain trên các state với transition probability:
+
+```math
+P_{\pi}(s'\mid s)
+=
+\sum_a\pi(a\mid s)P(s'\mid s,a)
+```
+
+#### 15. What is a POMDP?
+
+**Partially Observable Markov Decision Process — POMDP** là MDP mà agent không quan sát trực tiếp được state thật $S_t$. Thay vào đó, agent nhận observation $O_t$ được tạo ra từ state thông qua observation model, ví dụ:
+
+```math
+P(O_t=o\mid S_t=s)
+```
+
+Một POMDP thường được mô tả bởi:
+
+```math
+(S,A,P,R,\Omega,O,\gamma)
+```
+
+Trong đó $\Omega$ là tập observations và $O$ là observation model. Vì một observation có thể tương ứng với nhiều state thật khác nhau, agent dùng toàn bộ lịch sử action và observation để duy trì **belief state**:
+
+```math
+b_t(s)
+=
+P(S_t=s\mid o_{1:t},a_{0:t-1})
+```
+
+Belief state là một phân phối xác suất thể hiện agent đang tin state thật là mỗi khả năng với xác suất bao nhiêu.
+
+#### 16. Why are robotics problems often partially observable?
+
+Trong robotics, robot hiếm khi biết chính xác toàn bộ state của bản thân và môi trường vì:
+
+- Camera, LiDAR, radar, IMU và GPS đều có noise và sai số đo.
+- Vật thể có thể bị che khuất hoặc nằm ngoài field of view của sensor.
+- Sensor chỉ quan sát một phần của môi trường tại mỗi thời điểm.
+- Một ảnh đơn lẻ thường không cho biết trực tiếp velocity, depth hoặc intention của vật thể.
+- Calibration và time synchronization giữa các sensor không hoàn hảo.
+- Môi trường động có thể thay đổi trong khi robot đang quan sát và hành động.
+
+Do đó, robot phải kết hợp observation hiện tại, lịch sử measurements, actions đã thực hiện và motion model để ước lượng hidden state. Kalman Filter, Particle Filter, Bayesian filtering và SLAM đều liên quan tới việc suy luận state từ các quan sát không đầy đủ hoặc có noise.
+
+### Connection to Reinforcement Learning
+
+```text
+Markov Chain:        state + transition
+                          │
+                    thêm actions
+                          ▼
+Controlled process: state + action + transition
+                          │
+                    thêm rewards
+                          ▼
+MDP:                 state + action + transition + reward
+                          │
+              không quan sát trực tiếp state
+                          ▼
+POMDP:               MDP + observation model + belief state
+```
 
 ---
 
@@ -721,19 +1914,19 @@ $$
 
 Giả sử:
 
-$$
+```math
 y_i=f_\theta(x_i)+\epsilon_i
-$$
+```
 
 với
 
-$$
+```math
 \epsilon_i\sim\mathcal N(0,\sigma^2)
-$$
+```
 
 thì:
 
-$$
+```math
 p(y_i\mid x_i,\theta)
 =
 \frac{1}{\sqrt{2\pi\sigma^2}}
@@ -741,20 +1934,20 @@ p(y_i\mid x_i,\theta)
 \left(
 -\frac{(y_i-f_\theta(x_i))^2}{2\sigma^2}
 \right)
-$$
+```
 
 Likelihood của toàn bộ dataset:
 
-$$
+```math
 L(\theta)
 =
 \prod_i
 p(y_i\mid x_i,\theta)
-$$
+```
 
 Log-likelihood:
 
-$$
+```math
 \log L(\theta)
 =
 C
@@ -762,25 +1955,25 @@ C
 \frac{1}{2\sigma^2}
 \sum_i
 (y_i-\hat y_i)^2
-$$
+```
 
 Nếu $\sigma^2$ cố định:
 
-$$
+```math
 \arg\max_\theta \log L(\theta)
 \equiv
 \arg\min_\theta
 \sum_i(y_i-\hat y_i)^2
-$$
+```
 
 Chia cho $N$:
 
-$$
+```math
 MSE
 =
 \frac{1}{N}
 \sum_i(y_i-\hat y_i)^2
-$$
+```
 
 ### Interviewer có thể hỏi thêm
 
