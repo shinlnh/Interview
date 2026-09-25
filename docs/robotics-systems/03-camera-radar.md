@@ -133,7 +133,7 @@ Possible costs include:
 
 - Mahalanobis distance.
 - Euclidean distance.
-- $1 - \operatorname{IoU}$.
+- $1 - \mathrm{IoU}$.
 - Class incompatibility.
 - Velocity difference.
 - A weighted combination of these cues.
