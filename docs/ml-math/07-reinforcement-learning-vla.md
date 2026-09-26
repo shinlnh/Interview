@@ -6,6 +6,8 @@
 
 ## 1. Cây tổng quát
 
+> **Paper định hướng theo cây:** [DAgger — Imitation Learning](https://proceedings.mlr.press/v15/ross11a.html), [DQN — Value-based RL](https://www.nature.com/articles/nature14236), [REINFORCE — Policy Gradient](https://doi.org/10.1007/BF00992696), [A3C — Actor–Critic](https://arxiv.org/abs/1602.01783) và [RT-2 — Vision-Language-Action](https://arxiv.org/abs/2307.15818).
+
 ```text
 Machine Learning
 │
@@ -54,6 +56,8 @@ Machine Learning
 
 ### VLA nằm ở đâu trong cây?
 
+> **Paper nên đọc:** [RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control](https://arxiv.org/abs/2307.15818), [OpenVLA](https://arxiv.org/abs/2406.09246) và [π0](https://arxiv.org/abs/2410.24164).
+
 **VLA — Vision-Language-Action — không phải một nhánh học loại trừ lẫn nhau với IL hoặc RL.** VLA là một loại multimodal robot policy/foundation model. Quá trình tạo ra một VLA thường lấy thành phần từ nhiều nhánh:
 
 ```text
@@ -93,6 +97,8 @@ Nói ngắn gọn:
 
 ### 2.1 Supervised Learning
 
+> **Paper nên đọc:** [ImageNet Classification with Deep Convolutional Neural Networks — AlexNet](https://proceedings.neurips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html), một ví dụ kinh điển của supervised classification bằng deep learning.
+
 Mỗi input có target label rõ ràng. Classification dự đoán nhãn rời rạc; regression dự đoán giá trị liên tục.
 
 ```math
@@ -104,11 +110,15 @@ Behavioral Cloning có hình thức gần supervised learning: observation và i
 
 ### 2.2 Unsupervised và Self-supervised Learning
 
+> **Paper nên đọc:** [BERT](https://arxiv.org/abs/1810.04805) cho masked language modeling và [CLIP](https://arxiv.org/abs/2103.00020) cho image-text contrastive pre-training.
+
 Self-supervised learning tạo supervision từ chính dữ liệu, chẳng hạn che token rồi dự đoán token bị che, dự đoán token kế tiếp hoặc contrast hai view của cùng một ảnh.
 
 Trong VLA, nhánh này cung cấp backbone có hiểu biết về vật thể, ngôn ngữ và quan hệ không gian trước khi model học điều khiển robot. Đây là lý do RT-2, OpenVLA, π0 và các model tương tự không bắt đầu hoàn toàn từ số không.
 
 ### 2.3 Imitation Learning và Reinforcement Learning
+
+> **Paper đối chiếu:** [DAgger](https://proceedings.mlr.press/v15/ross11a.html) đại diện cho imitation learning có expert feedback; [DQN](https://www.nature.com/articles/nature14236) đại diện cho reinforcement learning từ reward và interaction.
 
 | Câu hỏi | Imitation Learning | Reinforcement Learning |
 |---|---|---|
@@ -124,6 +134,8 @@ Trong VLA, nhánh này cung cấp backbone có hiểu biết về vật thể, n
 ## 3. Imitation Learning — nhánh chính của phần lớn VLA nền tảng
 
 ### 3.1 Behavioral Cloning — BC
+
+> **Paper nên đọc:** [A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning](https://proceedings.mlr.press/v15/ross11a.html). Paper này mô tả supervised imitation/Behavioral Cloning làm baseline và phân tích vấn đề compounding error.
 
 Cho demonstration dataset:
 
@@ -153,6 +165,8 @@ Nếu action liên tục và policy chỉ dự đoán một mean với Gaussian 
 
 ### 3.2 Autoregressive action tokenization
 
+> **Paper nên đọc:** [RT-1](https://arxiv.org/abs/2212.06817), [RT-2](https://arxiv.org/abs/2307.15818) và [OpenVLA](https://arxiv.org/abs/2406.09246).
+
 Action liên tục được lượng tử hóa thành token, rồi model dự đoán chuỗi action giống next-token prediction:
 
 ```math
@@ -164,6 +178,8 @@ RT-1, RT-2 và OpenVLA là các ví dụ nổi bật của hướng action-token
 
 ### 3.3 Action chunking
 
+> **Paper nên đọc:** [Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware — ACT](https://arxiv.org/abs/2304.13705).
+
 Thay vì dự đoán một action, policy dự đoán cả đoạn:
 
 ```math
@@ -173,6 +189,8 @@ A_t=\left(a_t,a_{t+1},\ldots,a_{t+H-1}\right)
 Action chunking giúp biểu diễn motion có cấu trúc theo thời gian, giảm số lần phải gọi model lớn và thường làm hành động mượt hơn. ACT và π0 đều dùng action chunk, nhưng dùng cách modeling khác nhau.
 
 ### 3.4 Diffusion Policy
+
+> **Paper nên đọc:** [Diffusion Policy: Visuomotor Policy Learning via Action Diffusion](https://arxiv.org/abs/2303.04137) và [Octo](https://arxiv.org/abs/2405.12213) cho diffusion action head trong generalist robot policy.
 
 Diffusion policy học khử noise để biến noise thành action trajectory có điều kiện theo observation. Nó phù hợp với action distribution đa mode: cùng một task có thể có nhiều trajectory hợp lệ.
 
@@ -188,6 +206,8 @@ Nếu training data vẫn là expert demonstrations, Diffusion Policy thuộc nh
 
 ### 3.5 Flow-matching policy
 
+> **Paper nên đọc:** [Flow Matching for Generative Modeling](https://arxiv.org/abs/2210.02747) cho nền tảng toán học và [π0](https://arxiv.org/abs/2410.24164) cho ứng dụng vào VLA action expert.
+
 Flow matching học vector field để vận chuyển một sample noise thành action chunk. π0 kết hợp pretrained VLM với một **action expert** được huấn luyện bằng flow matching.
 
 ```math
@@ -200,6 +220,8 @@ Flow matching liên quan đến generative modeling và diffusion, nhưng không
 
 ### 3.6 Interactive IL: DAgger và human correction
 
+> **Paper nên đọc:** [DAgger](https://proceedings.mlr.press/v15/ross11a.html) và [RT-H: Action Hierarchies Using Language](https://arxiv.org/abs/2403.01823) cho language intervention/correction trong robot policy.
+
 DAgger cho policy chạy, hỏi expert action tại chính những state policy gặp, rồi gộp dữ liệu mới vào dataset:
 
 ```text
@@ -211,6 +233,8 @@ Nó giảm distribution mismatch giữa expert data và learner rollout. Với r
 
 ### 3.7 IRL và GAIL
 
+> **Paper nên đọc:** [Algorithms for Inverse Reinforcement Learning](https://ai.stanford.edu/~ang/papers/icml00-irl.pdf) và [Generative Adversarial Imitation Learning](https://arxiv.org/abs/1606.03476).
+
 - **Inverse Reinforcement Learning — IRL:** suy ra reward function giải thích expert behavior, rồi dùng RL để tối ưu reward đó.
 - **GAIL:** dùng discriminator để phân biệt expert trajectory với learner trajectory; policy học để làm hai occupancy distribution giống nhau.
 
@@ -221,6 +245,8 @@ Hai hướng này nằm giữa imitation và RL vì demonstration cung cấp tí
 ## 4. Nền tảng Reinforcement Learning
 
 ### 4.1 Từ Markov Chain đến MDP và POMDP
+
+> **Paper nên đọc:** [Planning and Acting in Partially Observable Stochastic Domains](https://doi.org/10.1016/S0004-3702%2898%2900023-X) cho POMDP; phần MDP/RL nền tảng có trong [Reinforcement Learning: An Introduction](http://incompleteideas.net/book/the-book-2nd.html).
 
 ```text
 Markov Chain
@@ -263,6 +289,8 @@ Robot thực tế thường gần POMDP vì camera bị occlusion, sensor có no
 
 ### 4.2 Value function, Q-function và advantage
 
+> **Paper nên đọc:** [High-Dimensional Continuous Control Using Generalized Advantage Estimation](https://arxiv.org/abs/1506.02438).
+
 ```math
 V^\pi(s)=\mathbb E_\pi\left[G_t\mid S_t=s\right]
 ```
@@ -278,6 +306,8 @@ A^\pi(s,a)=Q^\pi(s,a)-V^\pi(s)
 Advantage trả lời: action này tốt hơn mức trung bình của policy tại state hiện tại bao nhiêu?
 
 ### 4.3 Các trục phân loại RL chồng lấp nhau
+
+> **Paper tổng quan:** [Reinforcement Learning: A Survey](https://www.jair.org/index.php/jair/article/view/10166) và [A Survey on Offline Reinforcement Learning](https://arxiv.org/abs/2203.01387).
 
 | Trục | Nhóm | Ý nghĩa |
 |---|---|---|
@@ -295,6 +325,8 @@ Một thuật toán có thể nằm trên nhiều trục. SAC chẳng hạn là 
 ## 5. Chi tiết các thuật toán trong cây
 
 ### 5.1 DQN — Deep Q-Network
+
+> **Paper gốc:** [Human-level Control through Deep Reinforcement Learning](https://www.nature.com/articles/nature14236).
 
 **Nhánh:** Value-based → model-free → off-policy → discrete action.
 
@@ -331,6 +363,8 @@ Khi rollout, agent thường dùng epsilon-greedy: phần lớn chọn action c�
 
 ### 5.2 REINFORCE
 
+> **Paper gốc:** [Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning](https://doi.org/10.1007/BF00992696).
+
 **Nhánh:** Policy-based → model-free → on-policy → Monte Carlo policy gradient.
 
 REINFORCE tối ưu trực tiếp stochastic policy. Với return $G_t$, gradient estimator là:
@@ -350,6 +384,8 @@ Trực giác: nếu return tốt hơn baseline, tăng xác suất action đã ch
 **Hạn chế:** phải đợi return, variance cao, on-policy nên không reuse data cũ hiệu quả. Actor–Critic ra đời để thay Monte Carlo return bằng critic có bootstrap, đổi một phần variance lấy bias.
 
 ### 5.3 A2C và A3C
+
+> **Paper gốc:** [Asynchronous Methods for Deep Reinforcement Learning — A3C](https://arxiv.org/abs/1602.01783). A2C là biến thể synchronous được dùng phổ biến của cùng họ Advantage Actor–Critic, không có một paper khai sinh riêng được thống nhất như A3C.
 
 **Nhánh:** Actor–Critic → model-free → on-policy.
 
@@ -386,6 +422,8 @@ Khác nhau chính:
 A3C dùng diversity giữa các worker để decorrelate experience. A2C dễ vectorize trên accelerator và dễ tái lập hơn. Cả hai vẫn là on-policy và nhạy với advantage estimation.
 
 ### 5.4 PPO — Proximal Policy Optimization
+
+> **Paper gốc:** [Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347). Phần GAE dùng trong PPO nên đọc thêm [Generalized Advantage Estimation](https://arxiv.org/abs/1506.02438).
 
 **Nhánh thực dụng:** Actor–Critic → model-free → on-policy. Về mặt objective, PPO là một policy-gradient method.
 
@@ -431,6 +469,8 @@ Generalized Advantage Estimation — GAE thường được dùng để cân b�
 
 ### 5.5 DDPG — cầu nối đến TD3
 
+> **Paper gốc:** [Continuous Control with Deep Reinforcement Learning](https://arxiv.org/abs/1509.02971).
+
 **Nhánh:** Actor–Critic → model-free → off-policy → deterministic continuous control.
 
 DDPG học deterministic actor:
@@ -453,6 +493,8 @@ và critic $Q_\phi(s,a)$. Actor được update để chọn action mà critic �
 DDPG dùng replay buffer và target networks nhưng dễ bất ổn do critic overestimation. TD3 trực tiếp xử lý các vấn đề này.
 
 ### 5.6 TD3 — Twin Delayed DDPG
+
+> **Paper gốc:** [Addressing Function Approximation Error in Actor-Critic Methods](https://proceedings.mlr.press/v80/fujimoto18a.html).
 
 **Nhánh:** Actor–Critic → model-free → off-policy → deterministic continuous control.
 
@@ -483,6 +525,8 @@ với clipped noise:
 **Hạn chế:** deterministic policy cần exploration noise bên ngoài; vẫn phụ thuộc mạnh vào độ chính xác của critic và hyperparameters.
 
 ### 5.7 SAC — Soft Actor-Critic
+
+> **Paper gốc:** [Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor](https://proceedings.mlr.press/v80/haarnoja18b.html).
 
 **Nhánh:** Actor–Critic → model-free → off-policy → stochastic continuous control → maximum-entropy RL.
 
@@ -525,6 +569,8 @@ Temperature $\alpha$ điều khiển trade-off giữa reward và entropy, thư�
 
 ### 5.8 GRPO — Group Relative Policy Optimization
 
+> **Paper gốc:** [DeepSeekMath](https://arxiv.org/abs/2402.03300), paper giới thiệu GRPO; ứng dụng world-model GRPO cho VLA được trình bày trong [WMPO](https://arxiv.org/abs/2511.09515).
+
 **Nhánh:** Policy-based → model-free → on-policy. Khi rollout nằm trong learned world model, toàn hệ thống lại thuộc model-based RL.
 
 GRPO sample một nhóm trajectory/candidate cho cùng context, rồi chuẩn hóa reward trong nhóm để tạo relative advantage mà không bắt buộc học value critic riêng:
@@ -542,6 +588,8 @@ Policy update thường dùng clipped ratio gần PPO và thêm regularization �
 **Hạn chế:** cần nhiều candidate/rollout cho cùng context và reward đủ tin cậy; chất lượng world model sẽ giới hạn policy nếu training trên imagined experience.
 
 ### 5.9 So sánh nhanh
+
+> **Paper tra cứu theo bảng:** [DQN](https://www.nature.com/articles/nature14236) · [REINFORCE](https://doi.org/10.1007/BF00992696) · [A3C](https://arxiv.org/abs/1602.01783) · [PPO](https://arxiv.org/abs/1707.06347) · [GRPO](https://arxiv.org/abs/2402.03300) · [TD3](https://proceedings.mlr.press/v80/fujimoto18a.html) · [SAC](https://proceedings.mlr.press/v80/haarnoja18b.html).
 
 | Thuật toán | Học gì? | On/Off-policy | Action | Điểm nhớ nhất |
 |---|---|---|---|---|
@@ -563,6 +611,8 @@ Cây gốc của em đúng cho phần nhập môn, nhưng VLA hiện đại cầ
 
 ### 6.1 Offline RL
 
+> **Paper nên đọc:** [BCQ](https://arxiv.org/abs/1812.02900), [CQL](https://arxiv.org/abs/2006.04779), [IQL](https://arxiv.org/abs/2110.06169) và [Decision Transformer](https://arxiv.org/abs/2106.01345).
+
 Offline RL học từ static transition dataset có reward:
 
 ```math
@@ -580,6 +630,8 @@ RECAP/π*0.6 dùng offline RL trong pre-training rồi tiếp tục thu thập o
 
 ### 6.2 Model-based RL và world models
 
+> **Paper nên đọc:** [DreamerV3](https://arxiv.org/abs/2301.04104), [MuZero](https://arxiv.org/abs/1911.08265), [WMPO](https://arxiv.org/abs/2511.09515) và [VLA-MBPO](https://arxiv.org/abs/2603.20607).
+
 Model-based RL học hoặc dùng dynamics model để dự đoán tương lai, planning hoặc tạo imagined rollout. Với VLA, world model có thể giảm số trial tốn kém trên robot thật.
 
 ```math
@@ -589,6 +641,8 @@ Model-based RL học hoặc dùng dynamics model để dự đoán tương lai, 
 Các hướng VLA gần đây như WMPO hoặc VLA-MBPO đưa world-model rollout vào policy optimization. WMPO kết hợp world model với on-policy GRPO. Chúng nằm dưới **RL → Model-based RL**, không phải một loại BC mới.
 
 ### 6.3 Hierarchical và language-conditioned control
+
+> **Paper nên đọc:** [Between MDPs and Semi-MDPs: A Framework for Temporal Abstraction](https://doi.org/10.1016/S0004-3702%2899%2900052-1), [RT-H](https://arxiv.org/abs/2403.01823) và [π0.5](https://arxiv.org/abs/2504.16054).
 
 Task dài thường được tách thành:
 
@@ -605,6 +659,8 @@ robot controller
 Planner có thể là VLM/LLM, learned high-level policy hoặc search/planning module. Low-level VLA có thể vẫn được học bằng BC. Vì vậy có planner không đồng nghĩa với dùng RL.
 
 ### 6.4 Hybrid IL → RL
+
+> **Paper nên đọc:** [π*0.6 / RECAP](https://arxiv.org/abs/2511.14759), [RL Token](https://www.pi.website/download/rlt.pdf) và [EXIMO](https://arxiv.org/abs/2608.19891).
 
 Đây là pipeline ngày càng quan trọng trong robotics:
 
@@ -632,6 +688,8 @@ IL giải quyết exploration ban đầu và cung cấp skill prior; RL học t�
 
 ### 7.1 Định nghĩa
 
+> **Paper nên đọc:** [RT-2](https://arxiv.org/abs/2307.15818) cho định nghĩa VLA theo action token, [OpenVLA](https://arxiv.org/abs/2406.09246) cho open-source VLA và [π0](https://arxiv.org/abs/2410.24164) cho continuous flow-based VLA.
+
 VLA nhận vision, language và thường cả proprioception/history để sinh robot action:
 
 ```math
@@ -652,61 +710,75 @@ VLA là **model/policy class**. BC, offline RL, PPO, SAC hay residual RL là **c
 
 #### Giai đoạn 1 — imitation policy và action chunking
 
+> **Paper:** [ACT](https://arxiv.org/abs/2304.13705) · [Diffusion Policy](https://arxiv.org/abs/2303.04137).
+
 Các robot policy ban đầu chủ yếu học từ teleoperation demonstrations. ACT cho thấy Transformer có thể dự đoán action chunk cho bimanual manipulation. Diffusion Policy dùng conditional diffusion để biểu diễn action trajectory đa mode. Cả hai chủ yếu thuộc IL/BC.
 
 #### Giai đoạn 2 — generalist robot policy và action token
 
-**RT-1 (2022)** học nhiều task từ large real-robot demonstration dataset. Model token hóa action và dự đoán action token bằng supervised imitation learning.
+> **Paper:** [RT-1](https://arxiv.org/abs/2212.06817) · [RT-2](https://arxiv.org/abs/2307.15818).
 
-**RT-2 (2023)** biến pretrained VLM thành VLA bằng co-fine-tuning trên web-scale vision-language data và robot data. Robot action được biểu diễn như token text. Đây vẫn chủ yếu là supervised/BC, không phải PPO hay SAC.
+**[RT-1 (2022)](https://arxiv.org/abs/2212.06817)** học nhiều task từ large real-robot demonstration dataset. Model token hóa action và dự đoán action token bằng supervised imitation learning.
+
+**[RT-2 (2023)](https://arxiv.org/abs/2307.15818)** biến pretrained VLM thành VLA bằng co-fine-tuning trên web-scale vision-language data và robot data. Robot action được biểu diễn như token text. Đây vẫn chủ yếu là supervised/BC, không phải PPO hay SAC.
 
 #### Giai đoạn 3 — open cross-embodiment VLA
 
-**Octo (2024)** train Transformer policy trên Open X-Embodiment để dễ fine-tune sang sensor, robot và action space mới. Octo dùng diffusion action head cho continuous action.
+> **Paper:** [Octo](https://arxiv.org/abs/2405.12213) · [OpenVLA](https://arxiv.org/abs/2406.09246).
 
-**OpenVLA (2024)** kết hợp pretrained visual encoders và LLM rồi train trên 970k robot demonstrations. Model dự đoán discretized action tokens, hỗ trợ fine-tune bằng LoRA và có thể phục vụ ở dạng quantized. Nhánh chính vẫn là VLM pretraining + BC.
+**[Octo (2024)](https://arxiv.org/abs/2405.12213)** train Transformer policy trên Open X-Embodiment để dễ fine-tune sang sensor, robot và action space mới. Octo dùng diffusion action head cho continuous action.
+
+**[OpenVLA (2024)](https://arxiv.org/abs/2406.09246)** kết hợp pretrained visual encoders và LLM rồi train trên 970k robot demonstrations. Model dự đoán discretized action tokens, hỗ trợ fine-tune bằng LoRA và có thể phục vụ ở dạng quantized. Nhánh chính vẫn là VLM pretraining + BC.
 
 #### Giai đoạn 4 — generative continuous-action VLA
 
-**π0 (2024)** dùng pretrained PaliGemma VLM và action expert sinh high-frequency continuous action chunks bằng flow matching. Model được train trên hơn 10.000 giờ robot data đa embodiment. π0 gốc là imitation learning/generative policy, chưa phải RL algorithm.
+> **Paper:** [π0](https://arxiv.org/abs/2410.24164) · [π0.5](https://arxiv.org/abs/2504.16054) · [FAST](https://arxiv.org/abs/2501.09747).
 
-**π0.5 (2025)** mở rộng π0 bằng heterogeneous co-training: web data, multi-robot data, object detection, high-level semantic subtask prediction và low-level actions. Giai đoạn pre-training biểu diễn robot action bằng FAST discrete tokens; giai đoạn post-training dùng flow matching cho continuous action. Điểm chính là open-world generalization và knowledge transfer; training cốt lõi vẫn là supervised/IL co-training.
+**[π0 (2024)](https://arxiv.org/abs/2410.24164)** dùng pretrained PaliGemma VLM và action expert sinh high-frequency continuous action chunks bằng flow matching. Model được train trên hơn 10.000 giờ robot data đa embodiment. π0 gốc là imitation learning/generative policy, chưa phải RL algorithm.
+
+**[π0.5 (2025)](https://arxiv.org/abs/2504.16054)** mở rộng π0 bằng heterogeneous co-training: web data, multi-robot data, object detection, high-level semantic subtask prediction và low-level actions. Giai đoạn pre-training biểu diễn robot action bằng [FAST](https://arxiv.org/abs/2501.09747) discrete tokens; giai đoạn post-training dùng flow matching cho continuous action. Điểm chính là open-world generalization và knowledge transfer; training cốt lõi vẫn là supervised/IL co-training.
 
 #### Giai đoạn 5 — VLA học từ experience bằng RL
 
-**RECAP và π*0.6 (2025)** đưa RL vào rõ ràng. RECAP dùng demonstrations, on-policy rollouts và expert corrections; generalist VLA được pre-train bằng offline RL rồi chuyên biệt hóa bằng on-robot data collection. Advantage conditioning giúp policy phân biệt behavior tốt và kém thay vì bắt chước tất cả như BC.
+> **Paper:** [π*0.6 / RECAP](https://arxiv.org/abs/2511.14759) · [RL Token](https://www.pi.website/download/rlt.pdf) · [EXIMO](https://arxiv.org/abs/2608.19891) · [WMPO](https://arxiv.org/abs/2511.09515) · [VLA-MBPO](https://arxiv.org/abs/2603.20607).
 
-**RL Token (2026)** thêm một compact representation làm interface giữa frozen VLA và actor–critic nhỏ. Actor–critic được train bằng sample-efficient off-policy online RL để chỉnh action chunk của VLA trong các task cần độ chính xác cao.
+**[RECAP và π*0.6 (2025)](https://arxiv.org/abs/2511.14759)** đưa RL vào rõ ràng. RECAP dùng demonstrations, on-policy rollouts và expert corrections; generalist VLA được pre-train bằng offline RL rồi chuyên biệt hóa bằng on-robot data collection. Advantage conditioning giúp policy phân biệt behavior tốt và kém thay vì bắt chước tất cả như BC.
 
-**EXIMO (2026)** dùng pipeline `explore → imitate → optimize`: VLM planner hỗ trợ thu thập dữ liệu cho task mới, VLA imitate orchestrated data, rồi residual off-policy RL tối ưu tiếp. Đây là ví dụ rất rõ của hybrid IL → RL.
+**[RL Token (2026)](https://www.pi.website/download/rlt.pdf)** thêm một compact representation làm interface giữa frozen VLA và actor–critic nhỏ. Actor–critic được train bằng sample-efficient off-policy online RL để chỉnh action chunk của VLA trong các task cần độ chính xác cao.
 
-**World-model VLA RL (2025–2026)** như WMPO và VLA-MBPO dùng learned world model để tạo rollout hoặc policy optimization mà giảm interaction trực tiếp với robot thật. WMPO tối ưu policy bằng on-policy GRPO trên imagined trajectories. Đây là nhánh **model-based RL**, còn optimizer GRPO thuộc policy-based/on-policy.
+**[EXIMO (2026)](https://arxiv.org/abs/2608.19891)** dùng pipeline `explore → imitate → optimize`: VLM planner hỗ trợ thu thập dữ liệu cho task mới, VLA imitate orchestrated data, rồi residual off-policy RL tối ưu tiếp. Đây là ví dụ rất rõ của hybrid IL → RL.
+
+**World-model VLA RL (2025–2026)** như [WMPO](https://arxiv.org/abs/2511.09515) và [VLA-MBPO](https://arxiv.org/abs/2603.20607) dùng learned world model để tạo rollout hoặc policy optimization mà giảm interaction trực tiếp với robot thật. WMPO tối ưu policy bằng on-policy GRPO trên imagined trajectories. Đây là nhánh **model-based RL**, còn optimizer GRPO thuộc policy-based/on-policy.
 
 #### Giai đoạn 6 — steerability, memory và embodied reasoning
 
-**π0.7 (2026)** tập trung vào diverse context conditioning: language, subgoal images và episode metadata giúp steer strategy và compositional generalization. Model có thể đạt khả năng gần một số specialist đã RL-fine-tune, nhưng điểm mới chính của π0.7 là conditioning/data composition, không nên mặc định gắn toàn bộ model này vào RL.
+> **Paper/technical report:** [π0.7](https://www.pi.website/download/pi07.pdf) · [Gemini Robotics 1.5](https://deepmind.google/blog/gemini-robotics-15-brings-ai-agents-into-the-physical-world/) · [Gemini Robotics 2](https://deepmind.google/blog/gemini-robotics-2-brings-whole-body-intelligence-to-robots/).
 
-**Gemini Robotics 1.5/2 (2025–2026)** tách embodied reasoning/planning và low-level VLA execution rõ hơn, đồng thời mở rộng sang whole-body control, multi-robot collaboration và on-device adaptation. Đây là mở rộng về multimodal reasoning, hierarchy và deployment; public model cards không đủ để kết luận mọi phiên bản được train bằng một RL algorithm cụ thể.
+**[π0.7 (2026)](https://www.pi.website/download/pi07.pdf)** tập trung vào diverse context conditioning: language, subgoal images và episode metadata giúp steer strategy và compositional generalization. Model có thể đạt khả năng gần một số specialist đã RL-fine-tune, nhưng điểm mới chính của π0.7 là conditioning/data composition, không nên mặc định gắn toàn bộ model này vào RL.
+
+**[Gemini Robotics 1.5](https://deepmind.google/blog/gemini-robotics-15-brings-ai-agents-into-the-physical-world/) / [Gemini Robotics 2](https://deepmind.google/blog/gemini-robotics-2-brings-whole-body-intelligence-to-robots/) (2025–2026)** tách embodied reasoning/planning và low-level VLA execution rõ hơn, đồng thời mở rộng sang whole-body control, multi-robot collaboration và on-device adaptation. Đây là mở rộng về multimodal reasoning, hierarchy và deployment; public model cards không đủ để kết luận mọi phiên bản được train bằng một RL algorithm cụ thể.
 
 ### 7.3 Bảng phân loại từng mốc VLA
 
 | Mốc | Tín hiệu học policy chính | Action modeling | Có RL không? | Đặt ở đâu trong cây? |
 |---|---|---|---|---|
-| ACT | Expert demonstrations | Action chunking, CVAE-style latent | Không phải thành phần chính | IL → BC → Action chunking |
-| Diffusion Policy | Expert demonstrations | Conditional diffusion | Không | IL → BC → Diffusion policy |
-| RT-1 | Robot demonstrations | Discrete action tokens | Không | IL → BC → Autoregressive tokens |
-| RT-2 | Web/VLM data + robot demonstrations | Action tokens như text | Không phải thành phần chính | Self-supervised pretraining + IL/BC |
-| Octo | Cross-embodiment trajectories | Diffusion action head | Không phải thành phần chính | IL → BC → Diffusion policy |
-| OpenVLA | 970k robot demonstrations | Discretized action tokens | Không | IL → BC → Autoregressive tokens |
-| π0 | Multi-robot demonstrations | Action chunks + flow matching | Không trong bản gốc | IL → BC → Flow matching |
-| π0.5 | Heterogeneous co-training + demonstrations | FAST tokens khi pre-train; flow matching khi post-train; semantic outputs | Không phải điểm chính | Self-supervised/supervised + IL/BC |
-| π*0.6 / RECAP | Demonstrations + rollouts + corrections + outcomes | VLA action policy + advantage conditioning | Có: offline và online/on-robot RL | IL + Offline RL + Online RL |
-| RL Token | VLA prior + real-robot experience | Small actor–critic edits action chunks | Có: off-policy online RL | Actor–Critic → Off-policy |
-| π0.7 | Diverse prompts, subgoal images, metadata, robot/non-robot data | Steerable VLA policy | Không nên mặc định là RL | IL/foundation policy + context conditioning |
-| EXIMO | Planned exploration data + imitation + reward experience | Residual policy refinement | Có: residual off-policy RL | Hybrid IL → Actor–Critic/off-policy RL |
-| WMPO / VLA-MBPO | Imagined/world-model rollouts + reward | World-model policy optimization; WMPO dùng GRPO | Có | Model-based RL + Policy-based/on-policy |
+| [ACT](https://arxiv.org/abs/2304.13705) | Expert demonstrations | Action chunking, CVAE-style latent | Không phải thành phần chính | IL → BC → Action chunking |
+| [Diffusion Policy](https://arxiv.org/abs/2303.04137) | Expert demonstrations | Conditional diffusion | Không | IL → BC → Diffusion policy |
+| [RT-1](https://arxiv.org/abs/2212.06817) | Robot demonstrations | Discrete action tokens | Không | IL → BC → Autoregressive tokens |
+| [RT-2](https://arxiv.org/abs/2307.15818) | Web/VLM data + robot demonstrations | Action tokens như text | Không phải thành phần chính | Self-supervised pretraining + IL/BC |
+| [Octo](https://arxiv.org/abs/2405.12213) | Cross-embodiment trajectories | Diffusion action head | Không phải thành phần chính | IL → BC → Diffusion policy |
+| [OpenVLA](https://arxiv.org/abs/2406.09246) | 970k robot demonstrations | Discretized action tokens | Không | IL → BC → Autoregressive tokens |
+| [π0](https://arxiv.org/abs/2410.24164) | Multi-robot demonstrations | Action chunks + flow matching | Không trong bản gốc | IL → BC → Flow matching |
+| [π0.5](https://arxiv.org/abs/2504.16054) | Heterogeneous co-training + demonstrations | FAST tokens khi pre-train; flow matching khi post-train; semantic outputs | Không phải điểm chính | Self-supervised/supervised + IL/BC |
+| [π*0.6 / RECAP](https://arxiv.org/abs/2511.14759) | Demonstrations + rollouts + corrections + outcomes | VLA action policy + advantage conditioning | Có: offline và online/on-robot RL | IL + Offline RL + Online RL |
+| [RL Token](https://www.pi.website/download/rlt.pdf) | VLA prior + real-robot experience | Small actor–critic edits action chunks | Có: off-policy online RL | Actor–Critic → Off-policy |
+| [π0.7](https://www.pi.website/download/pi07.pdf) | Diverse prompts, subgoal images, metadata, robot/non-robot data | Steerable VLA policy | Không nên mặc định là RL | IL/foundation policy + context conditioning |
+| [EXIMO](https://arxiv.org/abs/2608.19891) | Planned exploration data + imitation + reward experience | Residual policy refinement | Có: residual off-policy RL | Hybrid IL → Actor–Critic/off-policy RL |
+| [WMPO](https://arxiv.org/abs/2511.09515) / [VLA-MBPO](https://arxiv.org/abs/2603.20607) | Imagined/world-model rollouts + reward | World-model policy optimization; WMPO dùng GRPO | Có | Model-based RL + Policy-based/on-policy |
 
 ### 7.4 Cây mở rộng dành riêng cho VLA
+
+> **Paper theo từng nhánh:** action token — [RT-2](https://arxiv.org/abs/2307.15818); action chunk — [ACT](https://arxiv.org/abs/2304.13705); diffusion — [Diffusion Policy](https://arxiv.org/abs/2303.04137); flow matching — [π0](https://arxiv.org/abs/2410.24164); offline/online RL — [RECAP](https://arxiv.org/abs/2511.14759), [RL Token](https://www.pi.website/download/rlt.pdf); model-based RL — [WMPO](https://arxiv.org/abs/2511.09515).
 
 ```text
 Robot Learning / VLA — lớp hội tụ, không phải một learning paradigm độc lập
@@ -749,23 +821,33 @@ Robot Learning / VLA — lớp hội tụ, không phải một learning paradigm
 
 ### “VLA dùng IL hay RL?”
 
+> **Paper đối chiếu:** [π0 — imitation + flow matching](https://arxiv.org/abs/2410.24164), [π*0.6 / RECAP — VLA + RL](https://arxiv.org/abs/2511.14759) và [RL Token — online actor–critic](https://www.pi.website/download/rlt.pdf).
+
 > Phần lớn VLA nền tảng ban đầu học robot action chủ yếu bằng imitation learning/Behavioral Cloning trên demonstrations, kết hợp backbone đã self-supervised hoặc supervised pre-train trên image-text data. Action có thể được sinh autoregressively, bằng diffusion hoặc flow matching; đây là action modeling, không phải RL. Các thế hệ mới bổ sung offline/online RL để học từ success, failure và on-robot experience, ví dụ RECAP/π*0.6, RL Token và EXIMO. Vì vậy câu đúng là VLA có pipeline hybrid, nhưng không phải mọi VLA đều dùng RL.
 
 ### “PPO thuộc Policy-based hay Actor–Critic?”
+
+> **Paper đối chiếu:** [PPO](https://arxiv.org/abs/1707.06347) và [A3C](https://arxiv.org/abs/1602.01783).
 
 > PPO là policy-gradient method về objective và thường được implement theo Actor–Critic với một policy actor cùng value critic. Vì taxonomy chồng lấp, cả hai cách gọi đều đúng nếu nói rõ tiêu chí phân loại.
 
 ### “SAC khác TD3 ở đâu?”
 
+> **Paper đối chiếu:** [Soft Actor-Critic](https://proceedings.mlr.press/v80/haarnoja18b.html) và [TD3](https://proceedings.mlr.press/v80/fujimoto18a.html).
+
 > Cả hai đều là off-policy Actor–Critic cho continuous control và đều thường dùng twin critics. TD3 có deterministic actor, external exploration noise, target policy smoothing và delayed actor updates. SAC có stochastic policy và tối ưu maximum-entropy objective; entropy trực tiếp khuyến khích exploration.
 
 ### “Tại sao VLA không chỉ dùng RL từ đầu?”
+
+> **Paper đối chiếu:** [RT-1](https://arxiv.org/abs/2212.06817) và [π0](https://arxiv.org/abs/2410.24164) cho large-scale imitation pre-training; [RECAP](https://arxiv.org/abs/2511.14759) cho RL sau khi đã có VLA prior.
 
 > Real-robot interaction đắt, chậm, nguy hiểm và reward cho task dài khó thiết kế. Demonstrations giúp policy có skill prior tốt mà không cần tự khám phá từ đầu. Sau đó RL phù hợp để cải thiện recovery, throughput, precision và outcome vượt quá việc bắt chước expert.
 
 ---
 
 ## 9. Bản đồ ghi nhớ cuối cùng
+
+> **Paper tra cứu nhanh:** [DAgger/IL](https://proceedings.mlr.press/v15/ross11a.html) · [DQN](https://www.nature.com/articles/nature14236) · [REINFORCE](https://doi.org/10.1007/BF00992696) · [PPO](https://arxiv.org/abs/1707.06347) · [TD3](https://proceedings.mlr.press/v80/fujimoto18a.html) · [SAC](https://proceedings.mlr.press/v80/haarnoja18b.html) · [RT-2/VLA](https://arxiv.org/abs/2307.15818) · [π0](https://arxiv.org/abs/2410.24164) · [RECAP](https://arxiv.org/abs/2511.14759).
 
 ```text
 Nếu target là label/action có sẵn
@@ -807,22 +889,32 @@ Nếu input là vision + language và output là robot action
 - Mnih và cộng sự, [Human-level control through deep reinforcement learning — DQN](https://www.nature.com/articles/nature14236).
 - Mnih và cộng sự, [Asynchronous Methods for Deep Reinforcement Learning — A3C](https://arxiv.org/abs/1602.01783).
 - Schulman và cộng sự, [Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347).
+- Schulman và cộng sự, [High-Dimensional Continuous Control Using Generalized Advantage Estimation](https://arxiv.org/abs/1506.02438).
+- Lillicrap và cộng sự, [Continuous Control with Deep Reinforcement Learning — DDPG](https://arxiv.org/abs/1509.02971).
 - Fujimoto và cộng sự, [Addressing Function Approximation Error in Actor-Critic Methods — TD3](https://proceedings.mlr.press/v80/fujimoto18a.html).
 - Haarnoja và cộng sự, [Soft Actor-Critic](https://proceedings.mlr.press/v80/haarnoja18b.html).
+- Shao và cộng sự, [DeepSeekMath — Group Relative Policy Optimization](https://arxiv.org/abs/2402.03300).
 - Ross và cộng sự, [A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning — DAgger](https://proceedings.mlr.press/v15/ross11a.html).
 - Ho và Ermon, [Generative Adversarial Imitation Learning](https://arxiv.org/abs/1606.03476).
+- Fujimoto và cộng sự, [Off-Policy Deep Reinforcement Learning without Exploration — BCQ](https://arxiv.org/abs/1812.02900).
 - Kumar và cộng sự, [Conservative Q-Learning for Offline Reinforcement Learning](https://arxiv.org/abs/2006.04779).
 - Kostrikov và cộng sự, [Offline Reinforcement Learning with Implicit Q-Learning](https://arxiv.org/abs/2110.06169).
+- Chen và cộng sự, [Decision Transformer](https://arxiv.org/abs/2106.01345).
+- Hafner và cộng sự, [Mastering Diverse Domains through World Models — DreamerV3](https://arxiv.org/abs/2301.04104).
+- Schrittwieser và cộng sự, [Mastering Atari, Go, Chess and Shogi by Planning with a Learned Model — MuZero](https://arxiv.org/abs/1911.08265).
 
 ### Robot policy và VLA
 
 - Zhao và cộng sự, [Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware — ACT](https://arxiv.org/abs/2304.13705).
 - Chi và cộng sự, [Diffusion Policy](https://arxiv.org/abs/2303.04137).
+- Lipman và cộng sự, [Flow Matching for Generative Modeling](https://arxiv.org/abs/2210.02747).
 - Brohan và cộng sự, [RT-1: Robotics Transformer for Real-World Control at Scale](https://arxiv.org/abs/2212.06817).
-- Google DeepMind, [RT-2: New model translates vision and language into action](https://deepmind.google/blog/rt-2-new-model-translates-vision-and-language-into-action/).
+- Brohan và cộng sự, [RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control](https://arxiv.org/abs/2307.15818).
+- Belkhale và cộng sự, [RT-H: Action Hierarchies Using Language](https://arxiv.org/abs/2403.01823).
 - Octo Model Team, [Octo: An Open-Source Generalist Robot Policy](https://arxiv.org/abs/2405.12213).
 - Kim và cộng sự, [OpenVLA: An Open-Source Vision-Language-Action Model](https://arxiv.org/abs/2406.09246).
 - Black và cộng sự, [π0: A Vision-Language-Action Flow Model for General Robot Control](https://arxiv.org/abs/2410.24164).
+- Pertsch và cộng sự, [FAST: Efficient Action Tokenization for Vision-Language-Action Models](https://arxiv.org/abs/2501.09747).
 - Physical Intelligence, [π0.5: A Vision-Language-Action Model with Open-World Generalization](https://arxiv.org/abs/2504.16054).
 - Physical Intelligence, [π*0.6: A VLA That Learns From Experience — RECAP](https://arxiv.org/abs/2511.14759).
 - Xu và cộng sự, [RL Token: Bootstrapping Online RL with Vision-Language-Action Models](https://www.pi.website/download/rlt.pdf).
@@ -830,4 +922,5 @@ Nếu input là vision + language và output là robot action
 - Sukhija và cộng sự, [EXIMO: VLM Guided Exploration of VLA Policies](https://arxiv.org/abs/2608.19891).
 - Zhu và cộng sự, [WMPO: World Model-based Policy Optimization for VLA Models](https://arxiv.org/abs/2511.09515).
 - Zhang và cộng sự, [VLA-MBPO: Towards Practical World Model-based RL for VLA Models](https://arxiv.org/abs/2603.20607).
+- Google DeepMind, [Gemini Robotics 1.5](https://deepmind.google/blog/gemini-robotics-15-brings-ai-agents-into-the-physical-world/).
 - Google DeepMind, [Gemini Robotics 2](https://deepmind.google/blog/gemini-robotics-2-brings-whole-body-intelligence-to-robots/).
